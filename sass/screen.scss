@@ -1,1 +1,11 @@
 @import "compass/reset";
+
+body {
+  background-color: black;
+}
+
+.game {
+  margin: 32px auto;
+  width: 640px;
+  height: 480px;
+}
