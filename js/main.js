@@ -13,6 +13,7 @@ define(function( require ) {
   var Game   = require( 'game' ),
       Level  = require( 'level' ),
       Circle = require( 'geometry/circle' ),
+      Rect   = require( 'geometry/rect' ),
       Player = require( 'entities/player' );
 
   var game = Game.instance = new Game();
