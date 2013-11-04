@@ -15,7 +15,7 @@ define([
 
   Circle.prototype.drawPath = function( ctx ) {
     ctx.beginPath();
-    ctx.arc( this.x, this.y, this.radius, 0, 2 * Math.PI );
+    ctx.arc( 0, 0, this.radius, 0, 2 * Math.PI );
     ctx.closePath();
   };
 

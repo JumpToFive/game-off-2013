@@ -26,7 +26,14 @@ define([
   Object2D.prototype.drawPath = function() {};
 
   Object2D.prototype.draw = function( ctx ) {
+    ctx.save();
+
+    ctx.translate( this.x, this.y );
+    ctx.rotate( -this.rotation );
+
     this.drawPath( ctx );
+
+    ctx.restore();
 
     if ( this.fill.alpha ) {
       ctx.fillStyle = this.fill.rgba();

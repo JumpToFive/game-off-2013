@@ -36,6 +36,7 @@ define(function( require ) {
 
   var rectInterval = setInterval(function() {
     rect.left--;
+    rect.rotation += 10 * Math.PI / 180;
   }, 16 );
 
   setTimeout(function() {

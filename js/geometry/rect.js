@@ -16,7 +16,7 @@ define([
 
   Rect.prototype.drawPath = function( ctx ) {
     ctx.beginPath();
-    ctx.rect( this.left, this.top, this.width, this.height );
+    ctx.rect( -0.5 * this.width, -0.5 * this.height, this.width, this.height );
     ctx.closePath();
   };
 

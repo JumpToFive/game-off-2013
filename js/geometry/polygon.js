@@ -24,9 +24,6 @@ define([
   Polygon.prototype.drawPath = function( ctx ) {
     var vertexCount = 0.5 * this.vertices.length;
 
-    ctx.save();
-    ctx.translate( this.x, this.y );
-
     ctx.beginPath();
 
     ctx.moveTo( this.vertices[0], this.vertices[1] );
@@ -35,7 +32,6 @@ define([
     }
 
     ctx.closePath();
-    ctx.restore();
   };
 
   return Polygon;
