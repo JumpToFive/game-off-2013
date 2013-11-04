@@ -10,11 +10,12 @@ requirejs.config({
 define(function( require ) {
   'use strict';
 
-  var Game   = require( 'game' ),
-      Level  = require( 'level' ),
-      Circle = require( 'geometry/circle' ),
-      Rect   = require( 'geometry/rect' ),
-      Player = require( 'entities/player' );
+  var Game    = require( 'game' ),
+      Level   = require( 'level' ),
+      Circle  = require( 'geometry/circle' ),
+      Rect    = require( 'geometry/rect' ),
+      Polygon = require( 'geometry/polygon'),
+      Player  = require( 'entities/player' );
 
   var game = Game.instance = new Game();
   game.level = new Level();
@@ -28,6 +29,23 @@ define(function( require ) {
   var circle = new Circle( 100, 200, 50 );
   circle.fill.alpha = 0.5;
   game.add( circle );
+
+  var rect = new Rect( 300, 100, 50, 100 );
+  rect.fill.alpha = 0.5;
+  game.add( rect );
+
+  var rectInterval = setInterval(function() {
+    rect.left--;
+  }, 16 );
+
+  setTimeout(function() {
+    clearInterval( rectInterval );
+  }, 600 );
+
+  var polygon = new Polygon( 500, 350 );
+  polygon.vertices = [ -100, -50, 100, -50, 0, 100 ];
+  polygon.fill.alpha = 0.5;
+  game.add( polygon );
 
   game.player = new Player( 200, 200 );
   game.player.world = game;
