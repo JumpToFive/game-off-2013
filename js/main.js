@@ -17,6 +17,11 @@
   Input.prototype = {
     onKeyDown: function( event ) {
       this.keys[ event.which ] = true;
+
+      // ESC.
+      if ( event.which === 27 ) {
+        Game.instance.running = false;
+      }
     },
 
     onKeyUp: function( event ) {
@@ -40,7 +45,7 @@
     this.red   = red   || 0;
     this.green = green || 0;
     this.blue  = blue  || 0;
-    this.alpha = alpha || 1.0;
+    this.alpha = alpha || 0.0;
   }
 
   Color.prototype = new BaseObject();
@@ -238,12 +243,37 @@
     this.rotation += this.va * dt;
   };
 
+  PhysicsEntity.prototype.onCollide = function() {};
+
   function Player( x, y ) {
     PhysicsEntity.call( this, x, y );
   }
 
   Player.prototype = new PhysicsEntity();
   Player.prototype.constructor = Player;
+
+  Player.prototype.update = function( dt ) {
+    PhysicsEntity.prototype.update.call( this, dt );
+
+    if ( !this.world ) {
+      return;
+    }
+
+    var keys = this.world.input.keys;
+    var vx = 0,
+        vy = 0;
+    // Left.
+    if ( keys[ 37 ] ) { vx -= 100; }
+    // Right.
+    if ( keys[ 39 ] ) { vx += 100; }
+    // Top.
+    if ( keys[ 38 ] ) { vy -= 100; }
+    // Bottom.
+    if ( keys[ 40 ] ) { vy += 100; }
+
+    this.vx = vx;
+    this.vy = vy;
+  };
 
   function Game() {
     this.prevTime = Date.now();
@@ -375,10 +405,6 @@
     document.addEventListener( 'keydown', input.onKeyDown.bind( input ) );
     document.addEventListener( 'keyup', input.onKeyUp.bind( input ) );
 
-    setTimeout( tick, 100 );
-
-    setTimeout(function() {
-      game.running = false;
-    }, 1500 );
+    setTimeout( tick, 0 );
   }) ();
 }) ( window, document );
