@@ -3,15 +3,6 @@
 
   var PI2 = 2 * Math.PI;
 
-  function rgba( red, green, blue, alpha ) {
-    return 'rgba(' +
-      Math.round( red )   + ', ' +
-      Math.round( green ) + ', ' +
-      Math.round( blue )  + ', ' +
-      alpha +
-    ')';
-  }
-
   function Input() {
     this.mouse = {
       x: 0,
@@ -33,32 +24,69 @@
     }
   };
 
-  function Object2D( x, y ) {
-    this.x = x || 0;
-    this.y = y || 0;
+  function BaseObject() {}
 
-    this.red   = 0;
-    this.green = 0;
-    this.blue  = 0;
-    this.alpha = 0.0;
-
-    this.rotation = 0;
-  }
-
-  Object2D.prototype.update = function() {};
-  Object2D.prototype.drawPath = function() {};
-  Object2D.prototype.draw = function( ctx ) {
-    this.drawPath( ctx );
-
-    ctx.fillStyle = rgba( this.red, this.green, this.blue, this.alpha );
-    ctx.fill();
-  };
-
-  Object2D.prototype.set = function( attrs ) {
+  BaseObject.prototype.set = function( attrs ) {
     for ( var key in attrs ) {
       if ( this.hasOwnProperty( key ) ) {
         this[ key ] = attrs[ key ];
       }
+    }
+  };
+
+  function Color( red, green, blue, alpha ) {
+    BaseObject.call( this );
+
+    this.red   = red   || 0;
+    this.green = green || 0;
+    this.blue  = blue  || 0;
+    this.alpha = alpha || 1.0;
+  }
+
+  Color.prototype = new BaseObject();
+  Color.prototype.constructor = Color;
+
+  Color.prototype.rgba = function() {
+    return 'rgba(' +
+      Math.round( this.red )   + ', ' +
+      Math.round( this.green ) + ', ' +
+      Math.round( this.blue )  + ', ' +
+      this.alpha +
+    ')';
+  };
+
+  function Object2D( x, y ) {
+    BaseObject.call( this );
+
+    this.x = x || 0;
+    this.y = y || 0;
+
+    this.rotation = 0;
+
+    this.fill   = new Color();
+    this.stroke = new Color();
+
+    this.lineWidth = 0;
+  }
+
+  Object2D.prototype = new BaseObject();
+  Object2D.prototype.constructor = Object2D;
+
+  Object2D.prototype.update = function() {};
+  Object2D.prototype.drawPath = function() {};
+
+  Object2D.prototype.draw = function( ctx ) {
+    this.drawPath( ctx );
+
+    if ( this.fill.alpha ) {
+      ctx.fillStyle = this.fill.rgba();
+      ctx.fill();
+    }
+
+    if ( this.lineWidth && this.stroke.alpha ) {
+      ctx.lineWidth = this.lineWidth;
+      ctx.strokeStyle = this.stroke.rgba();
+      ctx.stroke();
     }
   };
 
@@ -269,8 +297,8 @@
     var ctx = this.ctx;
 
     var level = this.level;
-    if ( level ) {
-      ctx.fillStyle = rgba( level.red, level.green, level.blue, level.alpha );
+    if ( level.fill.alpha ) {
+      ctx.fillStyle = level.fill.rgba();
       ctx.fillRect( 0, 0, ctx.canvas.width, ctx.canvas.height );
     } else {
       ctx.clearRect( 0, 0, ctx.canvas.width, ctx.canvas.height );
@@ -319,7 +347,7 @@
     var game = Game.instance = new Game();
     game.add( new Entity() );
     game.level = new Level();
-    game.level.set({
+    game.level.fill.set({
       red: 255,
       green: 255,
       blue: 255,
@@ -327,16 +355,13 @@
     });
 
     var circle = new Circle( 100, 200, 50 );
-    circle.alpha = 1.0;
+    circle.fill.alpha = 0.5;
     game.add( circle );
 
     game.player = new Player( 200, 200 );
     game.player.world = game;
     game.player.add( new Circle( 0, 0, 20 ) );
-    game.player.shapes[0].set({
-      blue: 240,
-      alpha: 1.0
-    });
+    game.player.shapes[0].fill.alpha = 0.5;
 
     game.player.set({
       vx: 50,
@@ -354,6 +379,6 @@
 
     setTimeout(function() {
       game.running = false;
-    }, 1500 )
+    }, 1500 );
   }) ();
 }) ( window, document );
