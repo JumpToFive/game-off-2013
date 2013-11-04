@@ -20,7 +20,27 @@
 
       // ESC.
       if ( event.which === 27 ) {
+        event.preventDefault();
         Game.instance.running = false;
+      }
+
+      // Z.
+      if ( event.which === 90 ) {
+        event.preventDefault();
+        Game.instance.running = true;
+        tick();
+
+        setTimeout(function() {
+          Game.instance.running = false;
+        }, 1000 );
+      }
+
+      // Arrow keys.
+      if ( event.which === 37 ||
+           event.which === 38 ||
+           event.which === 39 ||
+           event.which === 40 ) {
+        event.preventDefault();
       }
     },
 
@@ -405,6 +425,11 @@
     document.addEventListener( 'keydown', input.onKeyDown.bind( input ) );
     document.addEventListener( 'keyup', input.onKeyUp.bind( input ) );
 
-    setTimeout( tick, 0 );
+    tick();
+
+
+    setTimeout(function() {
+      game.running = false;
+    }, 1500 );
   }) ();
 }) ( window, document );
