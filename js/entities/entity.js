@@ -16,17 +16,10 @@ define([
 
   Entity.prototype.update = function() {};
 
-  Entity.prototype.draw = function( ctx ) {
-    ctx.save();
-
-    ctx.translate( this.x, this.y );
-    ctx.rotate( this.rotation );
-
+  Entity.prototype.drawPath = function( ctx ) {
     this.shapes.forEach(function( shape ) {
       shape.draw( ctx );
     });
-
-    ctx.restore();
   };
 
   Entity.prototype.add = function( shape ) {

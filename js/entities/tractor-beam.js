@@ -37,12 +37,15 @@ define([
 
   TractorBeam.prototype.draw = function( ctx ) {
     PhysicsEntity.prototype.draw.call( this, ctx );
-    ctx.fillStyle = 'rgba(0, 255, 0, 0.5)';
+
     ctx.save();
+
     ctx.translate( this.x, this.y );
     ctx.rotate( -this.rotation );
 
+    ctx.fillStyle = 'rgba(0, 255, 0, 0.5)';
     ctx.fillRect( 0, -0.5 * this.width, this.distance, this.width );
+
     ctx.restore();
   };
 
@@ -53,8 +56,8 @@ define([
       return;
     }
 
-    var cos = Math.cos( this.rotation ),
-        sin = Math.sin( this.rotation );
+    var cos = Math.cos( -this.rotation ),
+        sin = Math.sin( -this.rotation );
 
     var halfWidth = 0.5 * this.width;
 
@@ -69,23 +72,16 @@ define([
           y = entity.y - this.y;
 
       if ( this.rotation ) {
-        var rx = cos * x - sin * y,
-            ry = sin * x + cos * y;
+        var rx =  cos * x + sin * y,
+            ry = -sin * x + cos * y;
 
         x = rx;
         y = ry;
       }
 
-      if ( entity.constructor.name === 'Player' ) {
-        // console.log(x, y)
-      }
-
       if ( -halfWidth <= y && y <= halfWidth &&
             0 <= x && x <= this.distance ) {
         entity.force( cos * this.force, sin * this.force );
-        entity.fill.set({
-          red: 255
-        });
       }
 
     }.bind( this ));
