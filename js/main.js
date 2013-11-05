@@ -39,6 +39,7 @@ define(function( require ) {
   var rectInterval = setInterval(function() {
     rect.left -= 4;
     rect.rotation += 10 * Math.PI / 180;
+    polygon.rotation += 2 * Math.PI / 180;
   }, 16 );
 
   setTimeout(function() {

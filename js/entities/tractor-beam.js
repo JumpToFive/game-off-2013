@@ -71,9 +71,10 @@ define([
       var x = entity.x - this.x,
           y = entity.y - this.y;
 
+      var rx, ry;
       if ( this.rotation ) {
-        var rx =  cos * x + sin * y,
-            ry = -sin * x + cos * y;
+        rx =  cos * x + sin * y;
+        ry = -sin * x + cos * y;
 
         x = rx;
         y = ry;

@@ -19,6 +19,15 @@ define([
     ctx.closePath();
   };
 
+  Circle.prototype.aabb = function() {
+    return {
+      xmin: this.left,
+      ymin: this.top,
+      xmax: this.right,
+      ymax: this.bottom
+    };
+  };
+
   Object.defineProperty( Circle.prototype, 'left', {
     get: function() {
       return this.x - this.radius;

@@ -45,6 +45,34 @@ define([
       ctx.strokeStyle = this.stroke.rgba();
       ctx.stroke();
     }
+
+    this.drawDebug( ctx );
+  };
+
+  Object2D.prototype.drawDebug = function( ctx ) {
+    // Debug draw.
+    var aabb = this.aabb();
+    if ( !aabb ) {
+      return;
+    }
+
+    ctx.beginPath();
+
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'red';
+    ctx.strokeRect( aabb.xmin, aabb.ymin, aabb.xmax - aabb.xmin, aabb.ymax - aabb.ymin );
+  };
+
+  /**
+   * Returns the AABB corresponding to the object in world space.
+   */
+  Object2D.prototype.aabb = function() {
+    return {
+      xmin: this.x,
+      ymin: this.y,
+      xmax: this.x,
+      ymax: this.y
+    };
   };
 
   return Object2D;

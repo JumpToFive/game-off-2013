@@ -20,6 +20,46 @@ define([
     ctx.closePath();
   };
 
+  Rect.prototype.aabb = function() {
+    var halfWidth  = 0.5 * this.width,
+        halfHeight = 0.5 * this.height;
+
+    var top    = -halfHeight,
+        left   = -halfWidth,
+        bottom = halfHeight,
+        right  = halfWidth;
+
+    var cos = Math.cos( -this.rotation ),
+        sin = Math.sin( -this.rotation );
+
+    // Coordinates of rotated extents.
+    var x = [],
+        y = [];
+
+    // Top left.
+    x.push( cos * left - sin * top );
+    y.push( sin * left + cos * top );
+
+    // Bottom left.
+    x.push( cos * left - sin * bottom );
+    y.push( sin * left + cos * bottom );
+
+    // Top right.
+    x.push( cos * right - sin * top );
+    y.push( sin * right + cos * top );
+
+    // Bottom right.
+    x.push( cos * right - sin * bottom );
+    y.push( sin * right + cos * bottom );
+
+    return {
+      xmin: Math.min.apply( this, x ) + this.x,
+      ymin: Math.min.apply( this, y ) + this.y,
+      xmax: Math.max.apply( this, x ) + this.x,
+      ymax: Math.max.apply( this, y ) + this.y
+    };
+  };
+
   Object.defineProperty( Rect.prototype, 'left', {
     get: function() {
       return this.x - 0.5 * this.width;
