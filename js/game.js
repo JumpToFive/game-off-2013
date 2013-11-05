@@ -47,10 +47,6 @@ define([
     this.entities.forEach(function( entity ) {
       entity.update( dt );
     });
-
-    if ( this.player ) {
-      this.player.update( dt );
-    }
   };
 
   Game.prototype.draw = function() {
@@ -67,10 +63,6 @@ define([
     this.entities.forEach(function( entity ) {
       entity.draw( ctx );
     });
-
-    if ( this.player ) {
-      this.player.draw( ctx );
-    }
   };
 
   Game.prototype.tick = function() {

@@ -19,19 +19,22 @@ define([
     }
 
     var keys = this.world.input.keys;
-    var vx = 0,
-        vy = 0;
+    var ax = 0,
+        ay = 0;
     // Left.
-    if ( keys[ 37 ] ) { vx -= 100; }
+    if ( keys[ 37 ] ) { ax -= 1000; }
     // Right.
-    if ( keys[ 39 ] ) { vx += 100; }
+    if ( keys[ 39 ] ) { ax += 1000; }
     // Top.
-    if ( keys[ 38 ] ) { vy -= 100; }
+    if ( keys[ 38 ] ) { ay -= 1000; }
     // Bottom.
-    if ( keys[ 40 ] ) { vy += 100; }
+    if ( keys[ 40 ] ) { ay += 1000; }
 
-    this.vx = vx;
-    this.vy = vy;
+    this.vx = 0.95 * ( this.vx + ax * dt );
+    this.vy = 0.95 * ( this.vy + ay * dt );
+
+    this.vx = Math.abs( this.vx ) > 1e-2 ? this.vx : 0;
+    this.vy = Math.abs( this.vy ) > 1e-2 ? this.vy : 0;
   };
 
   return Player;

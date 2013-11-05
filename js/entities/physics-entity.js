@@ -41,6 +41,11 @@ define([
     this.rotation += this.va * dt;
   };
 
+  PhysicsEntity.prototype.force = function( x, y ) {
+    this.vx += x;
+    this.vy += y;
+  };
+
   PhysicsEntity.prototype.onCollide = function() {};
 
   return PhysicsEntity;
