@@ -35,7 +35,7 @@ define(function( require ) {
   game.add( rect );
 
   var rectInterval = setInterval(function() {
-    rect.left--;
+    rect.left -= 4;
     rect.rotation += 10 * Math.PI / 180;
   }, 16 );
 
@@ -59,7 +59,7 @@ define(function( require ) {
   });
 
   game.element.classList.add( 'game' );
-  document.body.appendChild( game.element );
+  document.body.insertBefore( game.element, document.body.firstChild );
 
   var input = game.input;
   document.addEventListener( 'keydown', input.onKeyDown.bind( input ) );
@@ -67,7 +67,28 @@ define(function( require ) {
 
   game.tick();
 
+  var runCheckbox = document.getElementById( 'run-checkbox' );
+  function toggleContinuousRendering() {
+    if ( !runCheckbox.checked ) {
+      game.running = true;
+      game.tick();
+      runCheckbox.checked = true;
+    } else {
+      game.running = false;
+      runCheckbox.checked = false;
+    }
+  }
+
+  runCheckbox.onclick = toggleContinuousRendering;
+
+  document.addEventListener( 'keydown', function( event ) {
+    // R.
+    if ( event.which === 82 ) {
+      toggleContinuousRendering();
+    }
+  });
+
   setTimeout(function() {
     game.running = false;
-  }, 1500 );
+  }, 10000 );
 });
