@@ -19,5 +19,45 @@ define([
     ctx.closePath();
   };
 
+  Object.defineProperty( Circle.prototype, 'left', {
+    get: function() {
+      return this.x - this.radius;
+    },
+
+    set: function( left ) {
+      this.x = left + this.radius;
+    }
+  });
+
+  Object.defineProperty( Circle.prototype, 'right', {
+    get: function() {
+      return this.x + this.radius;
+    },
+
+    set: function( right ) {
+      this.x = right - this.radius;
+    }
+  });
+
+  Object.defineProperty( Circle.prototype, 'top', {
+    get: function() {
+      return this.y - this.radius;
+    },
+
+    set: function( top ) {
+      this.y = top + this.radius;
+    }
+  });
+
+  Object.defineProperty( Circle.prototype, 'bottom', {
+    get: function() {
+      return this.y + this.radius;
+    },
+
+    set: function( bottom ) {
+      this.y = bottom - this.radius;
+    }
+  });
+
   return Circle;
 });
