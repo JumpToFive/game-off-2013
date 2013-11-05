@@ -11,7 +11,7 @@ define([
   }
 
   Polygon.prototype = new Object2D();
-  Polygon.prototype.cosntructor = Polygon;
+  Polygon.prototype.constructor = Polygon;
 
   Polygon.prototype.draw = function( ctx ) {
     if ( !this.vertices.length ) {

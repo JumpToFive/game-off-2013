@@ -6,12 +6,13 @@ define([
 
   function Level() {
     Object2D.call( this );
+
+    this.entities = [];
+    this.shapes = [];
   }
 
   Level.prototype = new Object2D();
   Level.prototype.constructor = Level;
-
-  Level.prototype.fromJSON = function() {};
 
   return Level;
 });
