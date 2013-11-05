@@ -77,14 +77,22 @@ define(function( require ) {
   game.tick();
 
   var runCheckbox = document.getElementById( 'run-checkbox' );
+  function play() {
+    game.running = true;
+    game.tick();
+    runCheckbox.checked = true;
+  }
+
+  function pause() {
+    game.running = false;
+    runCheckbox.checked = false;
+  }
+
   function toggleContinuousRendering() {
     if ( !runCheckbox.checked ) {
-      game.running = true;
-      game.tick();
-      runCheckbox.checked = true;
+      play();
     } else {
-      game.running = false;
-      runCheckbox.checked = false;
+      pause();
     }
   }
 
@@ -96,6 +104,8 @@ define(function( require ) {
       toggleContinuousRendering();
     }
   });
+
+  window.addEventListener( 'blur', pause );
 
   setTimeout(function() {
     game.running = false;
