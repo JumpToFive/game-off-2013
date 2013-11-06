@@ -1,7 +1,8 @@
 /*globals define*/
 define([
-  'input'
-], function( Input ) {
+  'input',
+  'physics/collision'
+], function( Input, Collision ) {
   'use strict';
 
   function Game() {
@@ -47,6 +48,8 @@ define([
     this.entities.forEach(function( entity ) {
       entity.update( dt );
     });
+
+    Collision.broadphase( this.entities );
   };
 
   Game.prototype.draw = function() {

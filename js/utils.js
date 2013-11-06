@@ -10,10 +10,14 @@ define(function() {
    * Return if the two axis-aligned bounding-boxes intersect.
    */
   function aabbIntersect( a, b ) {
-    return a.xmin <
+    return a.xmin <= b.xmax &&
+           a.xmax >= b.xmin &&
+           a.ymin <= b.ymax &&
+           a.ymax >= b.ymin;
   }
 
   return {
-    lerp: lerp
+    lerp: lerp,
+    aabbIntersect: aabbIntersect
   };
 });
