@@ -1,7 +1,7 @@
 /*globals define*/
 define([
-  'utils'
-], function( Utils ) {
+  'physics/intersection'
+], function( Intersection ) {
   'use strict';
 
   // Filter all physics entities that may be colliding.
@@ -10,13 +10,6 @@ define([
 
     var aabb0,
         aabb1;
-
-    entities.forEach(function( entity ) {
-      entity.fill.set({
-        red: 255,
-        green: 0
-      });
-    });
 
     entities.forEach(function( a ) {
       aabb0 = a.aabb();
@@ -28,17 +21,8 @@ define([
 
         aabb1 = b.aabb();
 
-        if ( Utils.aabbIntersect( aabb0, aabb1 ) ) {
-          a.fill.set({
-            red: 0,
-            green: 255
-          });
-
-          b.fill.set({
-            red: 0,
-            green: 255
-          });
-
+        if ( Intersection.aabb( aabb0, aabb1 ) ) {
+          potentials.push( [ a, b ] );
         }
       });
     });
