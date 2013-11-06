@@ -22,7 +22,7 @@ define([
   };
 
   Polygon.prototype.drawPath = function( ctx ) {
-    var vertexCount = this.vertexCount;
+    var vertexCount = this.vertexCount();
 
     ctx.beginPath();
 
@@ -35,7 +35,7 @@ define([
   };
 
   Polygon.prototype.aabb = function() {
-    var vertexCount = this.vertexCount;
+    var vertexCount = this.vertexCount();
 
     var xmin = Number.POSITIVE_INFINITY,
         ymin = Number.POSITIVE_INFINITY,
@@ -68,11 +68,9 @@ define([
     };
   };
 
-  Object.defineProperty( Polygon.prototype, 'vertexCount', {
-    get: function() {
-      return 0.5 * this.vertices.length;
-    }
-  });
+  Polygon.prototype.vertexCount = function() {
+    return 0.5 * this.vertices.length;
+  };
 
   return Polygon;
 });
