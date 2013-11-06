@@ -9,7 +9,7 @@ define([
     var aabb0,
         aabb1;
 
-    entities.filter(function( a ) {
+    entities.forEach(function( a ) {
       aabb0 = a.aabb;
 
       entities.forEach(function( b ) {
@@ -22,6 +22,16 @@ define([
     });
 
     return potentials;
+  }
+
+  /**
+   * Determine all unique pairs of entities.
+   */
+  function unique( pairsArray ) {
+    pairsArray.forEach(function() {
+      pairsArray.forEach(function() {
+      });
+    });
   }
 
   return {
