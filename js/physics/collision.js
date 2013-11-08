@@ -8,24 +8,24 @@ define([
   function broadphase( entities ) {
     var potentials = [];
 
-    var aabb0,
-        aabb1;
+    var aabbs = entities.map(function( entity ) {
+      return entity.aabb();
+    });
 
-    entities.forEach(function( a ) {
-      aabb0 = a.aabb();
+    var length = entities.length;
+    var i, j;
+    var aabb0, aabb1;
+    for ( i = 0; i < length; i++ ) {
+      aabb0 = aabbs[i];
 
-      entities.forEach(function( b ) {
-        if ( a === b ) {
-          return;
-        }
-
-        aabb1 = b.aabb();
+      for ( j = i + 1; j < length; j++ ) {
+        aabb1 = aabbs[j];
 
         if ( Intersection.aabb( aabb0, aabb1 ) ) {
-          potentials.push( [ a, b ] );
+          potentials.push( [ entities[i], entities[j] ] );
         }
-      });
-    });
+      }
+    }
 
     return potentials;
   }
@@ -36,16 +36,6 @@ define([
     }
 
     return a.x - b.x;
-  }
-
-  /**
-   * Determine all unique pairs of entities.
-   */
-  function unique( pairsArray ) {
-    pairsArray.forEach(function() {
-      pairsArray.forEach(function() {
-      });
-    });
   }
 
   return {
