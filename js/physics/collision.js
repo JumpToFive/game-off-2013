@@ -30,6 +30,14 @@ define([
     return potentials;
   }
 
+  function sort2d( a, b ) {
+    if ( a.x === b.x ) {
+      return a.y - b.y;
+    }
+
+    return a.x - b.x;
+  }
+
   /**
    * Determine all unique pairs of entities.
    */
@@ -41,6 +49,7 @@ define([
   }
 
   return {
-    broadphase: broadphase
+    broadphase: broadphase,
+    sort2d: sort2d
   };
 });
