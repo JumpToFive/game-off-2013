@@ -53,7 +53,7 @@ define(function( require ) {
 
   var tractorBeam = new TractorBeam( 200, 300, 50 );
   tractorBeam.distance = 200;
-  tractorBeam.force = 20;
+  tractorBeam.force = 1200;
   game.add( tractorBeam );
 
   game.player = new Player( 200, 200 );
@@ -97,12 +97,17 @@ define(function( require ) {
     }
   }
 
-  runCheckbox.onclick = toggleContinuousRendering;
+  runCheckbox.addEventListener( 'click', function() {
+    // Hacky. Since play() and pause() change the checked state, we need to
+    // toggle the checkbox state to back before it was clicked.
+    runCheckbox.checked = !runCheckbox.checked;
+    toggleContinuousRendering();
+  });
 
   document.addEventListener( 'keydown', function( event ) {
     // R.
     if ( event.which === 82 ) {
-      toggleContinuousRendering();
+      toggleContinuousRendering( event );
     }
   });
 
