@@ -18,6 +18,7 @@ define([
     this.va = 0;
 
     this.fixed = false;
+    this.collides = true;
   }
 
   PhysicsEntity.prototype = new Entity();
@@ -41,7 +42,7 @@ define([
     this.rotation += this.va * dt;
   };
 
-  PhysicsEntity.prototype.force = function( x, y ) {
+  PhysicsEntity.prototype.accelerate = function( x, y ) {
     this.vx += x;
     this.vy += y;
   };

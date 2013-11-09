@@ -8,6 +8,8 @@ define([
   function TractorBeam( x, y, width ) {
     PhysicsEntity.call( this, x, y );
 
+    this.fixed = true;
+
     // Width of the tractor beam effect.
     this.width = width || 0;
     // Distance to which tractor beam affects other physics entities.
@@ -56,6 +58,8 @@ define([
       return;
     }
 
+    var force = this.force * dt;
+
     var cos = Math.cos( -this.rotation ),
         sin = Math.sin( -this.rotation );
 
@@ -82,7 +86,7 @@ define([
 
       if ( -halfWidth <= y && y <= halfWidth &&
             0 <= x && x <= this.distance ) {
-        entity.force( cos * this.force, sin * this.force );
+        entity.accelerate( cos * force, sin * force );
       }
 
     }.bind( this ));
