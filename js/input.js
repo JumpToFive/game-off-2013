@@ -27,12 +27,6 @@ define(function() {
     onKeyDown: function( event ) {
       this.keys[ event.which ] = true;
 
-      // ESC.
-      if ( event.which === 27 ) {
-        event.preventDefault();
-        this.stop();
-      }
-
       // Arrow keys.
       if ( event.which === 37 ||
            event.which === 38 ||
@@ -69,7 +63,7 @@ define(function() {
       // Keyboard update.
       if ( this.keys[ 37 ] ) { controls.LEFT   = true; }
       if ( this.keys[ 38 ] ) { controls.TOP    = true; }
-      if ( this.keys[ 39 ] ) { controls.RIGH   = true; }
+      if ( this.keys[ 39 ] ) { controls.RIGHT  = true; }
       if ( this.keys[ 40 ] ) { controls.BOTTOM = true; }
 
       // Touch update.

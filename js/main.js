@@ -73,13 +73,11 @@ define(function( require ) {
 
   // Setup input.
   var input = game.input;
-  input.game = game;
 
   document.addEventListener( 'keydown', input.onKeyDown.bind( input ) );
   document.addEventListener( 'keyup', input.onKeyUp.bind( input ) );
 
   if ( typeof window.ontouchstart !== 'undefined' ) {
-    console.log('msg')
     game.canvas.addEventListener( 'touchstart', input.onTouchStart.bind( input ) );
     game.canvas.addEventListener( 'touchmove', input.onTouchMove.bind( input ) );
     game.canvas.addEventListener( 'touchend', input.onTouchEnd.bind( input ) );
