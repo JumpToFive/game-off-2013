@@ -91,10 +91,25 @@ define(function() {
           return;
         }
 
-        if ( x < halfWidth ) {
-          controls.LEFT = true;
-        } else {
+        var angle = Math.atan2( y - halfHeight, x - halfWidth );
+        // From [ -PI, PI ) to [ 0, 2PI ).
+        angle += Math.PI;
+        // Rotate CCW 45 degrees.
+        angle -= 0.25 * Math.PI;
+
+        if ( angle < 0 ) {
+          angle += 2 * Math.PI;
+        }
+
+        // 90 degrees.
+        if ( angle < 0.5 * Math.PI ) {
+          controls.TOP = true;
+        } else if ( angle < Math.PI ) {
           controls.RIGHT = true;
+        } else if ( angle < 1.5 * Math.PI ) {
+          controls.BOTTOM = true;
+        } else {
+          controls.LEFT = true;
         }
       }.bind( this ));
     }
