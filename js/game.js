@@ -35,6 +35,8 @@ define([
   Game.instance = null;
 
   Game.prototype.update = function() {
+    this.input.update();
+
     this.currTime = Date.now();
     var dt = this.currTime - this.prevTime;
     this.prevTime = this.currTime;

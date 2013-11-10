@@ -71,12 +71,24 @@ define(function( require ) {
   game.element.classList.add( 'game' );
   document.body.insertBefore( game.element, document.body.firstChild );
 
+  // Setup input.
   var input = game.input;
+  input.game = game;
+
   document.addEventListener( 'keydown', input.onKeyDown.bind( input ) );
   document.addEventListener( 'keyup', input.onKeyUp.bind( input ) );
 
+  if ( typeof window.ontouchstart !== 'undefined' ) {
+    console.log('msg')
+    game.canvas.addEventListener( 'touchstart', input.onTouchStart.bind( input ) );
+    game.canvas.addEventListener( 'touchmove', input.onTouchMove.bind( input ) );
+    game.canvas.addEventListener( 'touchend', input.onTouchEnd.bind( input ) );
+  }
+
+  // Start game.
   game.tick();
 
+  // Add a checkbox to toggle continuous rendering,
   var runCheckbox = document.getElementById( 'run-checkbox' );
   function play() {
     game.running = true;

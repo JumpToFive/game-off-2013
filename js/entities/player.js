@@ -18,17 +18,15 @@ define([
       return;
     }
 
-    var keys = this.world.input.keys;
+    var controls = this.world.input.controls;
+
     var ax = 0,
         ay = 0;
-    // Left.
-    if ( keys[ 37 ] ) { ax -= 1000; }
-    // Right.
-    if ( keys[ 39 ] ) { ax += 1000; }
-    // Top.
-    if ( keys[ 38 ] ) { ay -= 1000; }
-    // Bottom.
-    if ( keys[ 40 ] ) { ay += 1000; }
+
+    if ( controls.LEFT   ) { ax -= 1000; }
+    if ( controls.RIGHT  ) { ax += 1000; }
+    if ( controls.TOP    ) { ay -= 1000; }
+    if ( controls.BOTTOM ) { ay += 1000; }
 
     this.vx = 0.95 * ( this.vx + ax * dt );
     this.vy = 0.95 * ( this.vy + ay * dt );
