@@ -52,7 +52,6 @@ define([
   Rect.prototype = new Object2D();
   Rect.prototype.constructor = Rect;
 
-
   Rect.prototype.drawPath = function( ctx ) {
     ctx.beginPath();
     ctx.rect( -0.5 * this.width, -0.5 * this.height, this.width, this.height );

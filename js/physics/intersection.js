@@ -14,42 +14,68 @@ define([
            a.ymax >= b.ymin;
   }
 
-  function lineIntersectionParameter( x0, y0, x1, y1, x2, y2, x3, y3 ) {
+  function lineParameter( x0, y0, x1, y1, parameter ) {
+    return {
+      x: Utils.lerp( x0, x1, parameter ),
+      y: Utils.lerp( y0, y1, parameter )
+    };
+  }
 
+  function lineIntersectionParameter( x0, y0, x1, y1, x2, y2, x3, y3 ) {
+    var det = ( x1 - x0 ) * ( y3 - y2 ) - ( x3 - x2 ) * ( y1 - y0 );
+    if ( !det ) {
+      return null;
+    }
+
+    return ( ( x3 - x2 ) * ( y0 - y2 ) - ( y3 - y2 ) * ( x0 - x2 ) ) / det;
   }
 
   function lineIntersection( x0, y0, x1, y1, x2, y2, x3, y3 ) {
-    var t = lineIntersectionParameter.apply( null, arguments );
+    var t = lineIntersectionParameter( x0, y0, x1, y1, x2, y2, x3, y3 );
     if ( t === null ) {
       return null;
     }
 
-    return {
-      x: Utils.lerp( x0, x1, t ),
-      y: Utils.lerp( y0, y1, t )
-    };
+    return lineParameter( x0, y0, x1, y1, t );
   }
 
   function segmentIntersectionParameter( x0, y0, x1, y1, x2, y2, x3, y3 ) {
+    var s = lineIntersectionParameter( x0, y0, x1, y1, x2, y2, x3, y3 ),
+        t = lineIntersectionParameter( x2, y2, x3, y3, x0, y0, x1, y1 );
 
+    if ( s === null || t === null ) {
+      return null;
+    }
+
+    if ( 0 > s || s > 1 ||
+         0 > t || t > 1 ) {
+      return null;
+    }
+
+    return t;
   }
 
   function segmentIntersection( x0, y0, x1, y1, x2, y2, x3, y3 ) {
-    var t = segmentIntersectionParameter.apply( null, argmuents );
+    var t = segmentIntersectionParameter( x0, y0, x1, y1, x2, y2, x3, y3 );
     if ( t === null ) {
       return null;
     }
 
-    return {
-      x: Utils.lerp( x0, y1, t ),
-      y: Utils.lerp( y0, y1, t )
-    };
+    return lineParameter( x0, y0, x1, y1, t );
   }
 
-  function lineCircleIntersectionParameter( x0, y0, x1, y1, x, y, radius ) {
+  function lineCircleIntersectionParameter( x0, y0, x1, y1, cx, cy, radius ) {
   }
 
   return {
-    aabb: aabb
+    aabb: aabb,
+
+    lineParameter: lineParameter,
+
+    lineIntersectionParameter: lineIntersectionParameter,
+    lineIntersection: lineIntersection,
+
+    segmentIntersectionParameter: segmentIntersectionParameter,
+    segmentIntersection: segmentIntersection
   };
 });

@@ -8,8 +8,29 @@ define(function() {
     return a + t * ( b - a );
   }
 
+  /**
+   * Assuming the line is CCW, the normal of the line is (dy, -dx).
+   */
+  function lineNormal( x0, y0, x1, y1 ) {
+    var dx = x1 - x0,
+        dy = y1 - y0;
+
+    var lengthSquared = dx * dx + dy * dy;
+    if ( !lengthSquared ) {
+      return null;
+    }
+
+    var invLength = 1 / Math.sqrt( lengthSquared );
+    return {
+      x: -dy * invLength,
+      y:  dx * invLength
+    };
+  }
+
   return {
     EPSILON: EPSILON,
-    lerp: lerp
+
+    lerp: lerp,
+    lineNormal: lineNormal
   };
 });

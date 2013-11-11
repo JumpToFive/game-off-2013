@@ -1,7 +1,8 @@
 /*globals define*/
 define([
-  'object2d'
-], function( Object2D ) {
+  'object2d',
+  'utils'
+], function( Object2D, Utils ) {
   'use strict';
 
   function Polygon( x, y ) {
@@ -24,6 +25,8 @@ define([
   Polygon.prototype.drawPath = function( ctx ) {
     var vertexCount = this.vertexCount();
 
+    this.drawNormals( ctx );
+
     ctx.beginPath();
 
     ctx.moveTo( this.vertices[0], this.vertices[1] );
@@ -32,6 +35,38 @@ define([
     }
 
     ctx.closePath();
+  };
+
+  Polygon.prototype.drawNormals = function( ctx ) {
+    var vertexCount = this.vertexCount();
+
+    ctx.beginPath();
+
+    var x0, y0, x1, y1;
+    var mx, my;
+    var normal;
+    for ( var i = 0; i < vertexCount; i++ ) {
+      x0 = this.vertices[ 2 * i ];
+      y0 = this.vertices[ 2 * i + 1 ];
+      x1 = this.vertices[ 2 * ( ( i + 1 ) % vertexCount ) ];
+      y1 = this.vertices[ 2 * ( ( i + 1 ) % vertexCount ) + 1 ];
+
+      mx = 0.5 * ( x0 + x1 );
+      my = 0.5 * ( y0 + y1 );
+
+      ctx.moveTo( mx, my );
+
+      normal = Utils.lineNormal( x0, y0, x1, y1 );
+      if ( !normal ) {
+        continue;
+      }
+
+      ctx.lineTo( mx + normal.x * 30, my + normal.y * 30 );
+    }
+
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = '#0f0';
+    ctx.stroke();
   };
 
   Polygon.prototype.aabb = function() {

@@ -62,7 +62,7 @@ define(function( require ) {
   var polyEntity = new PhysicsEntity( 500, 350 );
 
   var polygon = new Polygon( 50, 0 );
-  polygon.vertices = [ -100, -50, 100, -50, 0, 100 ];
+  polygon.vertices = [ -100, 50, 100, 50, 0, -100 ];
   polygon.fill.alpha = 0.5;
 
   polyEntity.add( polygon );
