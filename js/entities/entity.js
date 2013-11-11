@@ -48,11 +48,38 @@ define([
       if ( aabb.ymax > ymax ) { ymax = aabb.ymax; }
     });
 
+    if ( !this.rotation ) {
+      return {
+        xmin: xmin + this.x,
+        ymin: ymin + this.y,
+        xmax: xmax + this.x,
+        ymax: ymax + this.y
+      };
+    }
+
+    var cos = Math.cos( -this.rotation ),
+        sin = Math.sin( -this.rotation );
+
+    var x = [],
+        y = [];
+
+    x.push( cos * xmin - sin * ymin );
+    y.push( sin * xmin + cos * ymin );
+
+    x.push( cos * xmin - sin * ymax );
+    y.push( sin * xmin + cos * ymax );
+
+    x.push( cos * xmax - sin * ymin );
+    y.push( sin * xmax + cos * ymin );
+
+    x.push( cos * xmax - sin * ymax );
+    y.push( sin * xmax + cos * ymax );
+
     return {
-      xmin: xmin + this.x,
-      ymin: ymin + this.y,
-      xmax: xmax + this.x,
-      ymax: ymax + this.y
+      xmin: Math.min.apply( this, x ) + this.x,
+      ymin: Math.min.apply( this, y ) + this.y,
+      xmax: Math.max.apply( this, x ) + this.x,
+      ymax: Math.max.apply( this, y ) + this.y
     };
   };
 

@@ -17,6 +17,8 @@ define(function( require ) {
       Polygon = require( 'geometry/polygon'),
       Player  = require( 'entities/player' );
 
+  var PhysicsEntity = require( 'entities/physics-entity' );
+
   var TractorBeam = require( 'entities/tractor-beam' );
 
   var game = Game.instance = new Game();
@@ -28,34 +30,51 @@ define(function( require ) {
     alpha: 1.0
   });
 
+  // Circle.
+  var circleEntity = new PhysicsEntity();
+
   var circle = new Circle( 100, 200, 50 );
   circle.fill.alpha = 0.5;
-  game.add( circle );
 
-  var rect = new Rect( 300, 100, 50, 100 );
+  circleEntity.add( circle );
+  game.add( circleEntity );
+
+  // Rect.
+  var rectEntity = new PhysicsEntity( 300, 150 );
+
+  var rect = new Rect( 0, 0, 50, 100 );
   rect.fill.alpha = 0.5;
-  game.add( rect );
+
+  rectEntity.add( rect );
+  game.add( rectEntity );
 
   var rectInterval = setInterval(function() {
-    rect.left -= 4;
-    rect.rotation += 10 * Math.PI / 180;
-    polygon.rotation += 2 * Math.PI / 180;
+    rectEntity.x -= 4;
+    rectEntity.rotation += 10 * Math.PI / 180;
+    polyEntity.rotation += 2 * Math.PI / 180;
   }, 16 );
 
   setTimeout(function() {
     clearInterval( rectInterval );
   }, 600 );
 
-  var polygon = new Polygon( 500, 350 );
+  // Polygon.
+  var polyEntity = new PhysicsEntity( 500, 350 );
+
+  var polygon = new Polygon( 50, 0 );
   polygon.vertices = [ -100, -50, 100, -50, 0, 100 ];
   polygon.fill.alpha = 0.5;
-  game.add( polygon );
 
+  polyEntity.add( polygon );
+  game.add( polyEntity );
+
+  // Tractor beam.
   var tractorBeam = new TractorBeam( 200, 300, 50 );
   tractorBeam.distance = 200;
   tractorBeam.force = 1200;
   game.add( tractorBeam );
 
+  // Player.
   game.player = new Player( 200, 200 );
   game.player.world = game;
   game.player.add( new Circle( 0, 0, 20 ) );

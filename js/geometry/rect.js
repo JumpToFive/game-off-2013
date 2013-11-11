@@ -21,6 +21,16 @@ define([
   };
 
   Rect.prototype.aabb = function() {
+    if ( !this.rotation ) {
+      return {
+        xmin: this.left,
+        ymin: this.top,
+        xmax: this.right,
+        ymax: this.bottom
+      };
+    }
+
+    // Handle rotation.
     var halfWidth  = 0.5 * this.width,
         halfHeight = 0.5 * this.height;
 
