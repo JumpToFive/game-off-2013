@@ -4,6 +4,42 @@ define([
 ], function( Object2D ) {
   'use strict';
 
+  /**
+   * Rotates the axis-aligned bounding box defined by
+   * [(left, top), (right, bottom)] by rotation. Translates by (tx, ty).
+   */
+  function rotate( tx, ty, left, top, right, bottom, rotation ) {
+    var cos = Math.cos( -rotation ),
+        sin = Math.sin( -rotation );
+
+    // Coordinates of rotated extents.
+    var x = [],
+        y = [];
+
+    // Top left.
+    x.push( cos * left - sin * top );
+    y.push( sin * left + cos * top );
+
+    // Bottom left.
+    x.push( cos * left - sin * bottom );
+    y.push( sin * left + cos * bottom );
+
+    // Top right.
+    x.push( cos * right - sin * top );
+    y.push( sin * right + cos * top );
+
+    // Bottom right.
+    x.push( cos * right - sin * bottom );
+    y.push( sin * right + cos * bottom );
+
+    return {
+      xmin: Math.min.apply( null, x ) + tx,
+      ymin: Math.min.apply( null, y ) + ty,
+      xmax: Math.max.apply( null, x ) + tx,
+      ymax: Math.max.apply( null, y ) + ty
+    };
+  }
+
   function Rect( x, y, width, height ) {
     Object2D.call( this, x, y );
 
@@ -11,8 +47,11 @@ define([
     this.height = height || 0;
   }
 
+  Rect.rotate = rotate;
+
   Rect.prototype = new Object2D();
   Rect.prototype.constructor = Rect;
+
 
   Rect.prototype.drawPath = function( ctx ) {
     ctx.beginPath();
@@ -39,35 +78,7 @@ define([
         bottom = halfHeight,
         right  = halfWidth;
 
-    var cos = Math.cos( -this.rotation ),
-        sin = Math.sin( -this.rotation );
-
-    // Coordinates of rotated extents.
-    var x = [],
-        y = [];
-
-    // Top left.
-    x.push( cos * left - sin * top );
-    y.push( sin * left + cos * top );
-
-    // Bottom left.
-    x.push( cos * left - sin * bottom );
-    y.push( sin * left + cos * bottom );
-
-    // Top right.
-    x.push( cos * right - sin * top );
-    y.push( sin * right + cos * top );
-
-    // Bottom right.
-    x.push( cos * right - sin * bottom );
-    y.push( sin * right + cos * bottom );
-
-    return {
-      xmin: Math.min.apply( this, x ) + this.x,
-      ymin: Math.min.apply( this, y ) + this.y,
-      xmax: Math.max.apply( this, x ) + this.x,
-      ymax: Math.max.apply( this, y ) + this.y
-    };
+    return rotate( this.x, this.y, left, top, right, bottom, this.rotation );
   };
 
   Object.defineProperty( Rect.prototype, 'left', {

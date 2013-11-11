@@ -1,7 +1,8 @@
 /*globals define*/
 define([
-  'object2d'
-], function( Object2D ) {
+  'object2d',
+  'geometry/rect'
+], function( Object2D, Rect ) {
   'use strict';
 
   function Entity( x, y ) {
@@ -57,30 +58,7 @@ define([
       };
     }
 
-    var cos = Math.cos( -this.rotation ),
-        sin = Math.sin( -this.rotation );
-
-    var x = [],
-        y = [];
-
-    x.push( cos * xmin - sin * ymin );
-    y.push( sin * xmin + cos * ymin );
-
-    x.push( cos * xmin - sin * ymax );
-    y.push( sin * xmin + cos * ymax );
-
-    x.push( cos * xmax - sin * ymin );
-    y.push( sin * xmax + cos * ymin );
-
-    x.push( cos * xmax - sin * ymax );
-    y.push( sin * xmax + cos * ymax );
-
-    return {
-      xmin: Math.min.apply( this, x ) + this.x,
-      ymin: Math.min.apply( this, y ) + this.y,
-      xmax: Math.max.apply( this, x ) + this.x,
-      ymax: Math.max.apply( this, y ) + this.y
-    };
+    return Rect.rotate( this.x, this.y, xmin, ymin, xmax, ymax, this.rotation );
   };
 
   return Entity;
