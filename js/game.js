@@ -85,75 +85,82 @@ define([
       return entity.shapes.some( isCircle );
     });
 
-    var x0 = 300,
-        y0 = 250,
-        x1 = 20,
-        y1 = 200;
+    var segments = [
+      [ 500, 150, 300, 250 ],
+      [ 300, 250,  20, 200 ]
+    ];
 
-    // Draw line.
-    ctx.beginPath();
-    ctx.moveTo( x0, y0 );
-    ctx.lineTo( x1, y1 );
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = '#f00';
-    ctx.stroke();
+    segments.forEach(function( segment ) {
+      var x0 = segment[0],
+          y0 = segment[1],
+          x1 = segment[2],
+          y1 = segment[3];
 
-    // Draw normals.
-    var mx = 0.5 * ( x0 + x1 ),
-        my = 0.5 * ( y0 + y1 );
-
-    var normal = Utils.lineNormal( x0, y0, x1, y1 );
-    ctx.beginPath();
-    ctx.moveTo( mx, my );
-    ctx.lineTo( mx + normal.x * 10, my + normal.y * 10 );
-    ctx.strokeStyle = '#0f0';
-    ctx.stroke();
-
-    // Get intersection points.
-    var points = circleEntities.map(function( circleEntity ) {
-      var x = circleEntity.x,
-          y = circleEntity.y;
-
-      var circles = circleEntity.shapes.filter( isCircle );
-
-      var intersections = circles.map(function( circle ) {
-        return Intersection.segmentCircleIntersection( x0, y0, x1, y1, circle.x + x, circle.y + y, circle.radius );
-      })[0];
-
-      var xi = 0, yi = 0;
-      intersections.forEach(function( intersection, index, array ) {
-        xi += intersection.x / array.length;
-        yi += intersection.y / array.length;
-      });
-
-      if ( intersections.length ) {
-        ctx.beginPath();
-        ctx.rect( xi - 6, yi - 6, 12, 12 );
-        ctx.fillStyle = '#f00';
-        ctx.fill();
-
-        var dx = xi - circleEntity.x,
-            dy = yi - circleEntity.y;
-        var distance = Math.sqrt( dx * dx + dy * dy );
-
-        var moveDistance = circleEntity.shapes[0].radius - distance;
-        if ( moveDistance >= 0 ) {
-          circleEntity.x += moveDistance * normal.x;
-          circleEntity.y += moveDistance * normal.y;
-        }
-      }
-
-      return intersections;
-    }).reduce(function( array, points ) {
-      return array.concat( points );
-    }, [] );
-
-    // Draw intersection points.
-    points.forEach(function( point ) {
+      // Draw segment.
       ctx.beginPath();
-      ctx.rect( point.x - 5, point.y - 5, 10, 10 );
-      ctx.fillStyle = '#0f0';
-      ctx.fill();
+      ctx.moveTo( x0, y0 );
+      ctx.lineTo( x1, y1 );
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#f00';
+      ctx.stroke();
+
+      // Draw normals.
+      var mx = 0.5 * ( x0 + x1 ),
+          my = 0.5 * ( y0 + y1 );
+
+      var normal = Utils.lineNormal( x0, y0, x1, y1 );
+      ctx.beginPath();
+      ctx.moveTo( mx, my );
+      ctx.lineTo( mx + normal.x * 10, my + normal.y * 10 );
+      ctx.strokeStyle = '#0f0';
+      ctx.stroke();
+
+      // Get intersection points.
+      var points = circleEntities.map(function( circleEntity ) {
+        var x = circleEntity.x,
+            y = circleEntity.y;
+
+        var circles = circleEntity.shapes.filter( isCircle );
+
+        var intersections = circles.map(function( circle ) {
+          return Intersection.segmentCircleIntersection( x0, y0, x1, y1, circle.x + x, circle.y + y, circle.radius );
+        })[0];
+
+        var xi = 0, yi = 0;
+        intersections.forEach(function( intersection, index, array ) {
+          xi += intersection.x / array.length;
+          yi += intersection.y / array.length;
+        });
+
+        if ( intersections.length ) {
+          ctx.beginPath();
+          ctx.rect( xi - 6, yi - 6, 12, 12 );
+          ctx.fillStyle = '#f00';
+          ctx.fill();
+
+          var dx = xi - circleEntity.x,
+              dy = yi - circleEntity.y;
+          var distance = Math.sqrt( dx * dx + dy * dy );
+
+          var moveDistance = circleEntity.shapes[0].radius - distance;
+          if ( moveDistance > 0 ) {
+            circleEntity.x += moveDistance * normal.x;
+            circleEntity.y += moveDistance * normal.y;
+          }
+        }
+
+        return intersections;
+      }).reduce(function( array, points ) {
+        return array.concat( points );
+      }, [] );
+
+      // Draw intersection points.
+      points.forEach(function( point ) {
+        ctx.beginPath();
+        ctx.rect( point.x - 5, point.y - 5, 10, 10 );
+        ctx.fillStyle = '#0f0';
+        ctx.fill();
+      });
     });
   };
 
