@@ -1,8 +1,9 @@
 /*globals define*/
 define([
   'input',
-  'physics/collision'
-], function( Input, Collision ) {
+  'physics/collision',
+  'physics/intersection'
+], function( Input, Collision, Intersection ) {
   'use strict';
 
   function Game() {
@@ -67,6 +68,53 @@ define([
 
     this.entities.forEach(function( entity ) {
       entity.draw( ctx );
+    });
+
+    this.drawDebug();
+  };
+
+  Game.prototype.drawDebug = function() {
+    var ctx = this.ctx;
+
+    function isCircle( shape ) {
+      return shape.type === 'Circle';
+    }
+
+    var circleEntities = this.entities.filter(function( entity ) {
+      return entity.shapes.some( isCircle );
+    });
+
+    var x0 = 20,
+        y0 = 200,
+        x1 = 300,
+        y1 = 250;
+
+    ctx.beginPath();
+    ctx.moveTo( x0, y0 );
+    ctx.lineTo( x1, y1 );
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#f00';
+    ctx.stroke();
+
+    var points = circleEntities.map(function( circleEntity ) {
+      var x = circleEntity.x,
+          y = circleEntity.y;
+
+      var circles = circleEntity.shapes.filter( isCircle );
+
+      return circles.map(function( circle ) {
+        return Intersection.segmentCircleIntersection( x0, y0, x1, y1, circle.x + x, circle.y + y, circle.radius );
+      });
+    }).reduce(function( array, points ) {
+      return array.concat( points[0] );
+    }, [] );
+
+    // Draw intersection points.
+    points.forEach(function( point ) {
+      ctx.beginPath();
+      ctx.rect( point.x - 5, point.y - 5, 10, 10 );
+      ctx.fillStyle = '#0f0';
+      ctx.fill();
     });
   };
 

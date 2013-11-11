@@ -61,35 +61,56 @@ define([
   }
 
   function lineCircleIntersectionParameter( x0, y0, x1, y1, cx, cy, r ) {
+    var dx = x1 - x0,
+        dy = y1 - y0;
+
     // Transform line to circle space.
     x0 -= cx;
     y0 -= cy;
-    x1 -= cx;
-    y1 -= cy;
+
+    // Compute coefficients.
+    var a = ( dx * dx ) + ( dy * dy );
+    var b = 2 * ( x0 * dx + y0 * dy );
+    var c = ( x0 * x0 ) + ( y0 * y0 ) - ( r * r );
+
+    // Compute discriminant.
+    var d = b * b - 4 * a * c;
+
+    // No intersection.
+    if ( d < 0 ) {
+      return [];
+    }
+
+    // One intersection.
+    if ( !d ) {
+      return [ -b / ( 2 * a ) ];
+    }
+
+    d = Math.sqrt( d );
+
+    // Two intersections.
+    return [
+      ( -b - d ) / ( 2 * a ),
+      ( -b + d ) / ( 2 * a )
+    ];
   }
 
-  // Should return an array?
   function lineCircleIntersection( x0, y0, x1, y1, cx, cy, r ) {
-    var t = lineCircleIntersectionParameter( x0, y0, x1, y1, cx, cy, r );
-    return lineParameter( x0, y0, x1, y1, t );
+    return lineCircleIntersectionParameter( x0, y0, x1, y1, cx, cy, r ).map(function( t ) {
+      return lineParameter( x0, y0, x1, y1, t );
+    });
   }
 
   function segmentCircleIntersectionParameter( x0, y0, x1, y1, cx, cy, r ) {
-    var t = lineCircleIntersectionParameter( x0, y0, x1, y1, cx, cy, r );
-    if ( t === null ) {
-      return null;
-    }
-
-    if ( 0 > t || t > 1 ) {
-      return null;
-    }
-
-    return t;
+    return lineCircleIntersectionParameter( x0, y0, x1, y1, cx, cy, r ).filter(function( t ) {
+      return t !== null && 0 <= t && t <= 1;
+    });
   }
 
   function segmentCircleIntersection( x0, y0, x1, y1, cx, cy, r ) {
-    var t = segmentCircleIntersectionParameter( x0, y0, x1, y1, cx, cy, r );
-    return lineParameter( x0, y0, x1, y1, t );
+    return segmentCircleIntersectionParameter( x0, y0, x1, y1, cx, cy, r ).map(function( t ) {
+      return lineParameter( x0, y0, x1, y1, t );
+    });
   }
 
   return {
