@@ -8,6 +8,10 @@ define(function() {
     return a + t * ( b - a );
   }
 
+  function roundNearZero( value ) {
+    return Math.abs( value ) > EPSILON ? value : 0;
+  }
+
   /**
    * Assuming the line is CCW, the normal of the line is (dy, -dx).
    */
@@ -31,6 +35,7 @@ define(function() {
     EPSILON: EPSILON,
 
     lerp: lerp,
+    roundNearZero: roundNearZero,
     lineNormal: lineNormal
   };
 });

@@ -1,7 +1,8 @@
 /*globals define*/
 define([
-  'entities/entity'
-], function( Entity ) {
+  'entities/entity',
+  'utils'
+], function( Entity, Utils ) {
   'use strict';
 
   function PhysicsEntity( x, y ) {
@@ -29,6 +30,14 @@ define([
       return;
     }
 
+    this.vx *= 0.95;
+    this.vy *= 0.95;
+    this.va *= 0.95;
+
+    this.vx = Utils.roundNearZero( this.vx );
+    this.vy = Utils.roundNearZero( this.vy );
+    this.va = Utils.roundNearZero( this.va );
+
     // Change to verlet integration.
     var x = this.x + this.vx * dt,
         y = this.y + this.vy * dt;
@@ -45,6 +54,10 @@ define([
   PhysicsEntity.prototype.accelerate = function( x, y ) {
     this.vx += x;
     this.vy += y;
+  };
+
+  PhysicsEntity.prototype.radialAccelerate = function( ra ) {
+    this.va += ra;
   };
 
   PhysicsEntity.prototype.onCollide = function() {};
