@@ -38,8 +38,8 @@ define([
     this.debug.segments = [
       [ 600, 150, 500, 150 ],
       [ 500, 150, 300, 250 ],
-      [ 300, 250,  20, 200 ],
-      [  20, 200,  20, 100 ]
+      [ 300, 250,  40, 200 ],
+      [  40, 200,  40, 100 ]
     ];
   }
 
@@ -133,9 +133,16 @@ define([
           var moveDistance = circleEntity.shapes[0].radius - distance;
           // If the circle is penetrating the line segment and it's velocity is
           // against the segment normal.
-          if ( moveDistance > 0 && circleEntity.vx * normal.x + circleEntity.vy * normal.y < 0 ) {
+          if ( moveDistance <= 0 ) {
+            return;
+          }
+
+          if ( circleEntity.vx * normal.x + circleEntity.vy * normal.y < 0 ) {
             circleEntity.x += moveDistance * normal.x;
             circleEntity.y += moveDistance * normal.y;
+          } else {
+            circleEntity.x -= moveDistance * normal.x;
+            circleEntity.y -= moveDistance * normal.y;
           }
         }
       });

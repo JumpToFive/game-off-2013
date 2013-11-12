@@ -43,6 +43,16 @@ define([
    * http://gamedev.tutsplus.com/tutorials/implementation/create-custom-2d-physics-engine-aabb-circle-impulse-resolution/
    */
   function collideCircles( a, b ) {
+    var dx = a.x - b.x,
+        dy = a.y - b.y;
+
+    var distanceSquared = dx * dx + dy * dy;
+    var radiusSquared = a.radius + b.radius;
+    radiusSquared *= radiusSquared;
+
+    if ( radiusSquared < distanceSquared ) {
+      return null;
+    }
 
     var manifold = new Manifold();
   }

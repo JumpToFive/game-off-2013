@@ -113,7 +113,7 @@ define([
     });
   }
 
-  function closestPointOnLine( x, y, x0, y0, x1, y1 ) {
+  function closestPointOnLineParameter( x, y, x0, y0, x1, y1 ) {
     var dx = x1 - x0,
         dy = y1 - y0;
 
@@ -124,8 +124,30 @@ define([
 
     var lengthSquared = dx * dx + dy * dy;
 
-    // Calculate parameter of closest point on line segment.
-    var t = ( ( x - x0 ) * ( x1 - x0 ) + ( y - y0 ) * ( y1 - y0 ) ) / lengthSquared;
+    return ( ( x - x0 ) * ( x1 - x0 ) + ( y - y0 ) * ( y1 - y0 ) ) / lengthSquared;
+  }
+
+  function closestPointOnLine( x, y, x0, y0, x1, y1 ) {
+    var t = closestPointOnLineParameter( x, y, x0, y0, x1, y1 );
+    return lineParameter( x0, y0, x1, y1, t );
+  }
+
+  function closestPointOnSegment( x, y, x0, y0, x1, y1 ) {
+    var t = closestPointOnLineParameter( x, y, x0, y1, x1, y1 );
+
+    if ( 0 > t ) {
+      return {
+        x: x0,
+        y: y0
+      };
+    }
+
+    if ( t > 1 ) {
+      return {
+        x: x1,
+        y: y1
+      };
+    }
 
     return lineParameter( x0, y0, x1, y1, t );
   }
@@ -147,6 +169,8 @@ define([
     segmentCircleIntersectionParameter: segmentCircleIntersectionParameter,
     segmentCircleIntersection: segmentCircleIntersection,
 
-    closestPointOnLine: closestPointOnLine
+    closestPointOnLineParameter: closestPointOnLineParameter,
+    closestPointOnLine: closestPointOnLine,
+    closestPointOnSegment: closestPointOnSegment
   };
 });
