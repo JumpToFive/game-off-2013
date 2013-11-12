@@ -105,7 +105,8 @@ define([
       // Get intersection points.
       circleEntities.forEach(function( circleEntity ) {
         var x = circleEntity.x,
-            y = circleEntity.y;
+            y = circleEntity.y,
+            radius = circleEntity.shapes[0].radius;
 
         var circles = circleEntity.shapes.filter( isCircle );
 
@@ -120,24 +121,24 @@ define([
         });
 
         if ( intersections.length === 1 ) {
-          var point = Intersection.closestPointOnLine( x, y, x0, y0, x1, y1 );
+          var point = Intersection.closestPointOnSegment( x, y, x0, y0, x1, y1 );
           xi = point.x;
           yi = point.y;
         }
 
         if ( intersections.length ) {
-          var dx = xi - circleEntity.x,
-              dy = yi - circleEntity.y;
+          var dx = xi - x,
+              dy = yi - y;
           var distance = Math.sqrt( dx * dx + dy * dy );
 
-          var moveDistance = circleEntity.shapes[0].radius - distance;
+          var moveDistance = radius - distance;
           // If the circle is penetrating the line segment and it's velocity is
           // against the segment normal.
           if ( moveDistance <= 0 ) {
             return;
           }
 
-          if ( circleEntity.vx * normal.x + circleEntity.vy * normal.y < 0 ) {
+          if ( dx * normal.x + dy * normal.y < 0 ) {
             circleEntity.x += moveDistance * normal.x;
             circleEntity.y += moveDistance * normal.y;
           } else {

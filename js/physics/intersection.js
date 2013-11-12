@@ -133,7 +133,7 @@ define([
   }
 
   function closestPointOnSegment( x, y, x0, y0, x1, y1 ) {
-    var t = closestPointOnLineParameter( x, y, x0, y1, x1, y1 );
+    var t = closestPointOnLineParameter( x, y, x0, y0, x1, y1 );
 
     if ( 0 > t ) {
       return {
@@ -150,6 +150,18 @@ define([
     }
 
     return lineParameter( x0, y0, x1, y1, t );
+  }
+
+  function angleFrom( x0, y0, x1, y1 ) {
+    return Math.atan2( y1 - y0, x1 - x0 );
+  }
+
+  function closestPointOnCircle( x, y, cx, cy, radius ) {
+    var angle = angleFrom( cx, cy, x, y );
+    return {
+      x: cx + Math.cos( angle ) * radius,
+      y: cy + Math.sin( angle ) * radius
+    };
   }
 
   return {
@@ -171,6 +183,9 @@ define([
 
     closestPointOnLineParameter: closestPointOnLineParameter,
     closestPointOnLine: closestPointOnLine,
-    closestPointOnSegment: closestPointOnSegment
+    closestPointOnSegment: closestPointOnSegment,
+
+    angleFrom: angleFrom,
+    closestPointOnCircle: closestPointOnCircle
   };
 });
