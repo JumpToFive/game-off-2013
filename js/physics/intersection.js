@@ -113,6 +113,23 @@ define([
     });
   }
 
+  function closestPointOnLine( x, y, x0, y0, x1, y1 ) {
+    var dx = x1 - x0,
+        dy = y1 - y0;
+
+    // Check for line degeneracy.
+    if ( !dx && !dy ) {
+      return null;
+    }
+
+    var lengthSquared = dx * dx + dy * dy;
+
+    // Calculate parameter of closest point on line segment.
+    var t = ( ( x - x0 ) * ( x1 - x0 ) + ( y - y0 ) * ( y1 - y0 ) ) / lengthSquared;
+
+    return lineParameter( x0, y0, x1, y1, t );
+  }
+
   return {
     aabb: aabb,
 
@@ -128,6 +145,8 @@ define([
     lineCircleIntersection: lineCircleIntersection,
 
     segmentCircleIntersectionParameter: segmentCircleIntersectionParameter,
-    segmentCircleIntersection: segmentCircleIntersection
+    segmentCircleIntersection: segmentCircleIntersection,
+
+    closestPointOnLine: closestPointOnLine
   };
 });

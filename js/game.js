@@ -134,6 +134,12 @@ define([
           yi += intersection.y / array.length;
         });
 
+        if ( intersections.length === 1 ) {
+          var point = Intersection.closestPointOnLine( x, y, x0, y0, x1, y1 );
+          xi = point.x;
+          yi = point.y;
+        }
+
         if ( intersections.length ) {
           ctx.beginPath();
           ctx.rect( xi - 6, yi - 6, 12, 12 );
