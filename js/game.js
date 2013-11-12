@@ -32,6 +32,15 @@ define([
 
     this.input = new Input();
     this.input.game = this;
+
+    this.debug = {};
+
+    this.debug.segments = [
+      [ 600, 150, 500, 150 ],
+      [ 500, 150, 300, 250 ],
+      [ 300, 250,  20, 200 ],
+      [  20, 200,  20, 100 ]
+    ];
   }
 
   Game.instance = null;
@@ -52,6 +61,8 @@ define([
     this.entities.forEach(function( entity ) {
       entity.update( dt );
     });
+
+    this.updateDebug( dt );
 
     Collision.broadphase( this.entities );
   };
@@ -74,25 +85,71 @@ define([
     this.drawDebug();
   };
 
+  function isCircle( shape ) {
+    return shape.type === 'Circle';
+  }
+
+  Game.prototype.updateDebug = function( dt ) {
+    var circleEntities = this.entities.filter(function( entity ) {
+      return entity.shapes.some( isCircle );
+    });
+
+    this.debug.segments.forEach(function( segment ) {
+      var x0 = segment[0],
+          y0 = segment[1],
+          x1 = segment[2],
+          y1 = segment[3];
+
+      var normal = Utils.lineNormal( x0, y0, x1, y1 );
+
+      // Get intersection points.
+      circleEntities.forEach(function( circleEntity ) {
+        var x = circleEntity.x,
+            y = circleEntity.y;
+
+        var circles = circleEntity.shapes.filter( isCircle );
+
+        var intersections = circles.map(function( circle ) {
+          return Intersection.segmentCircleIntersection( x0, y0, x1, y1, circle.x + x, circle.y + y, circle.radius );
+        })[0];
+
+        var xi = 0, yi = 0;
+        intersections.forEach(function( intersection, index, array ) {
+          xi += intersection.x / array.length;
+          yi += intersection.y / array.length;
+        });
+
+        if ( intersections.length === 1 ) {
+          var point = Intersection.closestPointOnLine( x, y, x0, y0, x1, y1 );
+          xi = point.x;
+          yi = point.y;
+        }
+
+        if ( intersections.length ) {
+          var dx = xi - circleEntity.x,
+              dy = yi - circleEntity.y;
+          var distance = Math.sqrt( dx * dx + dy * dy );
+
+          var moveDistance = circleEntity.shapes[0].radius - distance;
+          // If the circle is penetrating the line segment and it's velocity is
+          // against the segment normal.
+          if ( moveDistance > 0 && circleEntity.vx * normal.x + circleEntity.vy * normal.y < 0 ) {
+            circleEntity.x += moveDistance * normal.x;
+            circleEntity.y += moveDistance * normal.y;
+          }
+        }
+      });
+    });
+  };
+
   Game.prototype.drawDebug = function() {
     var ctx = this.ctx;
-
-    function isCircle( shape ) {
-      return shape.type === 'Circle';
-    }
 
     var circleEntities = this.entities.filter(function( entity ) {
       return entity.shapes.some( isCircle );
     });
 
-    var segments = [
-      [ 600, 150, 500, 150 ],
-      [ 500, 150, 300, 250 ],
-      [ 300, 250,  20, 200 ],
-      [  20, 200,  20, 100 ]
-    ];
-
-    segments.forEach(function( segment ) {
+    this.debug.segments.forEach(function( segment ) {
       var x0 = segment[0],
           y0 = segment[1],
           x1 = segment[2],
@@ -124,40 +181,9 @@ define([
 
         var circles = circleEntity.shapes.filter( isCircle );
 
-        var intersections = circles.map(function( circle ) {
+        return circles.map(function( circle ) {
           return Intersection.segmentCircleIntersection( x0, y0, x1, y1, circle.x + x, circle.y + y, circle.radius );
         })[0];
-
-        var xi = 0, yi = 0;
-        intersections.forEach(function( intersection, index, array ) {
-          xi += intersection.x / array.length;
-          yi += intersection.y / array.length;
-        });
-
-        if ( intersections.length === 1 ) {
-          var point = Intersection.closestPointOnLine( x, y, x0, y0, x1, y1 );
-          xi = point.x;
-          yi = point.y;
-        }
-
-        if ( intersections.length ) {
-          ctx.beginPath();
-          ctx.rect( xi - 6, yi - 6, 12, 12 );
-          ctx.fillStyle = '#f00';
-          ctx.fill();
-
-          var dx = xi - circleEntity.x,
-              dy = yi - circleEntity.y;
-          var distance = Math.sqrt( dx * dx + dy * dy );
-
-          var moveDistance = circleEntity.shapes[0].radius - distance;
-          if ( moveDistance > 0 ) {
-            circleEntity.x += moveDistance * normal.x;
-            circleEntity.y += moveDistance * normal.y;
-          }
-        }
-
-        return intersections;
       }).reduce(function( array, points ) {
         return array.concat( points );
       }, [] );
