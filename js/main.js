@@ -1,11 +1,3 @@
-/*globals requirejs, define*/
-requirejs.config({
-  paths: {
-    'text': 'text'
-  }
-});
-
-
 /* globals define*/
 define(function( require ) {
   'use strict';
