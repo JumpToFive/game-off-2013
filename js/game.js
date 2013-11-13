@@ -36,14 +36,10 @@ define([
       alpha: 1.0
     });
 
-    // Half scale.
-    // this.camera.set({
-    //   width: 1280,
-    //   height: 960
-    // });
+    this.camera.width = this.WIDTH;
+    this.camera.height = this.HEIGHT;
 
     this.camera.margin = 50;
-    this.camera.rotation = 0.25 * Math.PI;
     this.camera.lineWidth = 2;
 
     this.level = null;
@@ -174,6 +170,32 @@ define([
         }
       });
     });
+
+    // Basic camera controls.
+    // W. Zoom in.
+    if ( this.input.keys[ 87 ] ) {
+      this.camera.width = Math.max( this.camera.width - 4, 160 );
+      this.camera.height = Math.max( this.camera.height - 3, 120 );
+    }
+    // S. Zoom out.
+    if ( this.input.keys[ 83 ] ) {
+      this.camera.width += 4;
+      this.camera.height += 3;
+    }
+    // A. Rotate left.
+    if ( this.input.keys[ 65 ] ) {
+      this.camera.rotation += dt;
+    }
+    // D. Rotate right.
+    if ( this.input.keys[ 68 ] ) {
+      this.camera.rotation -= dt;
+    }
+    // Q. Reset camera.
+    if ( this.input.keys[ 81 ] ) {
+      this.camera.width = this.WIDTH;
+      this.camera.height = this.HEIGHT;
+      this.camera.rotation = 0;
+    }
   };
 
   Game.prototype.drawDebug = function() {

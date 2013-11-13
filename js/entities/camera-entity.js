@@ -78,8 +78,6 @@ define([
 
     this.x += dx;
     this.y += dy;
-
-    this.rotation += 0.01;
   };
 
   CameraEntity.prototype.applyTransform = function( ctx ) {
