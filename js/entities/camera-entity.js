@@ -14,7 +14,7 @@ define([
     this.target = null;
     this.margin = 0;
 
-    this.weight = 0.05;
+    this.weight = 4;
   }
 
   CameraEntity.prototype = new Entity();
@@ -51,21 +51,21 @@ define([
       y = ry;
     }
 
-    var dx = 0, dy = 0;
+    // Recenter at a rate influenced by weight and dt.
+    var dx = this.weight * x * dt,
+        dy = this.weight * y * dt;
+
+    // Make sure the target stays within the margins.
     if ( x < left + margin ) {
-      dx = x - ( left + margin );
+      dx += x - ( left + margin );
     } else if ( x > right - margin ) {
-      dx = x - ( right - margin );
-    } else {
-      dx = this.weight * x;
+      dx += x - ( right - margin );
     }
 
     if ( y < top + margin ) {
-      dy = y - ( top + margin );
+      dy += y - ( top + margin );
     } else if  ( y > bottom - margin ) {
-      dy = y - ( bottom - margin );
-    } else {
-      dy = this.weight * y;
+      dy += y - ( bottom - margin );
     }
 
     if ( this.rotation ) {
@@ -96,12 +96,8 @@ define([
     var halfWidth  = 0.5 * width,
         halfHeight = 0.5 * height;
 
-    ctx.save();
-
     ctx.rect( -halfWidth, -halfHeight, width, height );
     ctx.rect( -halfWidth + margin, -halfHeight + margin, width - 2 * margin, height - 2 * margin );
-
-    ctx.restore();
   };
 
   return CameraEntity;

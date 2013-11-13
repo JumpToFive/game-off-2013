@@ -2,7 +2,7 @@
 define(function() {
   'use strict';
 
-  var EPSILON = 1e-5;
+  var EPSILON = 1e-3;
 
   function lerp( a, b, t ) {
     return a + t * ( b - a );

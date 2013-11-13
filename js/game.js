@@ -160,13 +160,11 @@ define([
             return;
           }
 
-          if ( dx * normal.x + dy * normal.y < 0 ) {
-            circleEntity.x += moveDistance * normal.x;
-            circleEntity.y += moveDistance * normal.y;
-          } else {
-            circleEntity.x -= moveDistance * normal.x;
-            circleEntity.y -= moveDistance * normal.y;
-          }
+          // Move entity along normal direction.
+          moveDistance *= dx * normal.x + dy * normal.y < 0 ? 1 : -1
+
+          circleEntity.x += moveDistance * normal.x;
+          circleEntity.y += moveDistance * normal.y;
         }
       });
     });
