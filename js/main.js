@@ -87,6 +87,8 @@ define(function( require ) {
 
   game.add( game.player );
 
+  game.camera.target = game.player;
+
   game.element.classList.add( 'game' );
   document.body.insertBefore( game.element, document.body.firstChild );
 

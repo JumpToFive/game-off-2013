@@ -1,10 +1,11 @@
 /*globals define*/
 define([
   'input',
+  'entities/camera-entity',
   'physics/collision',
   'physics/intersection',
   'utils'
-], function( Input, Collision, Intersection, Utils ) {
+], function( Input, CameraEntity, Collision, Intersection, Utils ) {
   'use strict';
 
   function Game() {
@@ -27,6 +28,23 @@ define([
 
     this.entities = [];
     this.player = null;
+
+    this.camera = new CameraEntity( 0.5 * this.WIDTH, 0.5 * this.HEIGHT );
+    this.camera.world = this;
+    this.camera.stroke.set({
+      blue: 255,
+      alpha: 1.0
+    });
+
+    // Half scale.
+    // this.camera.set({
+    //   width: 1280,
+    //   height: 960
+    // });
+
+    this.camera.margin = 50;
+    this.camera.rotation = 0.25 * Math.PI;
+    this.camera.lineWidth = 2;
 
     this.level = null;
 
@@ -65,6 +83,8 @@ define([
     this.updateDebug( dt );
 
     Collision.broadphase( this.entities );
+
+    this.camera.update( dt );
   };
 
   Game.prototype.draw = function() {
@@ -78,11 +98,17 @@ define([
       ctx.clearRect( 0, 0, ctx.canvas.width, ctx.canvas.height );
     }
 
+    ctx.save();
+    this.camera.applyTransform( ctx );
+
     this.entities.forEach(function( entity ) {
       entity.draw( ctx );
     });
 
+    this.camera.draw( ctx );
     this.drawDebug();
+
+    ctx.restore();
   };
 
   function isCircle( shape ) {
