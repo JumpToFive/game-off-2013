@@ -14,18 +14,7 @@ define([
            a.ymax >= b.ymin;
   }
 
-  function lineParameter( x0, y0, x1, y1, parameter ) {
-    if ( parameter === null ) {
-      return null;
-    }
-
-    return {
-      x: Utils.lerp( x0, x1, parameter ),
-      y: Utils.lerp( y0, y1, parameter )
-    };
-  }
-
-  function lineIntersectionParameter( x0, y0, x1, y1, x2, y2, x3, y3 ) {
+  function linesParameter( x0, y0, x1, y1, x2, y2, x3, y3 ) {
     var det = ( x1 - x0 ) * ( y3 - y2 ) - ( x3 - x2 ) * ( y1 - y0 );
     if ( !det ) {
       return null;
@@ -34,14 +23,14 @@ define([
     return ( ( x3 - x2 ) * ( y0 - y2 ) - ( y3 - y2 ) * ( x0 - x2 ) ) / det;
   }
 
-  function lineIntersection( x0, y0, x1, y1, x2, y2, x3, y3 ) {
-    var t = lineIntersectionParameter( x0, y0, x1, y1, x2, y2, x3, y3 );
-    return lineParameter( x0, y0, x1, y1, t );
+  function lines( x0, y0, x1, y1, x2, y2, x3, y3 ) {
+    var t = linesParameter( x0, y0, x1, y1, x2, y2, x3, y3 );
+    return Utils.lerp2d( x0, y0, x1, y1, t );
   }
 
-  function segmentIntersectionParameter( x0, y0, x1, y1, x2, y2, x3, y3 ) {
-    var s = lineIntersectionParameter( x0, y0, x1, y1, x2, y2, x3, y3 ),
-        t = lineIntersectionParameter( x2, y2, x3, y3, x0, y0, x1, y1 );
+  function segmentsParameter( x0, y0, x1, y1, x2, y2, x3, y3 ) {
+    var s = linesParameter( x0, y0, x1, y1, x2, y2, x3, y3 ),
+        t = linesParameter( x2, y2, x3, y3, x0, y0, x1, y1 );
 
     if ( s === null || t === null ) {
       return null;
@@ -55,12 +44,12 @@ define([
     return t;
   }
 
-  function segmentIntersection( x0, y0, x1, y1, x2, y2, x3, y3 ) {
-    var t = segmentIntersectionParameter( x0, y0, x1, y1, x2, y2, x3, y3 );
-    return lineParameter( x0, y0, x1, y1, t );
+  function segments( x0, y0, x1, y1, x2, y2, x3, y3 ) {
+    var t = segmentsParameter( x0, y0, x1, y1, x2, y2, x3, y3 );
+    return Utils.lerp2d( x0, y0, x1, y1, t );
   }
 
-  function lineCircleIntersectionParameter( x0, y0, x1, y1, cx, cy, r ) {
+  function lineCircleParameter( x0, y0, x1, y1, cx, cy, r ) {
     var dx = x1 - x0,
         dy = y1 - y0;
 
@@ -95,21 +84,21 @@ define([
     ];
   }
 
-  function lineCircleIntersection( x0, y0, x1, y1, cx, cy, r ) {
-    return lineCircleIntersectionParameter( x0, y0, x1, y1, cx, cy, r ).map(function( t ) {
-      return lineParameter( x0, y0, x1, y1, t );
+  function lineCircle( x0, y0, x1, y1, cx, cy, r ) {
+    return lineCircleParameter( x0, y0, x1, y1, cx, cy, r ).map(function( t ) {
+      return Utils.lerp2d( x0, y0, x1, y1, t );
     });
   }
 
-  function segmentCircleIntersectionParameter( x0, y0, x1, y1, cx, cy, r ) {
-    return lineCircleIntersectionParameter( x0, y0, x1, y1, cx, cy, r ).filter(function( t ) {
+  function segmentCircleParameter( x0, y0, x1, y1, cx, cy, r ) {
+    return lineCircleParameter( x0, y0, x1, y1, cx, cy, r ).filter(function( t ) {
       return t !== null && 0 <= t && t <= 1;
     });
   }
 
-  function segmentCircleIntersection( x0, y0, x1, y1, cx, cy, r ) {
-    return segmentCircleIntersectionParameter( x0, y0, x1, y1, cx, cy, r ).map(function( t ) {
-      return lineParameter( x0, y0, x1, y1, t );
+  function segmentCircle( x0, y0, x1, y1, cx, cy, r ) {
+    return segmentCircleParameter( x0, y0, x1, y1, cx, cy, r ).map(function( t ) {
+      return Utils.lerp2d( x0, y0, x1, y1, t );
     });
   }
 
@@ -129,7 +118,7 @@ define([
 
   function closestPointOnLine( x, y, x0, y0, x1, y1 ) {
     var t = closestPointOnLineParameter( x, y, x0, y0, x1, y1 );
-    return lineParameter( x0, y0, x1, y1, t );
+    return Utils.lerp2d( x0, y0, x1, y1, t );
   }
 
   function closestPointOnSegment( x, y, x0, y0, x1, y1 ) {
@@ -149,7 +138,7 @@ define([
       };
     }
 
-    return lineParameter( x0, y0, x1, y1, t );
+    return Utils.lerp2d( x0, y0, x1, y1, t );
   }
 
   function angleFrom( x0, y0, x1, y1 ) {
@@ -167,19 +156,17 @@ define([
   return {
     aabb: aabb,
 
-    lineParameter: lineParameter,
+    linesParameter: linesParameter,
+    lines: lines,
 
-    lineIntersectionParameter: lineIntersectionParameter,
-    lineIntersection: lineIntersection,
+    segmentsParameter: segmentsParameter,
+    segments: segments,
 
-    segmentIntersectionParameter: segmentIntersectionParameter,
-    segmentIntersection: segmentIntersection,
+    lineCircleParameter: lineCircleParameter,
+    lineCircle: lineCircle,
 
-    lineCircleIntersectionParameter: lineCircleIntersectionParameter,
-    lineCircleIntersection: lineCircleIntersection,
-
-    segmentCircleIntersectionParameter: segmentCircleIntersectionParameter,
-    segmentCircleIntersection: segmentCircleIntersection,
+    segmentCircleParameter: segmentCircleParameter,
+    segmentCircle: segmentCircle,
 
     closestPointOnLineParameter: closestPointOnLineParameter,
     closestPointOnLine: closestPointOnLine,

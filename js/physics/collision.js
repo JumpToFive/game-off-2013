@@ -54,11 +54,16 @@ define([
       return null;
     }
 
-    var manifold = new Manifold();
+    var manifold = new Manifold( a, b );
   }
 
-  function collideEdgeAndCircle( edge, circle ) {
+  function collideEdgeAndCircle( edge, edgeTransform, circle, circleTransform ) {
+    var x0 = edge.x0,
+        y0 = edge.y0,
+        x1 = edge.x1,
+        y1 = edge.y1;
 
+    var manifold = new Manifold( edgeTransform, circleTransform );
   }
 
   function Manifold( a, b, penetration, nx, ny ) {

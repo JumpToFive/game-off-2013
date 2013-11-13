@@ -133,7 +133,7 @@ define([
         var circles = circleEntity.shapes.filter( isCircle );
 
         var intersections = circles.map(function( circle ) {
-          return Intersection.segmentCircleIntersection( x0, y0, x1, y1, circle.x + x, circle.y + y, circle.radius );
+          return Intersection.segmentCircle( x0, y0, x1, y1, circle.x + x, circle.y + y, circle.radius );
         })[0];
 
         var xi = 0, yi = 0;
@@ -236,7 +236,7 @@ define([
         var circles = circleEntity.shapes.filter( isCircle );
 
         return circles.map(function( circle ) {
-          return Intersection.segmentCircleIntersection( x0, y0, x1, y1, circle.x + x, circle.y + y, circle.radius );
+          return Intersection.segmentCircle( x0, y0, x1, y1, circle.x + x, circle.y + y, circle.radius );
         })[0];
       }).reduce(function( array, points ) {
         return array.concat( points );
