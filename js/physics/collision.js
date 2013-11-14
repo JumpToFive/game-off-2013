@@ -68,7 +68,7 @@ define([
 
     var manifold = new Manifold( a, b );
 
-    return Manifold;
+    return manifold;
   }
 
   function collideEdgeAndCircle( edge, edgeTransform, circle, circleTransform ) {
@@ -77,7 +77,49 @@ define([
         x1 = edge.x1,
         y1 = edge.y1;
 
+    var cos, sin;
+    if ( edgeTransform.rotation ) {
+      cos = Math.cos( -edgeTransform.rotation );
+      sin = Math.sin( -edgeTransform.rotation );
+
+      var rx0 = cos * x0 - sin * y0,
+          ry0 = sin * x0 + cos * y0,
+
+          rx1 = cos * x1 - sin * y1,
+          ry1 = sin * x1 + cos * y1;
+
+      x0 = rx0;
+      y0 = ry0;
+      x1 = rx1;
+      y1 = ry1;
+    }
+
+    x0 += edgeTransform.x;
+    y0 += edgeTransform.y;
+    x1 += edgeTransform.x;
+    y1 += edgeTransform.y;
+
+    var cx = circle.x,
+        cy = circle.y,
+        cr = circle.radius;
+
+    if ( circleTransform.rotation ) {
+      cos = Math.cos( -circleTransform.rotation );
+      sin = Math.sin( -circleTransform.rotation );
+
+      var rcx = cos * cx - sin * cy,
+          rcy = sin * cx - cos * cy;
+
+      cx = rcx;
+      cy = rcy;
+    }
+
+    cx += circleTransform.x;
+    cy += circleTransform.y;
+
     var manifold = new Manifold( edgeTransform, circleTransform );
+
+    return manifold;
   }
 
   return {
