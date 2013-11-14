@@ -161,7 +161,7 @@ define([
           }
 
           // Move entity along normal direction.
-          moveDistance *= dx * normal.x + dy * normal.y < 0 ? 1 : -1
+          moveDistance *= dx * normal.x + dy * normal.y < 0 ? 1 : -1;
 
           circleEntity.x += moveDistance * normal.x;
           circleEntity.y += moveDistance * normal.y;
