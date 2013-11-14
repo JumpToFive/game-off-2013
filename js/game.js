@@ -116,6 +116,8 @@ define([
       return entity.shapes.some( isCircle );
     });
 
+    var collision = this.debug.collision = [];
+
     this.debug.segments.forEach(function( segment ) {
       var x0 = segment[0],
           y0 = segment[1],
@@ -160,6 +162,8 @@ define([
             return;
           }
 
+          collision.push( segment );
+
           // Move entity along normal direction.
           moveDistance *= dx * normal.x + dy * normal.y < 0 ? 1 : -1;
 
@@ -201,6 +205,21 @@ define([
 
     var circleEntities = this.entities.filter(function( entity ) {
       return entity.shapes.some( isCircle );
+    });
+
+
+    this.debug.collision.forEach(function( segment ) {
+      var x0 = segment[0],
+          y0 = segment[1],
+          x1 = segment[2],
+          y1 = segment[3];
+
+      ctx.beginPath();
+      ctx.moveTo( x0, y0 );
+      ctx.lineTo( x1, y1 );
+      ctx.lineWidth = 5;
+      ctx.strokeStyle = 'blue';
+      ctx.stroke();
     });
 
     this.debug.segments.forEach(function( segment ) {

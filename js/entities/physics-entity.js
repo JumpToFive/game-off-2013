@@ -21,7 +21,7 @@ define([
     this.fixed = false;
     this.collides = true;
 
-    this.linearDamping = 1;
+    this.linearDamping = 2;
     this.angularDamping = 0.01;
   }
 
