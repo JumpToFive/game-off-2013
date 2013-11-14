@@ -89,20 +89,22 @@ define(function( require ) {
   }
 
   // Emitter.
-  var emitter = new Emitter( 200, 100 );
+  var emitter = new Emitter( 250, 200 );
   var emitterPolygon = new Polygon( 0, 0 );
-  emitterPolygon.vertices = [ -2, -2, -2, 2, 2, 2, 2, -2 ];
+  emitterPolygon.vertices = [ -3, -3, -3, 3, 3, 3, 3, -3 ];
   emitterPolygon.stroke.set({
     red: 255,
     alpha: 1
   });
   emitter.rate = 500;
-  emitter.lifeTime = 1000;
-  emitter.speed = 200;
+  emitter.lifeTime = 2000;
+  emitter.speed = 150;
   emitter.rotation = -0.5 * Math.PI;
   emitter.particle = emitterPolygon;
+  emitter.properties.linearDamping = 0.5;
+  emitter.properties.va = 3 * Math.PI;
   emitter.world = game;
-  emitter.start( 1000 );
+  emitter.start( 500 );
 
   // Player.
   game.player = new Player( 200, 200 );

@@ -54,13 +54,12 @@ define([
       mx = 0.5 * ( x0 + x1 );
       my = 0.5 * ( y0 + y1 );
 
-      ctx.moveTo( mx, my );
-
       normal = Utils.lineNormal( x0, y0, x1, y1 );
       if ( !normal ) {
         continue;
       }
 
+      ctx.moveTo( mx, my );
       ctx.lineTo( mx + normal.x * 10, my + normal.y * 10 );
     }
 

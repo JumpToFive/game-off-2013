@@ -20,6 +20,9 @@ define([
 
     this.fixed = false;
     this.collides = true;
+
+    this.linearDamping = 1;
+    this.angularDamping = 0.01;
   }
 
   PhysicsEntity.prototype = new Entity();
@@ -30,9 +33,11 @@ define([
       return;
     }
 
-    this.vx *= 0.95;
-    this.vy *= 0.95;
-    this.va *= 0.95;
+    var linearDamping = Utils.clamp( 1 - this.linearDamping * dt, 0, 1 )
+
+    this.vx *= linearDamping;
+    this.vy *= linearDamping;
+    this.va *= Utils.clamp( 1  - this.angularDamping * dt, 0, 1 );
 
     this.vx = Utils.roundNearZero( this.vx );
     this.vy = Utils.roundNearZero( this.vy );

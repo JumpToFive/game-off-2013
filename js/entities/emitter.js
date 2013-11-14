@@ -13,6 +13,9 @@ define([
     this.particle = null;
     this.lifeTime = 0;
 
+    // Any custom particle physics properties go here.
+    this.properties = {};
+
     this.interval = null;
   }
 
@@ -29,7 +32,7 @@ define([
 
       this.interval = setInterval(function() {
         var entity = new PhysicsEntity( this.x, this.y );
-
+        entity.set( this.properties );
         entity.add( GeometryFactory.create( particleJSON ) );
 
         entity.set({

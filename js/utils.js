@@ -4,6 +4,10 @@ define(function() {
 
   var EPSILON = 1e-3;
 
+  function clamp( value, min, max ) {
+    return Math.min( Math.max( value, min ), max );
+  }
+
   function lerp( a, b, t ) {
     return a + t * ( b - a );
   }
@@ -47,6 +51,8 @@ define(function() {
 
   return {
     EPSILON: EPSILON,
+
+    clamp: clamp,
 
     lerp: lerp,
     lerp2d: lerp2d,
