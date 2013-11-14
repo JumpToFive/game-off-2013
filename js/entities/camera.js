@@ -5,7 +5,7 @@ define([
 ], function( Entity, Utils ) {
   'use strict';
 
-  function CameraEntity( x, y ) {
+  function Camera( x, y ) {
     Entity.call( this, x, y );
 
     this.width  = 320;
@@ -17,10 +17,10 @@ define([
     this.weight = 4;
   }
 
-  CameraEntity.prototype = new Entity();
-  CameraEntity.prototype.constructor = CameraEntity;
+  Camera.prototype = new Entity();
+  Camera.prototype.constructor = Camera;
 
-  CameraEntity.prototype.update = function( dt ) {
+  Camera.prototype.update = function( dt ) {
     if ( !this.target || !this.world ) {
       return;
     }
@@ -80,14 +80,14 @@ define([
     this.y += dy;
   };
 
-  CameraEntity.prototype.applyTransform = function( ctx ) {
+  Camera.prototype.applyTransform = function( ctx ) {
     ctx.translate( 0.5 * this.world.canvas.width, 0.5 * this.world.canvas.height );
     ctx.scale( this.world.canvas.width / this.width, this.world.canvas.height / this.height );
     ctx.rotate( this.rotation );
     ctx.translate( -this.x, -this.y );
   };
 
-  CameraEntity.prototype.drawPath = function( ctx ) {
+  Camera.prototype.drawPath = function( ctx ) {
     var margin = this.margin;
 
     var width  = this.width,
@@ -100,5 +100,5 @@ define([
     ctx.rect( -halfWidth + margin, -halfHeight + margin, width - 2 * margin, height - 2 * margin );
   };
 
-  return CameraEntity;
+  return Camera;
 });

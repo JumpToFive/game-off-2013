@@ -1,11 +1,11 @@
 /*globals define*/
 define([
   'input',
-  'entities/camera-entity',
+  'entities/camera',
   'physics/collision',
   'physics/intersection',
   'utils'
-], function( Input, CameraEntity, Collision, Intersection, Utils ) {
+], function( Input, Camera, Collision, Intersection, Utils ) {
   'use strict';
 
   function Game() {
@@ -29,7 +29,7 @@ define([
     this.entities = [];
     this.player = null;
 
-    this.camera = new CameraEntity( 0.5 * this.WIDTH, 0.5 * this.HEIGHT );
+    this.camera = new Camera( 0.5 * this.WIDTH, 0.5 * this.HEIGHT );
     this.camera.world = this;
     this.camera.stroke.set({
       blue: 255,
