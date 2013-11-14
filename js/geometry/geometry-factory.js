@@ -2,6 +2,8 @@
 define(function( require ) {
   'use strict';
 
+  var Color = require( 'color' );
+
   var classes = {};
 
   function create( json ) {
@@ -16,7 +18,16 @@ define(function( require ) {
       }
     }
 
-    // Warning: This does not handle Color objects!
+    // Handle color objects.
+    var color;
+    for ( var key in attrs ) {
+      if ( attrs[ key ].type === 'Color' ) {
+        color = new Color();
+        color.set( attrs[ key ] );
+        attrs[ key ] = color;
+      }
+    }
+
     var geometryObject = new classes[ type ]();
     geometryObject.set( attrs );
 

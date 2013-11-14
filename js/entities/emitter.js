@@ -1,7 +1,8 @@
 /*globals define*/
 define([
-  'physics-entity'
-], function( PhysicsEntity ) {
+  'entities/physics-entity',
+  'geometry/geometry-factory'
+], function( PhysicsEntity, GeometryFactory ) {
   'use strict';
 
   function Emitter( x, y ) {
@@ -16,15 +17,20 @@ define([
   }
 
   Emitter.prototype.start = function( when ) {
-    if ( this.interval ) {
+    if ( this.interval ||
+         !this.particle ) {
       return;
     }
 
+    when = when || 0;
+
     setTimeout(function() {
+      var particleJSON = JSON.stringify( this.particle );
+
       this.interval = setInterval(function() {
         var entity = new PhysicsEntity( this.x, this.y );
-        // Note that this doesn't copy the shapes.
-        entity.set( this.particle );
+
+        entity.add( GeometryFactory.create( particleJSON ) );
 
         entity.set({
           vx: Math.cos( -this.rotation ) * this.speed,
@@ -42,9 +48,13 @@ define([
   };
 
   Emitter.prototype.stop = function( when ) {
+    when = when || 0;
+
     setTimeout(function() {
       clearInterval( this.interval );
       this.interval = null;
     }.bind( this ), when );
   };
+
+  return Emitter;
 });
