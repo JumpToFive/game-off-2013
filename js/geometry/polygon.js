@@ -61,7 +61,7 @@ define([
         continue;
       }
 
-      ctx.lineTo( mx + normal.x * 30, my + normal.y * 30 );
+      ctx.lineTo( mx + normal.x * 10, my + normal.y * 10 );
     }
 
     ctx.lineWidth = 3;

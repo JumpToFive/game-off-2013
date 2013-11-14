@@ -6,7 +6,8 @@ define(function( require ) {
       Level   = require( 'level' ),
       Circle  = require( 'geometry/circle' ),
       Rect    = require( 'geometry/rect' ),
-      Polygon = require( 'geometry/polygon'),
+      Polygon = require( 'geometry/polygon' ),
+      Segment = require( 'geometry/segment' ),
       Player  = require( 'entities/player' );
 
   var PhysicsEntity = require( 'entities/physics-entity' );
@@ -45,6 +46,7 @@ define(function( require ) {
     rectEntity.x -= 4;
     rectEntity.rotation += 10 * Math.PI / 180;
     polyEntity.rotation += 2 * Math.PI / 180;
+    segmentEntity.rotation -= 2 * Math.PI / 180;
   }, 16 );
 
   setTimeout(function() {
@@ -60,6 +62,18 @@ define(function( require ) {
 
   polyEntity.add( polygon );
   game.add( polyEntity );
+
+  // Segment.
+  var segmentEntity = new PhysicsEntity();
+  segmentEntity.x = 200;
+  segmentEntity.y = 350;
+
+  var segment = new Segment(0, 0, 100, 50 );
+  segment.stroke.alpha = 1;
+  segment.lineWidth = 2;
+
+  segmentEntity.add( segment );
+  game.add( segmentEntity );
 
   // Tractor beam.
   var tractorBeam = new TractorBeam( 200, 300, 50 );
