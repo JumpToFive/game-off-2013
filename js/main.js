@@ -66,6 +66,13 @@ define(function( require ) {
   tractorBeam.force = 1200;
   game.add( tractorBeam );
 
+  // Factory test.
+  var GeometryFactory = require( 'geometry/geometry-factory' );
+  var polygonClone =  GeometryFactory.create( JSON.stringify( polygon ) );
+  if ( JSON.stringify( polygon ) !== JSON.stringify( polygonClone ) ) {
+    console.log( 'GeometryFactory clone failed.' );
+  }
+
   // Player.
   game.player = new Player( 200, 200 );
   game.player.world = game;
