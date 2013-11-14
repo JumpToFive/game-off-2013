@@ -33,7 +33,7 @@ define([
       return;
     }
 
-    var linearDamping = Utils.clamp( 1 - this.linearDamping * dt, 0, 1 )
+    var linearDamping = Utils.clamp( 1 - this.linearDamping * dt, 0, 1 );
 
     this.vx *= linearDamping;
     this.vy *= linearDamping;
@@ -43,7 +43,7 @@ define([
     this.vy = Utils.roundNearZero( this.vy );
     this.va = Utils.roundNearZero( this.va );
 
-    // Change to verlet integration.
+    // TODO: change to verlet integration?
     var x = this.x + this.vx * dt,
         y = this.y + this.vy * dt;
 
@@ -64,8 +64,6 @@ define([
   PhysicsEntity.prototype.radialAccelerate = function( ra ) {
     this.va += ra;
   };
-
-  PhysicsEntity.prototype.onCollide = function() {};
 
   return PhysicsEntity;
 });
