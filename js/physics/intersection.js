@@ -92,7 +92,7 @@ define([
 
   function segmentCircleParameter( x0, y0, x1, y1, cx, cy, r ) {
     return lineCircleParameter( x0, y0, x1, y1, cx, cy, r ).filter(function( t ) {
-      return t !== null && 0 <= t && t <= 1;
+      return 0 <= t && t <= 1;
     });
   }
 

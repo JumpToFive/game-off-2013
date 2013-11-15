@@ -52,7 +52,44 @@ define([
    * Taken from Randy Gaul's article series, How to Create a Custom 2D Physics Engine:
    * http://gamedev.tutsplus.com/tutorials/implementation/create-custom-2d-physics-engine-aabb-circle-impulse-resolution/
    */
-  function collideCircles( a, aTramsform, b, bTransform ) {
+  function collideCircles( a, aTransform, b, bTransform ) {
+    var ax = a.x,
+        ay = a.y;
+
+    var bx = b.x,
+        by = b.y;
+
+    var cos, sin;
+    var rx, ry;
+
+    if ( aTransform.rotation ) {
+      cos = Math.cos( -aTransform.rotation );
+      sin = Math.sin( -aTransform.rotation );
+
+      rx = cos * ax - sin * ay;
+      ry = sin * ax + cos * ay;
+
+      ax = rx;
+      ay = ry;
+    }
+
+    ax += aTransform.x;
+    ay += aTransform.y;
+
+    if ( bTransform.rotation ) {
+      cos = Math.cos( -bTransform.rotation );
+      sin = Math.sin( -bTransform.rotation );
+
+      rx = cos * bx - sin * by;
+      ry = sin * bx + cos * by;
+
+      bx = rx;
+      by = ry;
+    }
+
+    bx += bTransform.x;
+    by += bTransform.y;
+
     var dx = a.x - b.x,
         dy = a.y - b.y;
 
@@ -66,7 +103,7 @@ define([
       return null;
     }
 
-    var manifold = new Manifold( a, b );
+    var manifold = new Manifold( aTransform, bTransform );
 
     return manifold;
   }
@@ -101,7 +138,7 @@ define([
 
     var cx = circle.x,
         cy = circle.y,
-        cr = circle.radius;
+        radius = circle.radius;
 
     if ( circleTransform.rotation ) {
       cos = Math.cos( -circleTransform.rotation );
@@ -124,6 +161,9 @@ define([
 
   return {
     broadphase: broadphase,
-    sort2d: sort2d
+    sort2d: sort2d,
+
+    collideCircles: collideCircles,
+    collideEdgeAndCircle: collideEdgeAndCircle
   };
 });
