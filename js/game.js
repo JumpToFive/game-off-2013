@@ -47,6 +47,9 @@ define([
     this.input = new Input();
     this.input.game = this;
 
+    // Minimum of 30 fps.
+    this.MAX_FRAME_TIME = 1000 / 30;
+
     this.debug = {};
 
     this.debug.segments = [
@@ -71,8 +74,8 @@ define([
     var dt = this.currTime - this.prevTime;
     this.prevTime = this.currTime;
 
-    if ( dt > 1e2 ) {
-      dt = 1e2;
+    if ( dt > this.MAX_FRAME_TIME ) {
+      dt = this.MAX_FRAME_TIME;
     }
 
     dt *= 1e-3;
