@@ -52,16 +52,20 @@ define([
 
     this.debug = {};
 
-    this.debug.segments = [
-      [ 600, 150, 500, 150 ],
-      [ 500, 150, 300, 250 ],
-      [ 300, 250,  40, 200 ],
-      [  40, 200,  40, 100 ],
-      // Rectangle.
-      [ 100, 0, 200, 0 ],
-      [ 200, 0, 200, -50 ],
-      [ 200, -50, 100, -50 ],
-      [ 100, -50, 100, 0 ]
+    this.debug.objects = [
+      [
+        [ 600, 150, 500, 150 ],
+        [ 500, 150, 300, 250 ],
+        [ 300, 250,  40, 200 ],
+        [  40, 200,  40, 100 ]
+      ],
+      [
+        // Rectangle.
+        [ 100, 0, 200, 0 ],
+        [ 200, 0, 200, -50 ],
+        [ 200, -50, 100, -50 ],
+        [ 100, -50, 100, 0 ]
+      ]
     ];
   }
 
@@ -126,58 +130,155 @@ define([
 
     var collision = this.debug.collision = [];
 
-    this.debug.segments.forEach(function( segment ) {
-      var x0 = segment[0],
-          y0 = segment[1],
-          x1 = segment[2],
-          y1 = segment[3];
+    var manifolds = [];
 
-      var normal = Utils.lineNormal( x0, y0, x1, y1 );
+    this.debug.objects.forEach(function( object ) {
+      object.forEach(function( segment, index ) {
+        var x0 = segment[0],
+            y0 = segment[1],
+            x1 = segment[2],
+            y1 = segment[3];
 
-      // Get intersection points.
-      circleEntities.forEach(function( circleEntity ) {
-        var x = circleEntity.x,
-            y = circleEntity.y,
-            radius = circleEntity.shapes[0].radius;
+        var normal = Utils.lineNormal( x0, y0, x1, y1 );
 
-        var circles = circleEntity.shapes.filter( isCircle );
+        // Get intersection points.
+        circleEntities.forEach(function( circleEntity ) {
+          var circles = circleEntity.shapes.filter( isCircle );
 
-        var intersections = circles.map(function( circle ) {
-          return Intersection.segmentCircle( x0, y0, x1, y1, circle.x + x, circle.y + y, circle.radius );
-        })[0];
+          var circle = circles[0];
 
-        var xi = 0, yi = 0;
-        intersections.forEach(function( intersection, index, array ) {
-          xi += intersection.x / array.length;
-          yi += intersection.y / array.length;
-        });
+          var x = circleEntity.x + circle.x,
+              y = circleEntity.y + circle.y,
+              radius = circle.radius,
+              radiusSquared = radius * radius;
 
-        if ( intersections.length === 1 ) {
-          var point = Intersection.closestPointOnSegment( x, y, x0, y0, x1, y1 );
-          xi = point.x;
-          yi = point.y;
-        }
+          var dx = x1 - x0;
+          var dy = y1 - y0;
 
-        if ( intersections.length ) {
-          var dx = xi - x,
-              dy = yi - y;
-          var distance = Math.sqrt( dx * dx + dy * dy );
+          var dx0 = x - x0;
+          var dy0 = y - y0;
+          var dx1 = x1 - x;
+          var dy1 = y1 - y;
 
-          var moveDistance = radius - distance;
-          // If the circle is penetrating the line segment and it's velocity is
-          // against the segment normal.
-          if ( moveDistance <= 0 ) {
+          var u = dx * dx1 + dy * dy1;
+          var v = dx * dx0 + dy * dy0;
+
+          var distance;
+          var distanceSquared;
+          var scale;
+
+          var edx, edy;
+          // Region A.
+          if ( v <= 0 ) {
+            distanceSquared = dx0 * dx0 + dy0 * dy0;
+            if ( distanceSquared > radiusSquared ) {
+              return;
+            }
+
+            // Previous edge.
+            if ( index > 0 ) {
+              var ex1 = object[ index - 1 ][2];
+              var ey1 = object[ index - 1 ][3];
+
+              edx = x0 - ex1;
+              edy = y0 - ey1;
+
+              var eu = edx * -dx0 + edy * -dy0;
+
+              if ( eu > 0 ) {
+                return;
+              }
+            }
+
+            distance = Math.sqrt( distanceSquared );
+            scale = ( distance - radius ) / distance;
+            manifolds.push({
+              entity: circleEntity,
+              dx: 0, // -dx0 * scale,
+              dy: 0  // -dy1 * scale
+            });
+
             return;
           }
 
-          collision.push( segment );
+          // Region B.
+          if ( u <= 0 ) {
+            distanceSquared = dx1 * dx1 + dy1 * dy1;
+            if ( distanceSquared > radiusSquared ) {
+              return;
+            }
 
-          // Move entity along normal direction.
-          moveDistance *= dx * normal.x + dy * normal.y < 0 ? 1 : -1;
+            // Next edge.
+            if ( index < object.length - 1 ) {
+              var ex0 = object[ index + 1 ][0];
+              var ey0 = object[ index + 1 ][1];
 
-          circleEntity.x += moveDistance * normal.x;
-          circleEntity.y += moveDistance * normal.y;
+              edx = ex0 - x1;
+              edy = ey0 - y1;
+
+              var ev = edx * -dx1 + edy * -dy1;
+
+              if ( ev > 0 ) {
+                return;
+              }
+            }
+
+            distance = Math.sqrt( distanceSquared );
+            scale = ( distance - radius ) / distance;
+            // Distance between circle edge and line segment.
+            distance -= radius;
+            manifolds.push({
+              entity: circleEntity,
+              dx: 0, // dx1 * scale,
+              dy: 0  // dy1 * scale
+            });
+
+            return;
+          }
+
+          // Region AB.
+          var denominator = dx * dx + dy * dy;
+          var invLength = 1 / denominator;
+          var ux0 = u * x0;
+          var uy0 = u * y0;
+          var vx1 = v * x1;
+          var vy1 = v * y1;
+          var px = invLength * ( ux0 + vx1 );
+          var py = invLength * ( uy0 + vy1 );
+          var cdx = x - px;
+          var cdy = y - py;
+          distanceSquared = cdx * cdx + cdy * cdy;
+
+          if ( distanceSquared > radiusSquared ) {
+            return;
+          }
+
+          var nx = -dy;
+          var ny = dx;
+          if ( nx * dx0 + ny * dy0 < 0 ) {
+            nx = -nx;
+            ny = -ny;
+          }
+
+          var invNormalLength = 1 / Math.sqrt( nx * nx + ny * ny );
+          nx *= invNormalLength * ( radius - Math.sqrt( distanceSquared ) );
+          ny *= invNormalLength * ( radius - Math.sqrt( distanceSquared ) );
+
+          manifolds.push({
+            entity: circleEntity,
+            dx: nx,
+            dy: ny
+          });
+        });
+      });
+
+      manifolds.forEach(function( manifold ) {
+        if ( typeof manifold.dx === 'undefined' ||
+             typeof manifold.dy === 'undefined' ) {
+          // console.log( manifold.dx, manifold.dy );
         }
+        manifold.entity.x += manifold.dx;
+        manifold.entity.y += manifold.dy;
       });
     });
 
@@ -230,44 +331,48 @@ define([
       ctx.stroke();
     });
 
-    this.debug.segments.forEach(function( segment ) {
-      var x0 = segment[0],
-          y0 = segment[1],
-          x1 = segment[2],
-          y1 = segment[3];
+    function flatten( array, subarray ) {
+      return array.concat( subarray );
+    }
 
-      // Draw segment.
-      ctx.beginPath();
-      ctx.moveTo( x0, y0 );
-      ctx.lineTo( x1, y1 );
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = '#f00';
-      ctx.stroke();
+    this.debug.objects.map(function( object ) {
+      var points = object.map(function( segment ) {
+        var x0 = segment[0],
+            y0 = segment[1],
+            x1 = segment[2],
+            y1 = segment[3];
 
-      // Draw normals.
-      var mx = 0.5 * ( x0 + x1 ),
-          my = 0.5 * ( y0 + y1 );
+        // Draw segment.
+        ctx.beginPath();
+        ctx.moveTo( x0, y0 );
+        ctx.lineTo( x1, y1 );
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#f00';
+        ctx.stroke();
 
-      var normal = Utils.lineNormal( x0, y0, x1, y1 );
-      ctx.beginPath();
-      ctx.moveTo( mx, my );
-      ctx.lineTo( mx + normal.x * 10, my + normal.y * 10 );
-      ctx.strokeStyle = '#0f0';
-      ctx.stroke();
+        // Draw normals.
+        var mx = 0.5 * ( x0 + x1 ),
+            my = 0.5 * ( y0 + y1 );
 
-      // Get intersection points.
-      var points = circleEntities.map(function( circleEntity ) {
-        var x = circleEntity.x,
-            y = circleEntity.y;
+        var normal = Utils.lineNormal( x0, y0, x1, y1 );
+        ctx.beginPath();
+        ctx.moveTo( mx, my );
+        ctx.lineTo( mx + normal.x * 10, my + normal.y * 10 );
+        ctx.strokeStyle = '#0f0';
+        ctx.stroke();
 
-        var circles = circleEntity.shapes.filter( isCircle );
+        // Get intersection points.
+        return circleEntities.map(function( circleEntity ) {
+          var x = circleEntity.x,
+              y = circleEntity.y;
 
-        return circles.map(function( circle ) {
-          return Intersection.segmentCircle( x0, y0, x1, y1, circle.x + x, circle.y + y, circle.radius );
-        })[0];
-      }).reduce(function( array, points ) {
-        return array.concat( points );
-      }, [] );
+          var circles = circleEntity.shapes.filter( isCircle );
+
+          return circles.map(function( circle ) {
+            return Intersection.segmentCircle( x0, y0, x1, y1, circle.x + x, circle.y + y, circle.radius );
+          })[0];
+        }).reduce( flatten, [] );
+      }).reduce( flatten, [] );
 
       // Draw intersection points.
       points.forEach(function( point ) {

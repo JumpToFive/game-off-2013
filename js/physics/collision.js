@@ -94,12 +94,10 @@ define([
         dy = a.y - b.y;
 
     var distanceSquared = dx * dx + dy * dy;
-
-    var radiusSquared = a.radius + b.radius;
-    radiusSquared *= radiusSquared;
+    var radius = a.radius + b.radius;
 
     // Not colliding.
-    if ( radiusSquared < distanceSquared ) {
+    if ( distanceSquared > radius * radius ) {
       return null;
     }
 
