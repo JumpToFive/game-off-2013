@@ -123,6 +123,12 @@ define([
     return shape.type === 'Circle';
   }
 
+  function midpoint( mid, point, index, array ) {
+    mid.x += point.x / array.length;
+    mid.y += point.y / array.length;
+    return mid;
+  }
+
   Game.prototype.updateDebug = function( dt ) {
     var circleEntities = this.entities.filter(function( entity ) {
       return entity.shapes.some( isCircle );
@@ -151,12 +157,15 @@ define([
 
           var intersections = Intersection.segmentCircle( x0, y0, x1, y1, x, y, radius );
 
-          var xi = 0, yi = 0;
-          intersections.forEach(function( intersection, index, array ) {
-            xi += intersection.x / array.length;
-            yi += intersection.y / array.length;
-          });
+          var intersection = intersections.reduce( midpoint, { x: 0, y: 0 } );
+          var xi = intersection.x;
+          var yi = intersection.y;
 
+          if ( intersections.length === 1 ) {
+            var point = Intersection.closestPointOnSegment( x, y, x0, y0, x1, y1 );
+            xi = point.x;
+            yi = point.y;
+          }
 
           var DEBUG_ADJACENT = false;
           // Begin adjacency code.
@@ -173,7 +182,7 @@ define([
 
               ex = object[ adjacentIndex ][2];
               ey = object[ adjacentIndex ][3];
-              s = Intersection.closestPointOnLineParameter( x, y, ex, ey, x0, y0 );
+              s = Intersection.segmentCircleParameter( ex, ey, x0, y0, x, y, radius ).reduce( midpoint, { x: 0, y: 0 } );
               if ( 0 <= s && s <= 1 ) {
                 return;
               }
@@ -183,19 +192,13 @@ define([
               adjacentIndex = ( index + 1 ) % object.length;
               ex = object[ adjacentIndex ][0];
               ey = object[ adjacentIndex ][1];
-              s = Intersection.closestPointOnLineParameter( x, y, x1, y1, ex, ey );
+              s = Intersection.segmentCircleParameter( x1, y1, ex, ey, x, y, radius ).reduce( midpoint, { x: 0, y: 0 } );
               if ( 0 <= s && s <= 1 ) {
                 return;
               }
             }
           }
           // End adjacency code.
-
-          if ( intersections.length === 1 ) {
-            var point = Intersection.closestPointOnSegment( x, y, x0, y0, x1, y1 );
-            xi = point.x;
-            yi = point.y;
-          }
 
           if ( intersections.length ) {
             var dx = xi - x,
