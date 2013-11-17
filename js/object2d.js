@@ -5,7 +5,7 @@ define([
 ], function( BaseObject, Color ) {
   'use strict';
 
-  function Object2D( x, y ) {
+  function Object2D( options ) {
     BaseObject.call( this );
 
     this.fixture = null;
@@ -16,7 +16,7 @@ define([
     this.lineWidth = 0;
   }
 
-  Object2D.prototype.initialize = function() {};
+  Object2D.prototype.initialize = function( options ) {};
 
   Object2D.prototype = new BaseObject();
   Object2D.prototype.constructor = Object2D;
@@ -90,7 +90,7 @@ define([
     },
 
     set: function( angle ) {
-      this.body.SetAngle( angle );
+      this.body.SetAngle( angle || 0 );
     }
   });
 

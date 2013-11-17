@@ -1,7 +1,7 @@
 /*globals define*/
 define([
-  'object2d',
   'box2d',
+  'object2d',
   'world'
 ], function( Box2D, Object2D, world ) {
   'use strict';
@@ -13,6 +13,7 @@ define([
 
   function Circle( x, y, radius ) {
     Object2D.call( this, x, y );
+    this.initialize();
   }
 
   Circle.prototype.initialize = function( options ) {

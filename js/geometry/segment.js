@@ -1,8 +1,8 @@
 /*globals define*/
 define([
-  'object2d',
-  'box2d'
-], function( Object2D, Box2D ) {
+  'box2d',
+  'object2d'
+], function( Box2D, Object2D ) {
   'use strict';
 
   var Vec2 = Box2D.Common.Math.b2Vec2;
@@ -13,7 +13,8 @@ define([
     Object2D.call( this, 0, 0 );
   }
 
-  Segment.prototype.initialize = function() {
+  Segment.prototype.initialize = function( options ) {
+
   };
 
   Segment.prototype = new Object2D();

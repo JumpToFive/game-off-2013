@@ -2,10 +2,8 @@
 define([
   'input',
   'entities/camera',
-  'physics/collision',
-  'physics/intersection',
   'utils'
-], function( Input, Camera, Collision, Intersection, Utils ) {
+], function( Input, Camera, Utils ) {
   'use strict';
 
   function Game() {
@@ -88,9 +86,8 @@ define([
       entity.update( dt );
     });
 
+    this.world.step( 1 / 60, 10, 10 );
     this.updateDebug( dt );
-
-    Collision.broadphase( this.entities );
 
     this.camera.update( dt );
   };
@@ -114,117 +111,12 @@ define([
     });
 
     this.camera.draw( ctx );
-    this.drawDebug();
 
     ctx.restore();
   };
 
-  function isCircle( shape ) {
-    return shape.type === 'Circle';
-  }
-
-  function midpoint( mid, point, index, array ) {
-    mid.x += point.x / array.length;
-    mid.y += point.y / array.length;
-    return mid;
-  }
-
   Game.prototype.updateDebug = function( dt ) {
-    var circleEntities = this.entities.filter(function( entity ) {
-      return entity.shapes.some( isCircle );
-    });
-
-    var collision = this.debug.collision = [];
-
-    this.debug.objects.forEach(function( object ) {
-      object.forEach(function( segment, index ) {
-        var x0 = segment[0],
-            y0 = segment[1],
-            x1 = segment[2],
-            y1 = segment[3];
-
-        var normal = Utils.lineNormal( x0, y0, x1, y1 );
-
-        // Get intersection points.
-        circleEntities.forEach(function( circleEntity ) {
-          var circles = circleEntity.shapes.filter( isCircle );
-
-          var circle = circles[0];
-
-          var x = circleEntity.x + circle.x,
-              y = circleEntity.y + circle.y,
-              radius = circle.radius;
-
-          var intersections = Intersection.segmentCircle( x0, y0, x1, y1, x, y, radius );
-
-          var intersection = intersections.reduce( midpoint, { x: 0, y: 0 } );
-          var xi = intersection.x;
-          var yi = intersection.y;
-
-          if ( intersections.length === 1 ) {
-            var point = Intersection.closestPointOnSegment( x, y, x0, y0, x1, y1 );
-            xi = point.x;
-            yi = point.y;
-          }
-
-          var DEBUG_ADJACENT = false;
-          // Begin adjacency code.
-          if ( intersections.length === 1 && DEBUG_ADJACENT ) {
-            var t = Intersection.closestPointOnLineParameter( x, y, x0, y0, x1, y1 );
-
-            var adjacentIndex;
-            var ex, ey, s;
-            if ( 0 > t && index >= 0 ) {
-              adjacentIndex = index - 1;
-              if ( adjacentIndex < 0 ) {
-                adjacentIndex += object.length;
-              }
-
-              ex = object[ adjacentIndex ][2];
-              ey = object[ adjacentIndex ][3];
-              s = Intersection.segmentCircleParameter( ex, ey, x0, y0, x, y, radius ).reduce( midpoint, { x: 0, y: 0 } );
-              if ( 0 <= s && s <= 1 ) {
-                return;
-              }
-            }
-
-            if ( t > 1 && index < object.length ) {
-              adjacentIndex = ( index + 1 ) % object.length;
-              ex = object[ adjacentIndex ][0];
-              ey = object[ adjacentIndex ][1];
-              s = Intersection.segmentCircleParameter( x1, y1, ex, ey, x, y, radius ).reduce( midpoint, { x: 0, y: 0 } );
-              if ( 0 <= s && s <= 1 ) {
-                return;
-              }
-            }
-          }
-          // End adjacency code.
-
-          if ( intersections.length ) {
-            var dx = xi - x,
-                dy = yi - y;
-            var distance = Math.sqrt( dx * dx + dy * dy );
-
-            var moveDistance = radius - distance;
-            // If the circle is penetrating the line segment and it's velocity is
-            // against the segment normal.
-            if ( moveDistance <= 0 ) {
-              return;
-            }
-
-            collision.push( segment );
-
-            // Move entity along normal direction.
-            moveDistance *= dx * normal.x + dy * normal.y < 0 ? 1 : -1;
-
-            circleEntity.x += moveDistance * normal.x;
-            circleEntity.y += moveDistance * normal.y;
-          }
-        });
-      });
-    });
-
-    // Basic camera controls.
+       // Basic camera controls.
     // W. Zoom in.
     if ( this.input.keys[ 87 ] ) {
       this.camera.width = Math.max( this.camera.width - 4, 160 );
@@ -249,81 +141,6 @@ define([
       this.camera.height = this.HEIGHT;
       this.camera.rotation = 0;
     }
-  };
-
-  Game.prototype.drawDebug = function() {
-    var ctx = this.ctx;
-
-    var circleEntities = this.entities.filter(function( entity ) {
-      return entity.shapes.some( isCircle );
-    });
-
-
-    this.debug.collision.forEach(function( segment ) {
-      var x0 = segment[0],
-          y0 = segment[1],
-          x1 = segment[2],
-          y1 = segment[3];
-
-      ctx.beginPath();
-      ctx.moveTo( x0, y0 );
-      ctx.lineTo( x1, y1 );
-      ctx.lineWidth = 5;
-      ctx.strokeStyle = 'blue';
-      ctx.stroke();
-    });
-
-    function flatten( array, subarray ) {
-      return array.concat( subarray );
-    }
-
-    this.debug.objects.map(function( object ) {
-      var points = object.map(function( segment ) {
-        var x0 = segment[0],
-            y0 = segment[1],
-            x1 = segment[2],
-            y1 = segment[3];
-
-        // Draw segment.
-        ctx.beginPath();
-        ctx.moveTo( x0, y0 );
-        ctx.lineTo( x1, y1 );
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = '#f00';
-        ctx.stroke();
-
-        // Draw normals.
-        var mx = 0.5 * ( x0 + x1 ),
-            my = 0.5 * ( y0 + y1 );
-
-        var normal = Utils.lineNormal( x0, y0, x1, y1 );
-        ctx.beginPath();
-        ctx.moveTo( mx, my );
-        ctx.lineTo( mx + normal.x * 10, my + normal.y * 10 );
-        ctx.strokeStyle = '#0f0';
-        ctx.stroke();
-
-        // Get intersection points.
-        return circleEntities.map(function( circleEntity ) {
-          var x = circleEntity.x,
-              y = circleEntity.y;
-
-          var circles = circleEntity.shapes.filter( isCircle );
-
-          return circles.map(function( circle ) {
-            return Intersection.segmentCircle( x0, y0, x1, y1, circle.x + x, circle.y + y, circle.radius );
-          })[0];
-        }).reduce( flatten, [] );
-      }).reduce( flatten, [] );
-
-      // Draw intersection points.
-      points.forEach(function( point ) {
-        ctx.beginPath();
-        ctx.rect( point.x - 5, point.y - 5, 10, 10 );
-        ctx.fillStyle = '#0f0';
-        ctx.fill();
-      });
-    });
   };
 
   Game.prototype.tick = function() {
