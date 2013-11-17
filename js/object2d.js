@@ -8,16 +8,15 @@ define([
   function Object2D( x, y ) {
     BaseObject.call( this );
 
-    this.x = x || 0;
-    this.y = y || 0;
-
-    this.rotation = 0;
+    this.fixture = null;
 
     this.fill   = new Color();
     this.stroke = new Color();
 
     this.lineWidth = 0;
   }
+
+  Object2D.prototype.initialize = function() {};
 
   Object2D.prototype = new BaseObject();
   Object2D.prototype.constructor = Object2D;
@@ -45,35 +44,55 @@ define([
       ctx.strokeStyle = this.stroke.rgba();
       ctx.stroke();
     }
-
-    this.drawDebug( ctx );
   };
 
-  Object2D.prototype.drawDebug = function( ctx ) {
-    // Debug draw.
-    var aabb = this.aabb();
-    if ( !aabb ) {
-      return;
+  Object.defineProperty( Object2D.prototype, 'body', {
+    get: function() {
+      return this.fixture.GetBody();
     }
+  });
 
-    ctx.beginPath();
+  Object.defineProperty( Object2D.prototype, 'position', {
+    get: function() {
+      return this.body.GetPosition();
+    }
+  });
 
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = 'red';
-    ctx.strokeRect( aabb.xmin, aabb.ymin, aabb.xmax - aabb.xmin, aabb.ymax - aabb.ymin );
-  };
+  Object.defineProperty( Object2D.prototype, 'x', {
+    enumerable: true,
 
-  /**
-   * Returns the AABB corresponding to the object in world space.
-   */
-  Object2D.prototype.aabb = function() {
-    return {
-      xmin: this.x,
-      ymin: this.y,
-      xmax: this.x,
-      ymax: this.y
-    };
-  };
+    get: function() {
+      return this.position.x;
+    },
+
+    set: function( x ) {
+      this.position.x = x || 0;
+    }
+  });
+
+  Object.defineProperty( Object2D.prototype, 'y', {
+    enumerable: true,
+
+    get: function() {
+      return this.position.y;
+    },
+
+    set: function( y ) {
+      this.position.y = y || 0;
+    }
+  });
+
+  Object.defineProperty( Object2D.prototype, 'angle', {
+    enumerable: true,
+
+    get: function() {
+      return this.body.GetAngle();
+    },
+
+    set: function( angle ) {
+      this.body.SetAngle( angle );
+    }
+  });
 
   return Object2D;
 });

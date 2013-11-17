@@ -1,18 +1,20 @@
 /*globals define*/
 define([
   'object2d',
-  'utils'
-], function( Object2D, Utils ) {
+  'box2d'
+], function( Object2D, Box2D ) {
   'use strict';
+
+  var Vec2 = Box2D.Common.Math.b2Vec2;
+  var PolygonShape = Box2D.Collision.Shapes.b2PolygonShape;
+
 
   function Segment( x0, y0, x1, y1 ) {
     Object2D.call( this, 0, 0 );
-
-    this.x0 = x0 || 0;
-    this.y0 = y0 || 0;
-    this.x1 = x1 || 0;
-    this.y1 = y1 || 0;
   }
+
+  Segment.prototype.initialize = function() {
+  };
 
   Segment.prototype = new Object2D();
   Segment.prototype.constructor = Segment;
@@ -26,77 +28,33 @@ define([
     ctx.closePath();
   };
 
-  Segment.prototype.aabb = function() {
-    var xmin, ymin, xmax, ymax;
+  Object.defineProperty( Segment.prototype, 'x0', {
+    enumerable: true,
 
-    var x0 = this.x0,
-        y0 = this.y0,
-        x1 = this.x1,
-        y1 = this.y1;
+    get: function() {},
+    set: function( x0 ) {}
+  });
 
-    if ( this.rotation ) {
-      var cos = Math.cos( -this.rotation ),
-          sin = Math.sin( -this.rotation );
+  Object.defineProperty( Segment.prototype, 'y0', {
+    enumerable: true,
 
-      var rx0 = cos * x0 - sin * y0,
-          ry0 = sin * x0 + cos * y0,
+    get: function() {},
+    set: function( y0 ) {}
+  });
 
-          rx1 = cos * x1 - sin * y1,
-          ry1 = sin * x1 + cos * y1;
+  Object.defineProperty( Segment.prototype, 'x1', {
+    enumerable: true,
 
-      x0 = rx0;
-      y0 = ry0;
-      x1 = rx1;
-      y1 = ry1;
-    }
+    get: function() {},
+    set: function( x1 ) {}
+  });
 
-    if ( x1 > x0 ) {
-      xmin = x0;
-      xmax = x1;
-    } else {
-      xmin = x1;
-      xmax = x0;
-    }
+  Object.defineProperty( Segment.prototype, 'y1', {
+    enumerable: true,
 
-    if ( y1 > y0 ) {
-      ymin = y0;
-      ymax = y1;
-    } else {
-      ymin = y1;
-      ymax = y0;
-    }
-
-    return {
-      xmin: xmin + this.x,
-      ymin: ymin + this.y,
-      xmax: xmax + this.x,
-      ymax: ymax + this.y
-    };
-  };
-
-  Segment.prototype.drawNormals = function( ctx ) {
-    ctx.beginPath();
-
-    var x0 = this.x0,
-        y0 = this.y0,
-        x1 = this.x1,
-        y1 = this.y1;
-
-    var mx = 0.5 * ( x0 + x1 ),
-        my = 0.5 * ( y0 + y1 );
-
-    var normal = Utils.lineNormal( x0, y0, x1, y1 );
-    if ( !normal ) {
-      return;
-    }
-
-    ctx.moveTo( mx, my );
-    ctx.lineTo( mx + normal.x * 10, my + normal.y * 10 );
-
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = '#0f0';
-    ctx.stroke();
-  };
+    get: function() {},
+    set: function( y1 ) {}
+  });
 
   return Segment;
 });
