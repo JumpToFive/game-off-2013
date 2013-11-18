@@ -2,8 +2,8 @@
 define([
   'input',
   'entities/camera',
-  'utils'
-], function( Input, Camera, Utils ) {
+  'world'
+], function( Input, Camera, world ) {
   'use strict';
 
   function Game() {
@@ -65,6 +65,8 @@ define([
         [ 100, -50, 100, 0 ]
       ]
     ];
+
+    this.world = world;
   }
 
   Game.instance = null;
@@ -86,7 +88,7 @@ define([
       entity.update( dt );
     });
 
-    this.world.step( 1 / 60, 10, 10 );
+    this.world.Step( 1 / 60, 10, 10 );
     this.updateDebug( dt );
 
     this.camera.update( dt );

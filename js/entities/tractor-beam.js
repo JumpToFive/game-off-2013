@@ -17,13 +17,13 @@ define([
     // Strength of the tractor beam.
     this.force = 0;
 
-    this.initialize();
+    this.construct();
   }
 
   TractorBeam.prototype = new PhysicsEntity();
   TractorBeam.prototype.constructor = TractorBeam;
 
-  TractorBeam.prototype.initialize = function() {
+  TractorBeam.prototype.construct = function() {
     var rect = new Rect( 0, 0, 10, this.width );
 
     rect.fill.set({
@@ -43,7 +43,7 @@ define([
     ctx.save();
 
     ctx.translate( this.x, this.y );
-    ctx.rotate( -this.rotation );
+    ctx.rotate( -this.angle );
 
     ctx.fillStyle = 'rgba(0, 255, 0, 0.5)';
     ctx.fillRect( 0, -0.5 * this.width, this.distance, this.width );
@@ -60,8 +60,8 @@ define([
 
     var force = this.force * dt;
 
-    var cos = Math.cos( -this.rotation ),
-        sin = Math.sin( -this.rotation );
+    var cos = Math.cos( -this.angle ),
+        sin = Math.sin( -this.angle );
 
     var halfWidth = 0.5 * this.width;
 
@@ -76,7 +76,7 @@ define([
           y = entity.y - this.y;
 
       var rx, ry;
-      if ( this.rotation ) {
+      if ( this.angle ) {
         rx =  cos * x + sin * y;
         ry = -sin * x + cos * y;
 

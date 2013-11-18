@@ -19,6 +19,9 @@ define([
     this.interval = null;
   }
 
+  Emitter.prototype = new PhysicsEntity();
+  Emitter.prototype.constructor = Emitter;
+
   Emitter.prototype.start = function( when ) {
     if ( this.interval ||
          !this.particle ) {
@@ -36,8 +39,8 @@ define([
         entity.add( GeometryFactory.create( particleJSON ) );
 
         entity.set({
-          vx: Math.cos( -this.rotation ) * this.speed,
-          vy: Math.sin( -this.rotation ) * this.speed
+          vx: Math.cos( -this.angle ) * this.speed,
+          vy: Math.sin( -this.angle ) * this.speed
         });
 
         this.world.add( entity );

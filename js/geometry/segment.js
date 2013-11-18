@@ -1,21 +1,18 @@
 /*globals define*/
 define([
-  'box2d',
-  'object2d'
-], function( Box2D, Object2D ) {
+  'object2d',
+  'utils'
+], function( Object2D, Utils ) {
   'use strict';
-
-  var Vec2 = Box2D.Common.Math.b2Vec2;
-  var PolygonShape = Box2D.Collision.Shapes.b2PolygonShape;
-
 
   function Segment( x0, y0, x1, y1 ) {
     Object2D.call( this, 0, 0 );
+
+    this.x0 = x0 || 0;
+    this.y0 = y0 || 0;
+    this.x1 = x1 || 0;
+    this.y1 = y1 || 0;
   }
-
-  Segment.prototype.initialize = function( options ) {
-
-  };
 
   Segment.prototype = new Object2D();
   Segment.prototype.constructor = Segment;
@@ -29,33 +26,29 @@ define([
     ctx.closePath();
   };
 
-  Object.defineProperty( Segment.prototype, 'x0', {
-    enumerable: true,
+  Segment.prototype.drawNormals = function( ctx ) {
+    ctx.beginPath();
 
-    get: function() {},
-    set: function( x0 ) {}
-  });
+    var x0 = this.x0,
+        y0 = this.y0,
+        x1 = this.x1,
+        y1 = this.y1;
 
-  Object.defineProperty( Segment.prototype, 'y0', {
-    enumerable: true,
+    var mx = 0.5 * ( x0 + x1 ),
+        my = 0.5 * ( y0 + y1 );
 
-    get: function() {},
-    set: function( y0 ) {}
-  });
+    var normal = Utils.lineNormal( x0, y0, x1, y1 );
+    if ( !normal ) {
+      return;
+    }
 
-  Object.defineProperty( Segment.prototype, 'x1', {
-    enumerable: true,
+    ctx.moveTo( mx, my );
+    ctx.lineTo( mx + normal.x * 10, my + normal.y * 10 );
 
-    get: function() {},
-    set: function( x1 ) {}
-  });
-
-  Object.defineProperty( Segment.prototype, 'y1', {
-    enumerable: true,
-
-    get: function() {},
-    set: function( y1 ) {}
-  });
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = '#0f0';
+    ctx.stroke();
+  };
 
   return Segment;
 });

@@ -4,7 +4,6 @@ define([
 ], function( Object2D ) {
   'use strict';
 
-
   function Rect( x, y, width, height ) {
     Object2D.call( this, x, y );
 

@@ -5,18 +5,19 @@ define([
 ], function( BaseObject, Color ) {
   'use strict';
 
-  function Object2D( options ) {
+  function Object2D( x, y ) {
     BaseObject.call( this );
 
-    this.fixture = null;
+    this.x = x || 0;
+    this.y = y || 0;
+
+    this.angle = 0;
 
     this.fill   = new Color();
     this.stroke = new Color();
 
     this.lineWidth = 0;
   }
-
-  Object2D.prototype.initialize = function( options ) {};
 
   Object2D.prototype = new BaseObject();
   Object2D.prototype.constructor = Object2D;
@@ -28,7 +29,7 @@ define([
     ctx.save();
 
     ctx.translate( this.x, this.y );
-    ctx.rotate( -this.rotation );
+    ctx.rotate( -this.angle );
 
     this.drawPath( ctx );
 
@@ -45,54 +46,6 @@ define([
       ctx.stroke();
     }
   };
-
-  Object.defineProperty( Object2D.prototype, 'body', {
-    get: function() {
-      return this.fixture.GetBody();
-    }
-  });
-
-  Object.defineProperty( Object2D.prototype, 'position', {
-    get: function() {
-      return this.body.GetPosition();
-    }
-  });
-
-  Object.defineProperty( Object2D.prototype, 'x', {
-    enumerable: true,
-
-    get: function() {
-      return this.position.x;
-    },
-
-    set: function( x ) {
-      this.position.x = x || 0;
-    }
-  });
-
-  Object.defineProperty( Object2D.prototype, 'y', {
-    enumerable: true,
-
-    get: function() {
-      return this.position.y;
-    },
-
-    set: function( y ) {
-      this.position.y = y || 0;
-    }
-  });
-
-  Object.defineProperty( Object2D.prototype, 'angle', {
-    enumerable: true,
-
-    get: function() {
-      return this.body.GetAngle();
-    },
-
-    set: function( angle ) {
-      this.body.SetAngle( angle || 0 );
-    }
-  });
 
   return Object2D;
 });

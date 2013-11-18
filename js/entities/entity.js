@@ -34,32 +34,5 @@ define([
     }
   };
 
-  Entity.prototype.aabb = function() {
-    var xmin = Number.POSITIVE_INFINITY,
-        ymin = Number.POSITIVE_INFINITY,
-        xmax = Number.NEGATIVE_INFINITY,
-        ymax = Number.NEGATIVE_INFINITY;
-
-    this.shapes.forEach(function( shape ) {
-      var aabb = shape.aabb();
-
-      if ( aabb.xmin < xmin ) { xmin = aabb.xmin; }
-      if ( aabb.xmax > xmax ) { xmax = aabb.xmax; }
-      if ( aabb.ymin < ymin ) { ymin = aabb.ymin; }
-      if ( aabb.ymax > ymax ) { ymax = aabb.ymax; }
-    });
-
-    if ( !this.rotation ) {
-      return {
-        xmin: xmin + this.x,
-        ymin: ymin + this.y,
-        xmax: xmax + this.x,
-        ymax: ymax + this.y
-      };
-    }
-
-    return Rect.rotate( this.x, this.y, xmin, ymin, xmax, ymax, this.rotation );
-  };
-
   return Entity;
 });

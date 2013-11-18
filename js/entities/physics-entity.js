@@ -1,69 +1,126 @@
 /*globals define*/
 define([
+  'box2d',
   'entities/entity',
-  'utils'
-], function( Entity, Utils ) {
+  'world'
+], function( Box2D, Entity, world ) {
   'use strict';
 
-  function PhysicsEntity( x, y ) {
+  var Body = Box2D.Dynamics.b2Body;
+  var BodyDef = Box2D.Dynamics.b2BodyDef;
+  var FixtureDef = Box2D.Dynamics.b2FixtureDef;
+  var CircleShape = Box2D.Collision.Shapes.b2CircleShape;
+
+  function PhysicsEntity( x, y, options ) {
+    this.fixture = null;
+    this.initialize( options );
+
     Entity.call( this, x, y );
-
-    // Previous position.
-    this.px = this.x;
-    this.py = this.y;
-
-    this.vx = 0;
-    this.vy = 0;
-
-    // Angular velocity.
-    this.va = 0;
-
-    this.fixed = false;
-    this.collides = true;
-
-    this.linearDamping = 2;
-    this.angularDamping = 0.01;
   }
 
   PhysicsEntity.prototype = new Entity();
   PhysicsEntity.prototype.constructor = PhysicsEntity;
 
-  PhysicsEntity.prototype.update = function( dt ) {
-    if ( this.fixed ) {
-      return;
+  PhysicsEntity.prototype.initialize = function( options ) {
+    options = options || {};
+
+    var density = typeof options.density !== 'undefined' ? options.density : 1.0;
+    var friction = typeof options.friction !== 'undefined' ? options.friction : 0.5;
+    var restitution = typeof options.restitution !== 'undefined' ? options.restitution : 0.2;
+
+    var fixDef = new FixtureDef();
+    fixDef.density = density;
+    fixDef.friction = friction;
+    fixDef.restitution = restitution;
+    this.fixtureShape( fixDef, options.shape );
+
+    var bodyDef = new BodyDef();
+    bodyDef.type = typeof options.type !== 'undefined' ? options.type : Body.b2_staticBody;
+    this.fixture = world.CreateBody( bodyDef ).CreateFixture( fixDef );
+  };
+
+  PhysicsEntity.prototype.fixtureShape = function( fixDef, shapeOptions ) {
+    shapeOptions = shapeOptions || [];
+    fixDef.shape = new ( Function.prototype.bind.apply( CircleShape, shapeOptions ) ) ();
+  };
+
+  Object.defineProperty( PhysicsEntity.prototype, 'body', {
+    get: function() {
+      return this.fixture.GetBody();
     }
+  });
 
-    var linearDamping = Utils.clamp( 1 - this.linearDamping * dt, 0, 1 );
+  Object.defineProperty( PhysicsEntity.prototype, 'position', {
+    get: function() {
+      return this.body.GetPosition();
+    }
+  });
 
-    this.vx *= linearDamping;
-    this.vy *= linearDamping;
-    this.va *= Utils.clamp( 1  - this.angularDamping * dt, 0, 1 );
+  Object.defineProperty( PhysicsEntity.prototype, 'x', {
+    enumerable: true,
 
-    this.vx = Utils.roundNearZero( this.vx );
-    this.vy = Utils.roundNearZero( this.vy );
-    this.va = Utils.roundNearZero( this.va );
+    get: function() {
+      return this.position.x;
+    },
 
-    // TODO: change to verlet integration?
-    var x = this.x + this.vx * dt,
-        y = this.y + this.vy * dt;
+    set: function( x ) {
+      this.position.x = x || 0;
+    }
+  });
 
-    this.px = this.x;
-    this.py = this.y;
+  Object.defineProperty( PhysicsEntity.prototype, 'y', {
+    enumerable: true,
 
-    this.x = x;
-    this.y = y;
+    get: function() {
+      return this.position.y;
+    },
 
-    this.rotation += this.va * dt;
-  };
+    set: function( y ) {
+      this.position.y = y || 0;
+    }
+  });
 
-  PhysicsEntity.prototype.accelerate = function( x, y ) {
-    this.vx += x;
-    this.vy += y;
-  };
+  Object.defineProperty( PhysicsEntity.prototype, 'angle', {
+    enumerable: true,
 
-  PhysicsEntity.prototype.radialAccelerate = function( ra ) {
-    this.va += ra;
-  };
+    get: function() {
+      return this.body.GetAngle();
+    },
+
+    set: function( angle ) {
+      this.body.SetAngle( angle || 0 );
+    }
+  });
+
+  Object.defineProperty( PhysicsEntity.prototype, 'velocity', {
+    get: function() {
+      return this.body.GetLinearVelocity();
+    },
+
+    set: function( velocity ) {
+      this.body.SetLinearVelocity( velocity );
+    }
+  });
+
+  Object.defineProperty( PhysicsEntity.prototype, 'vx', {
+    get: function() {
+      return this.velocity.x;
+    },
+
+    set: function( vx ) {
+      this.velocity.x = vx || 0;
+    }
+  });
+
+  Object.defineProperty( PhysicsEntity.prototype, 'vy', {
+    get: function() {
+      return this.velocity.y;
+    },
+
+    set: function( vy ) {
+      this.velocity.y = vy || 0;
+    }
+  });
 
   return PhysicsEntity;
 });
