@@ -68,14 +68,12 @@ define([
     shapeOptions = shapeOptions || [];
 
     shape = typeof shape !== 'undefined' ? shape : defaultShape;
-    var shapeClass = shapeClasses[ shape ];
-    if ( typeof shapeClass === 'undefined' ) {
-      shapeClass = shapeClasses[ defaultShape ];
+    var Shape = shapeClasses[ shape ];
+    if ( typeof Shape === 'undefined' ) {
+      Shape = shapeClasses[ defaultShape ];
     }
 
-    // Call the constructor with arguments. Just another way of writing
-    // something like: new b2CircleShape( 2.5 ).
-    fixDef.shape = new ( Function.prototype.bind.apply( shapeClass, shapeOptions ) ) ();
+    fixDef.shape = new Shape( shapeOptions[0] );
   };
 
   PhysicsEntity.prototype.accelerate = function( x, y ) {

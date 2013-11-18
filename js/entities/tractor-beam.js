@@ -8,7 +8,7 @@ define([
   function TractorBeam( x, y, width ) {
     PhysicsEntity.call( this, x, y );
 
-    this.fixed = true;
+    this.fixture.SetSensor( true );
 
     // Width of the tractor beam effect.
     this.width = width || 0;

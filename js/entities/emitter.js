@@ -9,6 +9,8 @@ define([
   function Emitter( x, y ) {
     PhysicsEntity.call( this, x, y );
 
+    this.fixture.SetSensor( true );
+
     this.rate = 0;
     this.speed = 0;
     this.particle = null;
@@ -36,7 +38,8 @@ define([
 
       this.interval = setInterval(function() {
         var entity = new PhysicsEntity( this.x, this.y, {
-          type: 'dynamic'
+          type: 'dynamic',
+          shapeOptions: [ 1 ]
         });
         entity.set( this.properties );
         entity.add( GeometryFactory.create( particleJSON ) );
@@ -48,7 +51,7 @@ define([
 
         entity.va = 3 * Math.PI;
         // TODO: Make linearDamping settable in PhysicsEntity.
-        entity.body.SetLinearDamping(0.4);
+        entity.body.SetLinearDamping(0.2);
 
         this.world.add( entity );
 
