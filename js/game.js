@@ -88,10 +88,12 @@ define([
       entity.update( dt );
     });
 
-    this.world.Step( 1 / 60, 10, 10 );
     this.updateDebug( dt );
-
     this.camera.update( dt );
+
+    this.world.Step( 1 / 60, 10, 10 );
+
+    this.world.ClearForces();
   };
 
   Game.prototype.draw = function() {

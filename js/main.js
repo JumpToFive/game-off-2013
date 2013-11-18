@@ -21,7 +21,7 @@ define(function( require ) {
       Segment = require( 'geometry/segment' ),
       Player  = require( 'entities/player' );
 
-  var PhysicsEntity = require( 'entities/physics-entity' );
+  var Entity = require( 'entities/entity' );
 
   var Emitter = require( 'entities/emitter' );
   var TractorBeam = require( 'entities/tractor-beam' );
@@ -36,7 +36,7 @@ define(function( require ) {
   });
 
   // Circle.
-  var circleEntity = new PhysicsEntity();
+  var circleEntity = new Entity();
 
   var circle = new Circle( 100, 200, 50 );
   circle.fill.alpha = 0.5;
@@ -45,7 +45,7 @@ define(function( require ) {
   game.add( circleEntity );
 
   // Rect.
-  var rectEntity = new PhysicsEntity( 300, 150 );
+  var rectEntity = new Entity( 300, 150 );
 
   var rect = new Rect( 0, 0, 50, 100 );
   rect.fill.alpha = 0.5;
@@ -55,9 +55,9 @@ define(function( require ) {
 
   var rectInterval = setInterval(function() {
     rectEntity.x -= 4;
-    rectEntity.rotation += 10 * Math.PI / 180;
-    polyEntity.rotation += 2 * Math.PI / 180;
-    segmentEntity.rotation -= 2 * Math.PI / 180;
+    rectEntity.angle += 10 * Math.PI / 180;
+    polyEntity.angle += 2 * Math.PI / 180;
+    segmentEntity.angle -= 2 * Math.PI / 180;
   }, 16 );
 
   setTimeout(function() {
@@ -65,7 +65,7 @@ define(function( require ) {
   }, 600 );
 
   // Polygon.
-  var polyEntity = new PhysicsEntity( 500, 350 );
+  var polyEntity = new Entity( 500, 350 );
 
   var polygon = new Polygon( 50, 0 );
   polygon.vertices = [ -100, 50, 100, 50, 0, -100 ];
@@ -75,7 +75,7 @@ define(function( require ) {
   game.add( polyEntity );
 
   // Segment.
-  var segmentEntity = new PhysicsEntity();
+  var segmentEntity = new Entity();
   segmentEntity.x = 200;
   segmentEntity.y = 350;
 
@@ -110,7 +110,7 @@ define(function( require ) {
   emitter.rate = 500;
   emitter.lifeTime = 2000;
   emitter.speed = 150;
-  emitter.rotation = -0.5 * Math.PI;
+  emitter.angle = -0.5 * Math.PI;
   emitter.particle = emitterPolygon;
   emitter.properties.linearDamping = 0.5;
   emitter.properties.va = 3 * Math.PI;

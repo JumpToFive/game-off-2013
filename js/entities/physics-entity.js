@@ -1,3 +1,4 @@
+/*jshint camelcase: false*/
 /*globals define*/
 define([
   'box2d',
@@ -6,10 +7,24 @@ define([
 ], function( Box2D, Entity, world ) {
   'use strict';
 
+  var Vec2 = Box2D.Common.Math.b2Vec2;
   var Body = Box2D.Dynamics.b2Body;
   var BodyDef = Box2D.Dynamics.b2BodyDef;
   var FixtureDef = Box2D.Dynamics.b2FixtureDef;
-  var CircleShape = Box2D.Collision.Shapes.b2CircleShape;
+
+  var shapeClasses = {
+    'CircleShape': Box2D.Collision.Shapes.b2CircleShape,
+    'PolygonShape': Box2D.Collision.Shapes.b2PolygonShape
+  };
+
+  var defaultShape = 'CircleShape';
+
+  var bodyTypes = {
+    'static': Body.b2_staticBody,
+    'dynamic': Body.b2_dynamicBody,
+    'kinematic': Body.b2_kinematicBody
+  };
+
 
   function PhysicsEntity( x, y, options ) {
     this.fixture = null;
@@ -32,16 +47,39 @@ define([
     fixDef.density = density;
     fixDef.friction = friction;
     fixDef.restitution = restitution;
-    this.fixtureShape( fixDef, options.shape );
+    this.fixtureShape( fixDef, options.shape, options.shapeOptions );
 
     var bodyDef = new BodyDef();
-    bodyDef.type = typeof options.type !== 'undefined' ? options.type : Body.b2_staticBody;
+    bodyDef.linearDamping = 0.9;
+    bodyDef.type = typeof options.type !== 'undefined' ? bodyTypes[ options.type ] : Body.b2_staticBody;
     this.fixture = world.CreateBody( bodyDef ).CreateFixture( fixDef );
   };
 
-  PhysicsEntity.prototype.fixtureShape = function( fixDef, shapeOptions ) {
+  /**
+   * Creates a shape of the class given by the string shape called with a
+   * shapeOptions array.
+   *
+   * Possible values for shape are:
+   *  - CircleShape (default)
+   *  - PolygonShape
+   */
+  PhysicsEntity.prototype.fixtureShape = function( fixDef, shape, shapeOptions ) {
     shapeOptions = shapeOptions || [];
-    fixDef.shape = new ( Function.prototype.bind.apply( CircleShape, shapeOptions ) ) ();
+
+    shape = typeof shape !== 'undefined' ? shape : defaultShape;
+    var shapeClass = shapeClasses[ shape ];
+    if ( typeof shapeClass === 'undefined' ) {
+      shapeClass = shapeClasses[ defaultShape ];
+    }
+
+    fixDef.shape = new ( Function.prototype.bind.apply( shapeClass, shapeOptions ) ) ();
+  };
+
+  PhysicsEntity.prototype.accelerate = function( x, y ) {
+    this.body.ApplyImpulse(
+      new Vec2( x, y ),
+      this.body.GetWorldCenter()
+    );
   };
 
   Object.defineProperty( PhysicsEntity.prototype, 'body', {
