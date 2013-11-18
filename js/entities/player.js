@@ -7,7 +7,8 @@ define([
 
   function Player( x, y ) {
     PhysicsEntity.call( this, x, y, {
-      type: 'dynamic'
+      type: 'dynamic',
+      shapeOptions: [ 2 ]
     });
   }
 
@@ -34,6 +35,8 @@ define([
 
   Player.prototype.draw = function( ctx ) {
     PhysicsEntity.prototype.draw.call( this, ctx );
+
+    ctx.beginPath();
     ctx.fillStyle = 'black';
     ctx.font = '3px Helvetica';
     ctx.fillText( this.vx + ', ' +  this.vy, 2, 2 );

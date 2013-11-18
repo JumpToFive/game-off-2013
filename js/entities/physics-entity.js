@@ -73,6 +73,8 @@ define([
       shapeClass = shapeClasses[ defaultShape ];
     }
 
+    // Call the constructor with arguments. Just another way of writing
+    // something like: new b2CircleShape( 2.5 ).
     fixDef.shape = new ( Function.prototype.bind.apply( shapeClass, shapeOptions ) ) ();
   };
 
@@ -164,6 +166,16 @@ define([
 
     set: function( vy ) {
       this.velocity.y = vy || 0;
+    }
+  });
+
+  Object.defineProperty( PhysicsEntity.prototype, 'va', {
+    get: function() {
+      return this.body.GetAngularVelocity();
+    },
+
+    set: function( va ) {
+      this.body.SetAngularVelocity( va || 0 );
     }
   });
 

@@ -89,7 +89,7 @@ define(function( require ) {
   // Tractor beam.
   var tractorBeam = new TractorBeam( 20, 30, 5 );
   tractorBeam.distance = 20;
-  tractorBeam.force = 120;
+  tractorBeam.force = 200;
   game.add( tractorBeam );
 
   // Factory test.
@@ -107,13 +107,12 @@ define(function( require ) {
     red: 255,
     alpha: 1
   });
+  emitterPolygon.lineWidth = 0.2;
   emitter.rate = 500;
   emitter.lifeTime = 2000;
-  emitter.speed = 150;
+  emitter.speed = 30;
   emitter.angle = -0.5 * Math.PI;
   emitter.particle = emitterPolygon;
-  emitter.properties.linearDamping = 0.5;
-  emitter.properties.va = 3 * Math.PI;
   emitter.world = game;
   emitter.start( 500 );
 

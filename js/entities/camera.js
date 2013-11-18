@@ -96,8 +96,10 @@ define([
     var halfWidth  = 0.5 * width,
         halfHeight = 0.5 * height;
 
+    ctx.beginPath();
     ctx.rect( -halfWidth, -halfHeight, width, height );
     ctx.rect( -halfWidth + margin, -halfHeight + margin, width - 2 * margin, height - 2 * margin );
+    ctx.closePath();
   };
 
   return Camera;
