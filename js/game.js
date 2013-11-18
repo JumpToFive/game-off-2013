@@ -131,17 +131,17 @@ define([
     }
     // A. Rotate left.
     if ( this.input.keys[ 65 ] ) {
-      this.camera.rotation += dt;
+      this.camera.angle += dt;
     }
     // D. Rotate right.
     if ( this.input.keys[ 68 ] ) {
-      this.camera.rotation -= dt;
+      this.camera.angle -= dt;
     }
     // Q. Reset camera.
     if ( this.input.keys[ 81 ] ) {
       this.camera.width = this.WIDTH;
       this.camera.height = this.HEIGHT;
-      this.camera.rotation = 0;
+      this.camera.angle = 0;
     }
   };
 

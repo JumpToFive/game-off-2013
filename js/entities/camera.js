@@ -40,9 +40,9 @@ define([
         y = this.target.y - this.y;
 
     var cos, sin;
-    if ( this.rotation ) {
-      cos = Math.cos( this.rotation );
-      sin = Math.sin( this.rotation );
+    if ( this.angle ) {
+      cos = Math.cos( this.angle );
+      sin = Math.sin( this.angle );
 
       var rx = cos * x - sin * y,
           ry = sin * x + cos * y;
@@ -68,7 +68,7 @@ define([
       dy += y - ( bottom - margin );
     }
 
-    if ( this.rotation ) {
+    if ( this.angle ) {
       var rdx =  cos * dx + sin * dy,
           rdy = -sin * dx + cos * dy;
 
@@ -83,7 +83,7 @@ define([
   Camera.prototype.applyTransform = function( ctx ) {
     ctx.translate( 0.5 * this.world.canvas.width, 0.5 * this.world.canvas.height );
     ctx.scale( this.world.canvas.width / this.width, this.world.canvas.height / this.height );
-    ctx.rotate( this.rotation );
+    ctx.rotate( this.angle );
     ctx.translate( -this.x, -this.y );
   };
 
