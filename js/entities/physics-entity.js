@@ -3,8 +3,9 @@
 define([
   'box2d',
   'entities/entity',
+  'utils',
   'world'
-], function( Box2D, Entity, world ) {
+], function( Box2D, Entity, Utils, world ) {
   'use strict';
 
   var Vec2 = Box2D.Common.Math.b2Vec2;
@@ -50,7 +51,7 @@ define([
     this.fixtureShape( fixDef, options.shape, options.shapeOptions );
 
     var bodyDef = new BodyDef();
-    bodyDef.linearDamping = 0.9;
+    bodyDef.linearDamping = 2;
     bodyDef.type = typeof options.type !== 'undefined' ? bodyTypes[ options.type ] : Body.b2_staticBody;
     this.fixture = world.CreateBody( bodyDef ).CreateFixture( fixDef );
   };
@@ -80,6 +81,12 @@ define([
       new Vec2( x, y ),
       this.body.GetWorldCenter()
     );
+  };
+
+  PhysicsEntity.prototype.update = function( dt ) {
+    Entity.prototype.update.call( this, dt );
+    this.vx = Utils.roundNearZero( this.vx );
+    this.vy = Utils.roundNearZero( this.vy );
   };
 
   Object.defineProperty( PhysicsEntity.prototype, 'body', {

@@ -8,8 +8,8 @@ define([
   function Camera( x, y ) {
     Entity.call( this, x, y );
 
-    this.width  = 320;
-    this.height = 240;
+    this.width  = 64;
+    this.height = 48;
 
     this.target = null;
     this.margin = 0;

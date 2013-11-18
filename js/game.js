@@ -34,11 +34,8 @@ define([
       alpha: 1.0
     });
 
-    this.camera.width = this.WIDTH;
-    this.camera.height = this.HEIGHT;
-
-    this.camera.margin = 50;
-    this.camera.lineWidth = 2;
+    this.camera.margin = 10;
+    this.camera.lineWidth = 0.2;
 
     this.level = null;
 
@@ -67,6 +64,7 @@ define([
     ];
 
     this.world = world;
+    this.world.GetGravity().SetZero();
   }
 
   Game.instance = null;
@@ -123,13 +121,13 @@ define([
        // Basic camera controls.
     // W. Zoom in.
     if ( this.input.keys[ 87 ] ) {
-      this.camera.width = Math.max( this.camera.width - 4, 160 );
-      this.camera.height = Math.max( this.camera.height - 3, 120 );
+      this.camera.width = Math.max( this.camera.width - 2, 32 );
+      this.camera.height = Math.max( this.camera.height - 1.5, 24 );
     }
     // S. Zoom out.
     if ( this.input.keys[ 83 ] ) {
-      this.camera.width += 4;
-      this.camera.height += 3;
+      this.camera.width += 2;
+      this.camera.height += 1.5;
     }
     // A. Rotate left.
     if ( this.input.keys[ 65 ] ) {
@@ -141,8 +139,8 @@ define([
     }
     // Q. Reset camera.
     if ( this.input.keys[ 81 ] ) {
-      this.camera.width = this.WIDTH;
-      this.camera.height = this.HEIGHT;
+      this.camera.width = 64;
+      this.camera.height = 48;
       this.camera.angle = 0;
     }
   };

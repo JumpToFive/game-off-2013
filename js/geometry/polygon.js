@@ -60,10 +60,10 @@ define([
       }
 
       ctx.moveTo( mx, my );
-      ctx.lineTo( mx + normal.x * 10, my + normal.y * 10 );
+      ctx.lineTo( mx + normal.x * 1, my + normal.y * 1 );
     }
 
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 0.2;
     ctx.strokeStyle = '#0f0';
     ctx.stroke();
   };

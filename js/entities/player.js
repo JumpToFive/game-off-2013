@@ -1,7 +1,7 @@
 /*globals define*/
 define([
   'box2d',
-  'entities/physics-entity'
+  'entities/physics-entity',
 ], function( Box2D, PhysicsEntity ) {
   'use strict';
 
@@ -15,29 +15,29 @@ define([
   Player.prototype.constructor = Player;
 
   Player.prototype.update = function( dt ) {
-    PhysicsEntity.prototype.update.call( this, dt );
-
     if ( this.world ) {
       var controls = this.world.input.controls;
 
       var ax = 0,
           ay = 0;
 
-      if ( controls.LEFT   ) { ax -= 5000; }
-      if ( controls.RIGHT  ) { ax += 5000; }
-      if ( controls.TOP    ) { ay -= 5000; }
-      if ( controls.BOTTOM ) { ay += 5000; }
+      if ( controls.LEFT   ) { ax -= 2; }
+      if ( controls.RIGHT  ) { ax += 2; }
+      if ( controls.TOP    ) { ay -= 2; }
+      if ( controls.BOTTOM ) { ay += 2; }
 
       this.accelerate( ax, ay );
     }
+
+    PhysicsEntity.prototype.update.call( this, dt );
   };
 
   Player.prototype.draw = function( ctx ) {
     PhysicsEntity.prototype.draw.call( this, ctx );
     ctx.fillStyle = 'black';
-    ctx.font = '30px Helvetica';
-    ctx.fillText( this.vx + ', ' +  this.vy, 20, 20 );
-    ctx.fillText( this.body.GetWorldCenter().x + ', ' +  this.body.GetWorldCenter().y, 20, 80 );
+    ctx.font = '3px Helvetica';
+    ctx.fillText( this.vx + ', ' +  this.vy, 2, 2 );
+    ctx.fillText( this.body.GetWorldCenter().x + ', ' +  this.body.GetWorldCenter().y, 2, 8 );
   };
 
   return Player;

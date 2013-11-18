@@ -2,7 +2,7 @@
 define(function() {
   'use strict';
 
-  var EPSILON = 1e-3;
+  var EPSILON = 1;
 
   function clamp( value, min, max ) {
     return Math.min( Math.max( value, min ), max );

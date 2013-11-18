@@ -24,7 +24,7 @@ define([
   TractorBeam.prototype.constructor = TractorBeam;
 
   TractorBeam.prototype.construct = function() {
-    var rect = new Rect( 0, 0, 10, this.width );
+    var rect = new Rect( 0, 0, 1, this.width );
 
     rect.fill.set({
       red: 255,
@@ -32,7 +32,7 @@ define([
     });
 
     rect.stroke.alpha = 1.0;
-    rect.lineWidth = 3;
+    rect.lineWidth = 0.2;
 
     this.shapes.push( rect );
   };

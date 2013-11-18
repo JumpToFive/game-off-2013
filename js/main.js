@@ -38,23 +38,23 @@ define(function( require ) {
   // Circle.
   var circleEntity = new Entity();
 
-  var circle = new Circle( 100, 200, 50 );
+  var circle = new Circle( 10, 20, 5 );
   circle.fill.alpha = 0.5;
 
   circleEntity.add( circle );
   game.add( circleEntity );
 
   // Rect.
-  var rectEntity = new Entity( 300, 150 );
+  var rectEntity = new Entity( 30, 5 );
 
-  var rect = new Rect( 0, 0, 50, 100 );
+  var rect = new Rect( 0, 0, 5, 10 );
   rect.fill.alpha = 0.5;
 
   rectEntity.add( rect );
   game.add( rectEntity );
 
   var rectInterval = setInterval(function() {
-    rectEntity.x -= 4;
+    rectEntity.x -= 0.4;
     rectEntity.angle += 10 * Math.PI / 180;
     polyEntity.angle += 2 * Math.PI / 180;
     segmentEntity.angle -= 2 * Math.PI / 180;
@@ -65,10 +65,10 @@ define(function( require ) {
   }, 600 );
 
   // Polygon.
-  var polyEntity = new Entity( 500, 350 );
+  var polyEntity = new Entity( 50, 35 );
 
-  var polygon = new Polygon( 50, 0 );
-  polygon.vertices = [ -100, 50, 100, 50, 0, -100 ];
+  var polygon = new Polygon( 5, 0 );
+  polygon.vertices = [ -5, 3, 5, 3, 0, -5 ];
   polygon.fill.alpha = 0.5;
 
   polyEntity.add( polygon );
@@ -76,20 +76,20 @@ define(function( require ) {
 
   // Segment.
   var segmentEntity = new Entity();
-  segmentEntity.x = 200;
-  segmentEntity.y = 350;
+  segmentEntity.x = 20;
+  segmentEntity.y = 35;
 
-  var segment = new Segment(0, 0, 100, 50 );
+  var segment = new Segment(0, 0, 10, 5 );
   segment.stroke.alpha = 1;
-  segment.lineWidth = 2;
+  segment.lineWidth = 0.2;
 
   segmentEntity.add( segment );
   game.add( segmentEntity );
 
   // Tractor beam.
-  var tractorBeam = new TractorBeam( 200, 300, 50 );
-  tractorBeam.distance = 200;
-  tractorBeam.force = 1200;
+  var tractorBeam = new TractorBeam( 20, 30, 5 );
+  tractorBeam.distance = 20;
+  tractorBeam.force = 120;
   game.add( tractorBeam );
 
   // Factory test.
@@ -100,9 +100,9 @@ define(function( require ) {
   }
 
   // Emitter.
-  var emitter = new Emitter( 250, 200 );
+  var emitter = new Emitter( 25, 20 );
   var emitterPolygon = new Polygon( 0, 0 );
-  emitterPolygon.vertices = [ -3, -3, -3, 3, 3, 3, 3, -3 ];
+  emitterPolygon.vertices = [ -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5 ];
   emitterPolygon.stroke.set({
     red: 255,
     alpha: 1
@@ -118,15 +118,10 @@ define(function( require ) {
   emitter.start( 500 );
 
   // Player.
-  game.player = new Player( 200, 200 );
+  game.player = new Player( 20, 20 );
   game.player.world = game;
-  game.player.add( new Circle( 0, 0, 20 ) );
+  game.player.add( new Circle( 0, 0, 2 ) );
   game.player.shapes[0].fill.alpha = 0.5;
-
-  game.player.set({
-    vx: 50,
-    vy: 100
-  });
 
   game.add( game.player );
 
