@@ -19,7 +19,7 @@ define([
     ctx.closePath();
   };
 
-  Circle.prototype.random = function( ctx ) {
+  Circle.prototype.random = function() {
     // Calculates r in [0, 1) and theta in [0, 2PI).
     // Note that using sqrt() results in a uniform distribution:
     //   x^2 + y^2 = r^2.
