@@ -20,6 +20,13 @@ define([
     ctx.closePath();
   };
 
+  Rect.prototype.random = function() {
+    return {
+      x: this.y + Math.random() * this.width,
+      y: this.y + Math.random() * this.height
+    };
+  };
+
   Object.defineProperty( Rect.prototype, 'left', {
     get: function() {
       return this.x - 0.5 * this.width;

@@ -50,5 +50,13 @@ define([
     ctx.stroke();
   };
 
+  Segment.prototype.random = function() {
+    return Utils.lerp2d(
+      this.x0, this.y0,
+      this.x1, this.y1,
+      Math.random()
+    );
+  };
+
   return Segment;
 });

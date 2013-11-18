@@ -19,6 +19,19 @@ define([
     ctx.closePath();
   };
 
+  Circle.prototype.random = function( ctx ) {
+    // Calculates r in [0, 1) and theta in [0, 2PI).
+    // Note that using sqrt() results in a uniform distribution:
+    //   x^2 + y^2 = r^2.
+    var radius = this.radius * Math.sqrt( Math.random() ),
+        theta  = 2 * Math.PI * Math.random();
+
+    return {
+      x: radius * Math.cos( theta ),
+      y: radius * Math.sin( theta )
+    };
+  };
+
   Object.defineProperty( Circle.prototype, 'left', {
     get: function() {
       return this.x - this.radius;
