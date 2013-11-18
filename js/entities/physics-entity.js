@@ -14,17 +14,36 @@ define([
   var FixtureDef = Box2D.Dynamics.b2FixtureDef;
 
   var shapeClasses = {
-    'CircleShape': Box2D.Collision.Shapes.b2CircleShape,
-    'PolygonShape': Box2D.Collision.Shapes.b2PolygonShape
+    circle: Box2D.Collision.Shapes.b2CircleShape,
+    polygon: Box2D.Collision.Shapes.b2PolygonShape
   };
 
-  var defaultShape = 'CircleShape';
+  var defaultShape = 'circle';
 
   var bodyTypes = {
     'static': Body.b2_staticBody,
     'dynamic': Body.b2_dynamicBody,
     'kinematic': Body.b2_kinematicBody
   };
+
+  // Set the pre-existing properties of a given object with the values in attrs.
+  // Recursively handles properties that are also objects.
+  function set( object, attrs ) {
+    if ( !object || !attrs ) {
+      return;
+    }
+
+    for ( var key in attrs ) {
+      if ( object.hasOwnProperty( key ) ) {
+        if ( typeof object[ key ] === 'object' &&
+             typeof  attrs[ key ] === 'object' ) {
+          set( object[ key ], attrs[ key ] );
+        } else {
+          object[ key ] = attrs[ key ];
+        }
+      }
+    }
+  }
 
 
   function PhysicsEntity( x, y, options ) {
@@ -40,14 +59,8 @@ define([
   PhysicsEntity.prototype.initialize = function( options ) {
     options = options || {};
 
-    var density = typeof options.density !== 'undefined' ? options.density : 1.0;
-    var friction = typeof options.friction !== 'undefined' ? options.friction : 0.5;
-    var restitution = typeof options.restitution !== 'undefined' ? options.restitution : 0.2;
-
     var fixDef = new FixtureDef();
-    fixDef.density = density;
-    fixDef.friction = friction;
-    fixDef.restitution = restitution;
+    set( fixDef, options.fixture );
     this.fixtureShape( fixDef, options.shape, options.shapeOptions );
 
     var bodyDef = new BodyDef();
@@ -61,8 +74,8 @@ define([
    * shapeOptions array.
    *
    * Possible values for shape are:
-   *  - CircleShape (default)
-   *  - PolygonShape
+   *  - circle (default)
+   *  - polygon
    */
   PhysicsEntity.prototype.fixtureShape = function( fixDef, shape, shapeOptions ) {
     shapeOptions = shapeOptions || [];

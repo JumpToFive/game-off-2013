@@ -9,7 +9,11 @@ define([
     PhysicsEntity.call( this, x, y, {
       type: 'dynamic',
       shapeOptions: [ 2 ],
-      density: 0.5
+      fixture: {
+        density: 0.5,
+        friction: 0.5,
+        restitution: 0.2
+      }
     });
   }
 

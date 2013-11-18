@@ -39,7 +39,12 @@ define([
       this.interval = setInterval(function() {
         var entity = new PhysicsEntity( this.x, this.y, {
           type: 'dynamic',
-          shapeOptions: [ 1 ]
+          shapeOptions: [ 1 ],
+          fixture: {
+            density: 1.0,
+            friction: 0.5,
+            restitution: 0.2
+          }
         });
         entity.set( this.properties );
         entity.add( GeometryFactory.create( particleJSON ) );
