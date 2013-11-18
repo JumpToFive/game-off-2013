@@ -89,7 +89,7 @@ define([
     this.updateDebug( dt );
     this.camera.update( dt );
 
-    this.world.Step( 1 / 60, 10, 10 );
+    this.world.Step( 1 / 60, 8, 3 );
 
     this.world.ClearForces();
   };

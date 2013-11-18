@@ -1,3 +1,56 @@
 {
-  "name": "Introduction to Introductions 101"
+  "name": "Introduction to Introductions 101",
+  "physics-entities": [
+    {
+      "shape": "circle",
+      "shapeOptions": {
+        "radius": 0
+      },
+      "fixture": {
+        "density": 1.0,
+        "friction": 0.5,
+        "restitution": 0.2,
+        "isSensor": false,
+        "filter": {
+          "categoryBits": 1,
+          "maskBits": 65535,
+          "groupIndex": 0
+        }
+      },
+      "body": {
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "angle": 0,
+        "linearVelocity": {
+          "x": 0,
+          "y": 0
+        },
+        "angularVelocity": 0,
+        "linearDamping": 0,
+        "angularDamping": 0,
+        "allowSleep": true,
+        "awake": true,
+        "fixedRotation": false,
+        "bullet": false,
+        "type": "static",
+        "active": true,
+        "inertiaScale": 1.0
+      }
+    },
+    {
+      "shape": "polygon",
+      "shapeOptions": {
+        "types": [
+          "array",
+          "box",
+          "edge",
+          "orientedBox",
+          "vector"
+        ],
+        "data": [ 100, 20, 100, 100, 0, 100 ]
+      }
+    }
+  ]
 }
