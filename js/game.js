@@ -1,9 +1,10 @@
 /*globals define*/
 define([
+  'box2d',
   'input',
   'entities/camera',
   'world'
-], function( Input, Camera, world ) {
+], function( Box2D, Input, Camera, world ) {
   'use strict';
 
   function Game() {
@@ -64,7 +65,28 @@ define([
     ];
 
     this.world = world;
-    this.world.GetGravity().SetZero();
+    world.GetGravity().SetZero();
+
+    // Initialize debug view.
+    this.DEBUG = false;
+
+    this.debugCanvas = document.createElement( 'canvas' );
+    this.debugCtx    = this.debugCanvas.getContext( '2d' );
+
+    this.element.appendChild( this.debugCanvas );
+
+    this.debugCanvas.width  = this.WIDTH;
+    this.debugCanvas.height = this.HEIGHT;
+
+    var DebugDraw = Box2D.Dynamics.b2DebugDraw;
+
+    var debugDraw = new DebugDraw();
+    debugDraw.SetSprite( this.debugCtx );
+    debugDraw.SetDrawScale( 1 );
+    debugDraw.SetFillAlpha( 0.3 );
+    debugDraw.SetLineThickness( 1 );
+    debugDraw.SetFlags( DebugDraw.e_shapeBit | DebugDraw.e_jointBit );
+    world.SetDebugDraw( debugDraw );
   }
 
   Game.instance = null;
@@ -95,6 +117,10 @@ define([
   };
 
   Game.prototype.draw = function() {
+    if ( this.DEBUG ) {
+      this.drawDebug();
+    }
+
     var ctx = this.ctx;
 
     var level = this.level;
@@ -143,6 +169,21 @@ define([
       this.camera.height = 48;
       this.camera.angle = 0;
     }
+  };
+
+  Game.prototype.drawDebug = function() {
+    var debugCtx = this.debugCtx;
+
+    var width  = debugCtx.canvas.width,
+        height = debugCtx.canvas.height;
+
+    debugCtx.clearRect( 0, 0, width, height );
+    debugCtx.save();
+
+    debugCtx.translate( 0.5 * width, 0.5 * height );
+    this.world.DrawDebugData();
+
+    debugCtx.restore();
   };
 
   Game.prototype.tick = function() {
