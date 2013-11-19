@@ -200,14 +200,14 @@ define([
 
   Game.prototype.add = function( entity ) {
     this.entities.push( entity );
-    entity.world = this;
+    entity.game = this;
   };
 
   Game.prototype.remove = function( entity ) {
     var index = this.entities.indexOf( entity );
     if ( index !== -1 ) {
       this.entities.splice( index, 1 );
-      entity.world = null;
+      entity.game = null;
     }
   };
 

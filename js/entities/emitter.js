@@ -6,9 +6,11 @@ define([
   'use strict';
 
   function Emitter( x, y ) {
-    PhysicsEntity.call( this, x, y );
-
-    this.fixture.SetSensor( true );
+    PhysicsEntity.call( this, x, y, {
+      fixture: {
+        isSensor: true
+      }
+    });
 
     this.rate = 0;
     this.speed = 0;
@@ -40,7 +42,7 @@ define([
   };
 
   Emitter.prototype.fire = function() {
-    if ( !this.particle || !this.world ) {
+    if ( !this.particle || !this.game ) {
       return;
     }
 

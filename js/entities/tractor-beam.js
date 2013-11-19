@@ -6,9 +6,11 @@ define([
   'use strict';
 
   function TractorBeam( x, y, width ) {
-    PhysicsEntity.call( this, x, y );
-
-    this.fixture.SetSensor( true );
+    PhysicsEntity.call( this, x, y, {
+      fixture: {
+        isSensor: true
+      }
+    });
 
     // Width of the tractor beam effect.
     this.width = width || 0;
@@ -54,7 +56,7 @@ define([
   TractorBeam.prototype.update = function( dt ) {
     PhysicsEntity.prototype.update.call( this, dt );
 
-    if ( !this.world ) {
+    if ( !this.game ) {
       return;
     }
 
@@ -65,7 +67,8 @@ define([
 
     var halfWidth = 0.5 * this.width;
 
-    this.world.entities.forEach(function( entity ) {
+    // Replace with a sensor.
+    this.game.entities.forEach(function( entity ) {
       if ( !( entity instanceof PhysicsEntity ) ||
           entity.fixed ||
           entity === this ) {
