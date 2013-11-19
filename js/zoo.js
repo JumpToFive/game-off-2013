@@ -24,31 +24,79 @@
 
     el.appendChild( canvas );
 
+    var t = 0;
+
     function draw() {
       ctx.clearRect( 0, 0, ctx.canvas.width, ctx.canvas.height );
 
+      ctx.save();
+      ctx.translate( 0.5 * width, 0.5 * height );
+
+      // Draw casing.
+      ctx.lineWidth = 0.05 * width;
+
+      ctx.beginPath();
+      ctx.arc( 0, 0, 0.22 * width, -Math.PI, -0.5 * Math.PI );
+      ctx.strokeStyle = '#fef';
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc( 0, 0, 0.22 * width, -0.5 * Math.PI, 0 );
+      ctx.strokeStyle = '#cbe';
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc( 0, 0, 0.22 * width, 0, 0.5 * Math.PI );
+      ctx.strokeStyle = '#98b';
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc( 0, 0, 0.22 * width, 0.5 * Math.PI, Math.PI );
+      ctx.strokeStyle = '#658';
+      ctx.stroke();
+
       // Draw main body.
       ctx.beginPath();
-      ctx.arc( 0.5 * width, 0.5 * height, 0.2 * width, 0, PI2 );
-      ctx.fillStyle = '#ddf';
+      ctx.arc( 0, 0, 0.2 * width, 0, PI2 );
+      ctx.fillStyle = '#dbf';
       ctx.fill();
 
-      // Draw eye.
+
+      // Draw left eye.
       ctx.beginPath();
-      ctx.arc( 0.65 * width, 0.5 * height, 0.08 * width, 0, PI2 );
-      ctx.fillStyle = '#f43';
+      ctx.rect( -0.1 * width, -0.06 * height, 0.04 * width, 0.08 * width );
+      ctx.fillStyle = '#448';
       ctx.fill();
 
-      // Draw eye gleam.
+      // Draw right eye.
       ctx.beginPath();
-      ctx.arc( 0.65 * width, 0.5 * height, 0.05 * width, -0.25 * Math.PI, 0.25 * Math.PI );
-      ctx.lineWidth = 0.02 * width;
-      ctx.strokeStyle = '#fff';
-      ctx.stroke();
+      ctx.rect( 0.06 * width, -0.06 * height, 0.04 * width, 0.08 * width );
+      ctx.fillStyle = '#448';
+      ctx.fill();
+
+      // Draw mouth.
+      if ( t % 240 < 80 ) {
+        ctx.beginPath();
+        ctx.arc( 0, 0.02 * height, 0.1 * width, 0.25 * Math.PI, 0.75 * Math.PI );
+
+        ctx.lineWidth = 0.03 * width;
+        ctx.strokeStyle = '#448';
+        ctx.stroke();
+      } else if ( t % 240 < 160 ) {
+        ctx.beginPath();
+        ctx.rect( -0.02 * width, 0.08 * height, 0.04 * width, 0.04 * width );
+        ctx.fillStyle = '#448';
+        ctx.fill();
+      } else {
+        ctx.beginPath();
+        ctx.rect( -0.06 * width, 0.08 * height, 0.12 * width, 0.02 * width );
+        ctx.fillStyle = '#448';
+        ctx.fill();
+      }
 
       // Draw ring.
       ctx.beginPath();
-      ctx.arc( 0.5 * width, 0.5 * height, 0.35 * width, 0, PI2 );
+      ctx.arc( 0, 0, 0.35 * width, 0, PI2 );
 
       ctx.shadowColor = '#fff';
       ctx.shadowBlur = 0.05 * width + Math.random() * 0.03 * width;
@@ -58,9 +106,12 @@
       ctx.stroke();
 
       ctx.shadowBlur = 0;
+
+      ctx.restore();
     }
 
     return function() {
+      t++;
       draw();
     };
   }) ());
