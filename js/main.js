@@ -113,6 +113,19 @@ define(function( require ) {
   emitter.speed = 100;
   emitter.angle = -0.5 * Math.PI;
   emitter.particle = emitterPolygon;
+  emitter.properties = {
+    radius: 0.5,
+    fixture: {
+      density: 4.0,
+      friction: 0.5,
+      restitution: 0.2
+    },
+    body: {
+      angularVelocity: 3 * Math.PI,
+      linearDamping: 0.2,
+      type: 'dynamic'
+    }
+  };
   emitter.game = game;
   emitter.start( 500 );
   game.add( emitter );

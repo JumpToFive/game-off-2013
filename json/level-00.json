@@ -3,9 +3,7 @@
   "physics-entities": [
     {
       "shape": "circle",
-      "shapeOptions": {
-        "radius": 0
-      },
+      "radius": 2,
       "fixture": {
         "density": 1.0,
         "friction": 0.5,
@@ -41,16 +39,10 @@
     },
     {
       "shape": "polygon",
-      "shapeOptions": {
-        "types": [
-          "array",
-          "box",
-          "edge",
-          "orientedBox",
-          "vector"
-        ],
-        "data": [ 100, 20, 100, 100, 0, 100 ]
-      }
+      "type": "vector",
+      "data": [
+        [ 100, 20, 100, 100, 0, 100 ]
+      ]
     }
   ]
 }

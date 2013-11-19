@@ -26,6 +26,14 @@ define([
     'kinematic': Body.b2_kinematicBody
   };
 
+  var setAs = {
+    array: 'SetAsArray',
+    box: 'SetAsBox',
+    edge: 'SetAsEdge',
+    orientedBox: 'SetAsOrientedBox',
+    vector: 'SetAsVector'
+  };
+
   // Set the pre-existing properties of a given object with the values in attrs.
   // Recursively handles properties that are also objects.
   function set( object, attrs ) {
@@ -61,11 +69,15 @@ define([
 
     var fixDef = new FixtureDef();
     set( fixDef, options.fixture );
-    this.fixtureShape( fixDef, options.shape, options.shapeOptions );
+    this.fixtureShape( fixDef, options );
 
     var bodyDef = new BodyDef();
-    bodyDef.linearDamping = 2;
-    bodyDef.type = typeof options.type !== 'undefined' ? bodyTypes[ options.type ] : Body.b2_staticBody;
+    set( bodyDef, options.body );
+    // Convert body type from string to flag.
+    if ( options.body ) {
+      bodyDef.type = typeof bodyDef.type !== 'undefined' ? bodyTypes[ bodyDef.type ] : Body.b2_staticBody;
+    }
+
     this.fixture = world.CreateBody( bodyDef ).CreateFixture( fixDef );
   };
 
@@ -77,16 +89,26 @@ define([
    *  - circle (default)
    *  - polygon
    */
-  PhysicsEntity.prototype.fixtureShape = function( fixDef, shape, shapeOptions ) {
-    shapeOptions = shapeOptions || [];
+  PhysicsEntity.prototype.fixtureShape = function( fixDef, options ) {
+    var shape = typeof options.shape !== 'undefined' ? options.shape : defaultShape;
 
-    shape = typeof shape !== 'undefined' ? shape : defaultShape;
     var Shape = shapeClasses[ shape ];
     if ( typeof Shape === 'undefined' ) {
       Shape = shapeClasses[ defaultShape ];
     }
 
-    fixDef.shape = new Shape( shapeOptions[0] );
+    fixDef.shape = new Shape();
+
+    if ( shape === 'circle' ) {
+      if ( typeof options.radius !== 'undefined' ) {
+        fixDef.shape.SetRadius( options.radius );
+      }
+    } else if ( shape === 'polygon' ) {
+      if ( typeof options.type !== 'undefined' &&
+           typeof options.data !== 'undefined' ) {
+        fixDef.shape[ setAs[ options.type ] ].apply( fixDef.shape, options.data );
+      }
+    }
   };
 
   PhysicsEntity.prototype.accelerate = function( x, y ) {

@@ -1,8 +1,7 @@
 /*globals define*/
 define([
-  'entities/entity',
-  'utils'
-], function( Entity, Utils ) {
+  'entities/entity'
+], function( Entity ) {
   'use strict';
 
   function Camera( x, y ) {

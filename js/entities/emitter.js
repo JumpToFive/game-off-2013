@@ -1,9 +1,8 @@
 /*globals define*/
 define([
   'entities/physics-entity',
-  'geometry/geometry-factory',
-  'world'
-], function( PhysicsEntity, GeometryFactory, world ) {
+  'geometry/geometry-factory'
+], function( PhysicsEntity, GeometryFactory ) {
   'use strict';
 
   function Emitter( x, y ) {
@@ -47,26 +46,13 @@ define([
 
     var particleJSON = JSON.stringify( this.particle );
 
-    var entity = new PhysicsEntity( this.x, this.y, {
-      type: 'dynamic',
-      shapeOptions: [ 1 ],
-      fixture: {
-        density: 1.0,
-        friction: 0.5,
-        restitution: 0.2
-      }
-    });
-    entity.set( this.properties );
+    var entity = new PhysicsEntity( this.x, this.y, this.properties );
     entity.add( GeometryFactory.create( particleJSON ) );
 
     entity.accelerate(
       Math.cos( -this.angle ) * this.speed,
       Math.sin( -this.angle ) * this.speed
     );
-
-    entity.va = 3 * Math.PI;
-    // TODO: Make linearDamping settable in PhysicsEntity.
-    entity.body.SetLinearDamping(0.2);
 
     this.game.add( entity );
 

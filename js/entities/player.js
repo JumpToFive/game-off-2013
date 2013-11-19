@@ -7,12 +7,16 @@ define([
 
   function Player( x, y ) {
     PhysicsEntity.call( this, x, y, {
-      type: 'dynamic',
-      shapeOptions: [ 2 ],
+      shape: 'circle',
+      radius: 2,
       fixture: {
         density: 0.5,
         friction: 0.5,
         restitution: 0.2
+      },
+      body: {
+        linearDamping: 2,
+        type: 'dynamic'
       }
     });
   }
