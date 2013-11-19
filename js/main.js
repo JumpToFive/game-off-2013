@@ -186,7 +186,28 @@ define(function( require ) {
     toggleContinuousRendering();
   });
 
+  // Add a checkbox to toggle Box2D debug view.
+  var debugCanvas = document.getElementById( 'box2d-debug-canvas' );
+  debugCanvas.style.display = 'none';
+
+  var debugCheckbox = document.getElementById( 'box2d-debug-checkbox' );
+  function toggleDebug() {
+    debugCheckbox.checked = game.box2dDebug = !game.box2dDebug;
+
+    // Toggle visibility.
+    if ( game.box2dDebug ) {
+      debugCanvas.style.display = 'inline';
+    } else {
+      debugCanvas.style.display = 'none';
+    }
+  }
+
   document.addEventListener( 'keydown', function( event ) {
+    // B.
+    if ( event.which === 66 ) {
+      toggleDebug();
+    }
+
     // R.
     if ( event.which === 82 ) {
       toggleContinuousRendering( event );

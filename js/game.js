@@ -68,13 +68,14 @@ define([
     world.GetGravity().SetZero();
 
     // Initialize debug view.
-    this.DEBUG = false;
+    this.box2dDebug = false;
 
     this.debugCanvas = document.createElement( 'canvas' );
     this.debugCtx    = this.debugCanvas.getContext( '2d' );
 
     this.element.appendChild( this.debugCanvas );
 
+    this.debugCanvas.id = 'box2d-debug-canvas';
     this.debugCanvas.width  = this.WIDTH;
     this.debugCanvas.height = this.HEIGHT;
 
@@ -85,7 +86,7 @@ define([
     debugDraw.SetDrawScale( 1 );
     debugDraw.SetFillAlpha( 0.3 );
     debugDraw.SetLineThickness( 1 );
-    debugDraw.SetFlags( DebugDraw.e_shapeBit | DebugDraw.e_jointBit );
+    debugDraw.SetFlags( DebugDraw.e_shapeBit );
     world.SetDebugDraw( debugDraw );
   }
 
@@ -117,7 +118,7 @@ define([
   };
 
   Game.prototype.draw = function() {
-    if ( this.DEBUG ) {
+    if ( this.box2dDebug ) {
       this.drawDebug();
     }
 
