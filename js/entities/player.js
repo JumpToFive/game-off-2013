@@ -21,8 +21,8 @@ define([
   Player.prototype.constructor = Player;
 
   Player.prototype.update = function( dt ) {
-    if ( this.world ) {
-      var controls = this.world.input.controls;
+    if ( this.game ) {
+      var controls = this.game.input.controls;
 
       var ax = 0,
           ay = 0;

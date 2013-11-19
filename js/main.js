@@ -108,17 +108,18 @@ define(function( require ) {
     alpha: 1
   });
   emitterPolygon.lineWidth = 0.2;
-  emitter.rate = 500;
+  emitter.rate = 0.5;
   emitter.lifeTime = 2000;
   emitter.speed = 100;
   emitter.angle = -0.5 * Math.PI;
   emitter.particle = emitterPolygon;
-  emitter.world = game;
+  emitter.game = game;
   emitter.start( 500 );
+  game.add( emitter );
 
   // Player.
   game.player = new Player( 20, 20 );
-  game.player.world = game;
+  game.player.game = game;
   game.player.add( new Circle( 0, 0, 2 ) );
   game.player.shapes[0].fill.alpha = 0.5;
 

@@ -19,53 +19,69 @@ define([
     // Any custom particle physics properties go here.
     this.properties = {};
 
-    this.interval = null;
+    this.time = 0;
+    this.firing = false;
   }
 
   Emitter.prototype = new PhysicsEntity();
   Emitter.prototype.constructor = Emitter;
 
-  Emitter.prototype.start = function( when ) {
-    if ( this.interval ||
-         !this.particle ) {
+  Emitter.prototype.update = function( dt ) {
+    PhysicsEntity.prototype.update.call( this, dt );
+
+    if ( !this.firing ) {
       return;
     }
 
+    this.time += dt;
+    if ( this.time > this.rate ) {
+      this.time = 0;
+      this.fire();
+    }
+  };
+
+  Emitter.prototype.fire = function() {
+    if ( !this.particle || !this.world ) {
+      return;
+    }
+
+    var particleJSON = JSON.stringify( this.particle );
+
+    var entity = new PhysicsEntity( this.x, this.y, {
+      type: 'dynamic',
+      shapeOptions: [ 1 ],
+      fixture: {
+        density: 1.0,
+        friction: 0.5,
+        restitution: 0.2
+      }
+    });
+    entity.set( this.properties );
+    entity.add( GeometryFactory.create( particleJSON ) );
+
+    entity.accelerate(
+      Math.cos( -this.angle ) * this.speed,
+      Math.sin( -this.angle ) * this.speed
+    );
+
+    entity.va = 3 * Math.PI;
+    // TODO: Make linearDamping settable in PhysicsEntity.
+    entity.body.SetLinearDamping(0.2);
+
+    this.game.add( entity );
+
+    setTimeout(function() {
+      this.game.remove( entity );
+      this.game.world.DestroyBody( entity.body );
+    }.bind( this ), this.lifeTime );
+  };
+
+  Emitter.prototype.start = function( when ) {
     when = when || 0;
 
     setTimeout(function() {
-      var particleJSON = JSON.stringify( this.particle );
-
-      this.interval = setInterval(function() {
-        var entity = new PhysicsEntity( this.x, this.y, {
-          type: 'dynamic',
-          shapeOptions: [ 1 ],
-          fixture: {
-            density: 1.0,
-            friction: 0.5,
-            restitution: 0.2
-          }
-        });
-        entity.set( this.properties );
-        entity.add( GeometryFactory.create( particleJSON ) );
-
-        entity.accelerate(
-          Math.cos( -this.angle ) * this.speed,
-          Math.sin( -this.angle ) * this.speed
-        );
-
-        entity.va = 3 * Math.PI;
-        // TODO: Make linearDamping settable in PhysicsEntity.
-        entity.body.SetLinearDamping(0.2);
-
-        this.world.add( entity );
-
-        setTimeout(function() {
-          this.world.remove( entity );
-          world.DestroyBody( entity.body );
-        }.bind( this ), this.lifeTime );
-
-      }.bind( this ), this.rate );
+      this.firing = true;
+      this.time = 0;
     }.bind( this ), when );
   };
 
@@ -73,8 +89,7 @@ define([
     when = when || 0;
 
     setTimeout(function() {
-      clearInterval( this.interval );
-      this.interval = null;
+      this.firing = false;
     }.bind( this ), when );
   };
 

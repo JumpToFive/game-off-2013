@@ -9,7 +9,7 @@ define([
     Object2D.call( this, x, y );
 
     this.shapes = [];
-    this.world = null;
+    this.game = null;
   }
 
   Entity.prototype = new Object2D();
