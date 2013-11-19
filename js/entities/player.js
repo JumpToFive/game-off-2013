@@ -36,20 +36,22 @@ define([
       if ( controls.TOP    ) { ay -= 15; }
       if ( controls.BOTTOM ) { ay += 15; }
 
+      var camera = this.game.camera;
+      if ( camera.angle ) {
+        var cos = Math.cos( -camera.angle ),
+            sin = Math.sin( -camera.angle );
+
+        var rax = cos * ax - sin * ay,
+            ray = sin * ax + cos * ay;
+
+        ax = rax;
+        ay = ray;
+      }
+
       this.accelerate( ax, ay );
     }
 
     PhysicsEntity.prototype.update.call( this, dt );
-  };
-
-  Player.prototype.draw = function( ctx ) {
-    PhysicsEntity.prototype.draw.call( this, ctx );
-
-    ctx.beginPath();
-    ctx.fillStyle = 'black';
-    ctx.font = '3px Helvetica';
-    ctx.fillText( this.vx + ', ' +  this.vy, 2, 2 );
-    ctx.fillText( this.body.GetWorldCenter().x + ', ' +  this.body.GetWorldCenter().y, 2, 8 );
   };
 
   return Player;
