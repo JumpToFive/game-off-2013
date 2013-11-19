@@ -99,15 +99,74 @@ define([
 
     fixDef.shape = new Shape();
 
+    // Set up shape properties.
     if ( shape === 'circle' ) {
       if ( typeof options.radius !== 'undefined' ) {
         fixDef.shape.SetRadius( options.radius );
       }
-    } else if ( shape === 'polygon' ) {
-      if ( typeof options.type !== 'undefined' &&
-           typeof options.data !== 'undefined' ) {
-        fixDef.shape[ setAs[ options.type ] ].apply( fixDef.shape, options.data );
+
+      return;
+    }
+
+    // Handle SetAs functions for each possible type.
+    var type = options.type,
+        data = options.data;
+
+    if ( shape !== 'polygon' ||
+         typeof type === 'undefined' ||
+         typeof data === 'undefined' ) {
+      return;
+    }
+
+    var setAsFunction = setAs[ type ];
+    if ( typeof setAsFunction === 'undefined' ) {
+      return;
+    }
+
+    setAsFunction = fixDef.shape[ setAsFunction ];
+
+    // Data is an array.
+    if ( type === 'array' ||
+         type === 'vector' ) {
+      // Convert flat array of numbers to a Vec2 array.
+      var vector = [];
+      for ( var i = 0, il = 0.5 * data.length; i < il; i++ ) {
+        vector.push( new Vec2( data[ 2 * i ], data[ 2 * i + 1 ] ) );
       }
+
+      setAsFunction.call( fixDef.shape, vector, vector.length );
+    }
+
+    // Data is an object:
+    // - hx:Number
+    // - hy:Number
+    else if ( type === 'box' ) {
+      setAsFunction.call( fixDef.shape, data.hx, data.hy );
+    }
+
+    // Data is an object:
+    // - hx:Number
+    // - hy:Number
+    // - center:Vec2
+    // - angle:Number
+    else if ( type === 'orientedBox' ) {
+      var center;
+      if ( typeof data.center !== 'undefined' ) {
+        center = new Vec2( data.center.x, data.center.y );
+      } else {
+        center = new Vec2( 0, 0 );
+      }
+
+      setAsFunction.call( fixDef.shape, data.hx, data.hy, center, data.angle );
+    }
+
+    // Data is an array of 4 numbers.
+    else if ( type === 'edge' ) {
+      setAsFunction.call(
+        fixDef.shape,
+        new Vec2( data[0], data[1] ),
+        new Vec2( data[2], data[3] )
+      );
     }
   };
 
