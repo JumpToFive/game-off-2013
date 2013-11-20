@@ -429,22 +429,47 @@
 
   tick();
 
+  var runCheckbox = document.getElementById( 'run-checkbox' );
+
+  function play() {
+    if ( !running ) {
+      running = true;
+      tick();
+      runCheckbox.checked = true;
+    }
+  }
+
+  function pause() {
+    running = false;
+    runCheckbox.checked = false;
+  }
+
+  function toggleContinuousRendering() {
+    if ( !runCheckbox.checked ) {
+      play();
+    } else {
+      pause();
+    }
+  }
+
+  runCheckbox.addEventListener( 'click', function() {
+    runCheckbox.checked = !runCheckbox.checked();
+    toggleContinuousRendering();
+  });
+
   document.addEventListener( 'keydown', function( event ) {
     // ESC.
     if ( event.which === 27 ) {
-      running = false;
+      pause();
     }
 
     // Space.
     if ( event.which === 32 ) {
-      if ( !running ) {
-        running = true;
-        tick();
-      }
+      toggleContinuousRendering();
     }
   });
 
   window.addEventListener( 'blur', function() {
-    running = false;
+    pause();
   });
 }) ( window, document );
