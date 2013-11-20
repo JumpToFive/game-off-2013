@@ -40,9 +40,33 @@
     {
       "shape": "polygon",
       "type": "vector",
-      "data": [
-        [ 100, 20, 100, 100, 0, 100 ]
-      ]
+      "data": [ 100, 20, 100, 100, 0, 100 ]
+    },
+    {
+      "shape": "polygon",
+      "type": "box",
+      "data": {
+        "hx": 5,
+        "hy": 2
+      }
+    },
+    {
+      "shape": "polygon",
+      "type": "orientedBox",
+      "data": {
+        "hx": 5,
+        "hy": 3,
+        "center": {
+          "x": 0,
+          "y": 0
+        },
+        "angle": 0.52
+      }
+    },
+    {
+      "shape": "polygon",
+      "type": "edge",
+      "data": [ -3, 0, 3, 0 ]
     }
   ]
 }
