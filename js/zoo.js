@@ -156,12 +156,14 @@
     var beamWidth  = 0.4 * width,
         beamHeight = 0.3 * height;
 
-    var baseWidth  = 0.01 * beamWidth,
+    var baseWidth  = 0.1 * beamWidth,
         baseHeight = beamHeight;
 
     function yRandom() {
       return Math.random() - 0.5;
     }
+
+    var t = 0;
 
     var particles = [];
     var particleCount = 10;
@@ -169,7 +171,7 @@
     while ( particleCount-- ) {
       radius = ( 0.02 + Math.random() * 0.01 ) * width;
       particles.push({
-        x: Math.random() * beamWidth + radius,
+        x: Math.random() * beamWidth,
         y: yRandom() * ( beamHeight - radius ),
         radius: radius,
         vx: 1.8 * beamHeight,
@@ -177,26 +179,32 @@
       });
     }
 
+    var redPrefix  = 'rgba(255, 128, 128, ',
+        bluePrefix = 'rgba(128, 128, 255, ';
+
+    var colorPrefix = redPrefix;
+
     function draw() {
+      if ( t % 120 < 60 ) {
+        colorPrefix = redPrefix;
+      } else {
+        colorPrefix = bluePrefix;
+      }
+
       ctx.clearRect( 0, 0, width, height );
 
       ctx.save();
       ctx.translate( 0.5 * width, 0.5 * height );
 
-      // Draw base.
-      ctx.beginPath();
-      ctx.rect( -0.5 * baseWidth, -0.5 * baseHeight, baseWidth, baseHeight );
-      ctx.fillStyle = '#f55';
-      ctx.fill();
-
       // Draw beam.
       ctx.beginPath();
       ctx.rect( 0, -0.5 * beamHeight, beamWidth, beamHeight );
       var grad = ctx.createLinearGradient( 0, 0, beamWidth, 0 );
-      grad.addColorStop( 0, 'rgba(255, 128, 128, 0.8)' );
-      grad.addColorStop( 1, 'rgba(255, 128, 128, 0.0)' );
+      grad.addColorStop( 0, colorPrefix + '0.8)' );
+      grad.addColorStop( 1, colorPrefix + '0.0)' );
       ctx.fillStyle = grad;
       ctx.fill();
+
 
       // Draw particles.
       particles.forEach(function( particle ) {
@@ -204,14 +212,32 @@
 
         ctx.beginPath();
         ctx.arc( particle.x, particle.y, particle.radius, 0, PI2 );
-        ctx.fillStyle = 'rgba(255, 64, 64, ' + alpha + ')';
+        ctx.fillStyle = 'rgba(255, 255, 255, ' + alpha + ')';
         ctx.fill();
       });
+
+      // Draw base.
+      ctx.shadowBlur = 0.02 * width;
+      ctx.shadowColor = colorPrefix + '1.0)';
+
+      ctx.beginPath();
+      ctx.moveTo( 0, -0.5 * baseHeight );
+      ctx.lineTo( 0, 0.5 * baseHeight );
+
+      ctx.lineCap = 'round';
+      ctx.lineWidth = baseWidth;
+      ctx.strokeStyle = '#fff';
+      ctx.stroke();
+
+      ctx.lineCap = 'butt';
+      ctx.shadowBlur = 0;
 
       ctx.restore();
     }
 
     return function( dt ) {
+      t++;
+
       particles.forEach(function( particle ) {
         particle.x += particle.vx * dt;
         particle.y += particle.vy * dt;
