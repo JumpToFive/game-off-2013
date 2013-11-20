@@ -137,7 +137,6 @@
     };
   }) ());
 
-
   tickFns.push((function drawEmitter() {
     var canvas = document.createElement( 'canvas' ),
         ctx    = canvas.getContext( '2d' );
@@ -252,6 +251,73 @@
     };
   }) ());
 
+  tickFns.push((function drawTrash() {
+    var canvas = document.createElement( 'canvas' ),
+        ctx    = canvas.getContext( '2d' );
+
+    var size = 128;
+
+    var width  = size,
+        height = size;
+
+    var t = 0;
+
+    var angle = 0;
+    var va = 60 * Math.PI / 180;
+
+    var hue = 240;
+
+    canvas.width  = width;
+    canvas.height = height;
+    canvas.style.backgroundColor = '#222';
+
+    el.appendChild( canvas );
+
+    function draw() {
+      ctx.clearRect( 0, 0, width, height );
+
+      if ( t % 240 < 120 ) {
+        hue = 240;
+      } else {
+        hue = 0;
+      }
+
+      ctx.save();
+      ctx.translate( 0.5 * width, 0.5 * height );
+      ctx.rotate( -angle );
+
+      ctx.beginPath();
+      ctx.rect( -0.32 * width, -0.2 * height, 0.64 * width, 0.4 * height );
+      ctx.fillStyle = 'hsl(' + hue + ', 30%, 60%)';
+      ctx.fill();
+
+      // Draw outline.
+      ctx.shadowBlur = 0.1 * width;
+      ctx.shadowColor = 'hsl(' + hue + ', 70%, 70%)';
+
+      ctx.lineJoin = 'round';
+      ctx.lineWidth = 0.03 * width;
+      ctx.strokeStyle = '#fff';
+      ctx.stroke();
+
+      ctx.shadowBlur = 0;
+      ctx.lineJoin = 'butt';
+
+      ctx.restore();
+    }
+
+    return function( dt ) {
+      t++;
+
+      angle += va * dt;
+      if ( angle > PI2 ) {
+        angle -= PI2;
+      }
+
+      draw();
+    };
+  }) ());
+
   tickFns.push((function drawBackground() {
     var canvas = document.createElement( 'canvas' ),
         ctx    = canvas.getContext( '2d' );
@@ -280,8 +346,8 @@
         rects.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          width: Math.random() * 0.25 * width,
-          height: Math.random() * 0.25 * height,
+          width: ( Math.random() * 0.25 + 0.05 ) * width,
+          height: ( Math.random() * 0.25 + 0.05 ) * height,
           saturation: Math.round( Math.random() * 30 + 25 ) + '%',
           lightness: Math.round( Math.random() * 50 + 25 ) + '%'
         });
