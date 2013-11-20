@@ -12,6 +12,8 @@ define([
       }
     });
 
+    this.spawnArea = null;
+
     this.rate = 0;
     this.speed = 0;
     this.particle = null;
@@ -46,15 +48,39 @@ define([
       return;
     }
 
+    var x = this.x,
+        y = this.y;
+
+    var cos = 1,
+        sin = 0;
+    if ( this.angle ) {
+      cos = Math.cos( -this.angle );
+      sin = Math.sin( -this.angle );
+    }
+
+    // Spawn inside an area (rect, circle, segment).
+    var point;
+    var rx, ry;
+    if ( this.spawnArea ) {
+      point = this.spawnArea.random();
+      if ( this.angle ) {
+        rx = cos * point.x - sin * point.y;
+        ry = sin * point.x + cos * point.y;
+
+        point.x = rx;
+        point.y = ry;
+      }
+
+      x += point.x;
+      y += point.y;
+    }
+
     var particleJSON = JSON.stringify( this.particle );
 
-    var entity = new PhysicsEntity( this.x, this.y, this.properties );
+    var entity = new PhysicsEntity( x, y, this.properties );
     entity.add( GeometryFactory.create( particleJSON ) );
 
-    entity.accelerate(
-      Math.cos( -this.angle ) * this.speed,
-      Math.sin( -this.angle ) * this.speed
-    );
+    entity.accelerate( cos * this.speed, sin * this.speed );
 
     this.game.add( entity );
 

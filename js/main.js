@@ -108,10 +108,20 @@ define(function( require ) {
     alpha: 1
   });
   emitterPolygon.lineWidth = 0.2;
-  emitter.rate = 0.5;
+
+  emitter.spawnArea = new Segment( 0, 2, 0, -2 );
+  emitter.spawnArea.stroke.set({
+    red: 255,
+    alpha: 1
+  });
+  emitter.spawnArea.lineWidth = 0.2;
+  emitter.add( emitter.spawnArea );
+
+  emitter.rate = 0.4;
   emitter.lifeTime = 2000;
   emitter.speed = 100;
   emitter.angle = -0.5 * Math.PI;
+
   emitter.particle = emitterPolygon;
   emitter.properties = {
     radius: 0.5,
@@ -126,6 +136,7 @@ define(function( require ) {
       type: 'dynamic'
     }
   };
+
   emitter.game = game;
   emitter.start( 500 );
   game.add( emitter );
