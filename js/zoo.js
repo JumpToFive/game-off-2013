@@ -252,6 +252,90 @@
     };
   }) ());
 
+  tickFns.push((function drawBackground() {
+    var canvas = document.createElement( 'canvas' ),
+        ctx    = canvas.getContext( '2d' );
+
+    var size = 512;
+
+    var width  = size,
+        height = size;
+
+    var hue = 240;
+
+    canvas.width  = width;
+    canvas.height = height;
+
+    el.appendChild( canvas );
+
+    var t = 0;
+
+    var rects = [];
+
+    function generateRects() {
+      rects = [];
+
+      var rectCount = 100;
+      while ( rectCount-- ) {
+        rects.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          width: Math.random() * 0.25 * width,
+          height: Math.random() * 0.25 * height,
+          saturation: Math.round( Math.random() * 30 + 25 ) + '%',
+          lightness: Math.round( Math.random() * 50 + 25 ) + '%'
+        });
+      }
+    }
+
+    function draw() {
+      var width  = ctx.canvas.width,
+          height = ctx.canvas.height;
+
+      if ( t % 240 < 120 ) {
+        hue = 240;
+      } else {
+        hue = 0;
+      }
+
+      canvas.style.backgroundColor = 'hsla(' + hue + ', 30%, 50%, 1.0)';
+
+      ctx.clearRect( 0, 0, width, height );
+
+      generateRects();
+      rects.forEach(function( rect ) {
+        ctx.save();
+        ctx.translate( rect.x, rect.y );
+
+        ctx.beginPath();
+        ctx.rect( -0.5 * rect.width, -0.5 * rect.height, rect.width, rect.height );
+        ctx.fillStyle = 'hsla(' +
+          hue + ', ' +
+          rect.saturation + ', ' +
+          rect.lightness + ', ' +
+          Math.random() +
+        ')';
+        ctx.fill();
+
+        ctx.restore();
+      });
+    }
+
+    var isDrawn = false;
+
+    return function() {
+      t++;
+      if ( t % 120 === 0 ) {
+        isDrawn = false;
+      }
+
+      if ( !isDrawn ) {
+        draw();
+        isDrawn = true;
+      }
+    };
+  }) ());
+
   var prevTime = Date.now(),
       currTime;
 
