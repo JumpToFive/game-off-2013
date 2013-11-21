@@ -8,6 +8,28 @@ define(function() {
     return Math.min( Math.max( value, min ), max );
   }
 
+  function randomFloat( min, max ) {
+    return min + Math.random() * ( max - min );
+  }
+
+  function randomInt( min, max ) {
+    return Math.round( randomFloat( min, max ) );
+  }
+
+  /**
+   * Returns a float: value +/- spread.
+   */
+  function floatSpread( value, spread ) {
+    return randomFloat( value - spread, value + spread );
+  }
+
+  /**
+   * Returns an int: value +/- spread.
+   */
+  function intSpread( value, spread ) {
+    return randomInt( value - spread, value + spread );
+  }
+
   function lerp( a, b, t ) {
     return a + t * ( b - a );
   }
@@ -53,6 +75,12 @@ define(function() {
     EPSILON: EPSILON,
 
     clamp: clamp,
+
+    randomFloat: randomFloat,
+    randomInt: randomInt,
+
+    floatSpread: floatSpread,
+    intSpread: intSpread,
 
     lerp: lerp,
     lerp2d: lerp2d,
