@@ -80,6 +80,7 @@ define([
     }
 
     this.fixture = world.CreateBody( bodyDef ).CreateFixture( fixDef );
+    this.body.SetUserData( this );
   };
 
   /**

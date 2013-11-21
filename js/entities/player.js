@@ -5,6 +5,11 @@ define([
 ], function( Box2D, PhysicsEntity ) {
   'use strict';
 
+  var Emotion = {
+    NORMAL: 0,
+    HIT: 1
+  };
+
   function Player( x, y ) {
     PhysicsEntity.call( this, {
       shape: 'circle',
@@ -24,7 +29,12 @@ define([
         type: 'dynamic'
       }
     });
+
+    this.emotion = Emotion.NORMAL;
+    this.emotionTimeout = null;
   }
+
+  Player.Emotion = Emotion;
 
   Player.prototype = new PhysicsEntity();
   Player.prototype.constructor = Player;
@@ -41,6 +51,7 @@ define([
       if ( controls.TOP    ) { ay -= 15; }
       if ( controls.BOTTOM ) { ay += 15; }
 
+      // Move along camera direction.
       var camera = this.game.camera;
       if ( camera.angle ) {
         var cos = Math.cos( -camera.angle ),
@@ -112,29 +123,12 @@ define([
     ctx.strokeStyle = '#fff';
     ctx.stroke();
 
-    // Draw left eye.
     if ( this.angle ) {
       ctx.save();
       ctx.rotate( -this.angle );
     }
-    ctx.beginPath();
-    ctx.rect( -0.1 * width, -0.06 * height, 0.04 * width, 0.08 * width );
-    ctx.fillStyle = '#448';
-    ctx.fill();
 
-    // Draw right eye.
-    ctx.beginPath();
-    ctx.rect( 0.06 * width, -0.06 * height, 0.04 * width, 0.08 * width );
-    ctx.fillStyle = '#448';
-    ctx.fill();
-
-    // Draw mouth.
-    ctx.beginPath();
-    ctx.arc( 0, 0.02 * height, 0.1 * width, 0.25 * Math.PI, 0.75 * Math.PI );
-
-    ctx.lineWidth = 0.03 * width;
-    ctx.strokeStyle = '#448';
-    ctx.stroke();
+    this.drawFace( ctx, width, height );
 
     if ( this.angle ) {
       ctx.restore();
@@ -154,7 +148,47 @@ define([
 
 
     ctx.restore();
-  }
+  };
+
+  Player.prototype.drawFace = function( ctx, width, height ) {
+    if ( this.emotion === Emotion.NORMAL ) {
+      // Draw left eye.
+      ctx.beginPath();
+      ctx.rect( -0.1 * width, -0.06 * height, 0.04 * width, 0.08 * width );
+      ctx.fillStyle = '#448';
+      ctx.fill();
+
+      // Draw right eye.
+      ctx.beginPath();
+      ctx.rect( 0.06 * width, -0.06 * height, 0.04 * width, 0.08 * width );
+      ctx.fillStyle = '#448';
+      ctx.fill();
+
+      // Draw smile.
+      ctx.beginPath();
+      ctx.arc( 0, 0.02 * height, 0.1 * width, 0.25 * Math.PI, 0.75 * Math.PI );
+
+      ctx.lineWidth = 0.03 * width;
+      ctx.strokeStyle = '#448';
+      ctx.stroke();
+    } else if ( this.emotion === Emotion.HIT ) {
+      // Draw X.
+      ctx.beginPath();
+      ctx.moveTo( -0.1 * width, -0.06 * height );
+      ctx.lineTo( 0.1 * width, 0.02 * height );
+      ctx.moveTo( -0.1 * width, 0.02 * height );
+      ctx.lineTo( 0.1 * width, -0.06 * height );
+      ctx.lineWidth = 0.03 * width;
+      ctx.strokeStyle = '#448';
+      ctx.stroke();
+
+      // Draw square.
+      ctx.beginPath();
+      ctx.rect( -0.02 * width, 0.08 * height, 0.04 * width, 0.04 * width );
+      ctx.fillStyle = '#448';
+      ctx.fill();
+    }
+  };
 
   return Player;
 });

@@ -3,10 +3,14 @@ define([
   'box2d',
   'input',
   'entities/camera',
+  'entities/player',
   'effects/background',
   'world'
-], function( Box2D, Input, Camera, Background, world ) {
+], function( Box2D, Input, Camera, Player, Background, world ) {
   'use strict';
+
+  var DebugDraw = Box2D.Dynamics.b2DebugDraw;
+  var ContactListener = Box2D.Dynamics.b2ContactListener;
 
   function Game() {
     this.prevTime = Date.now();
@@ -91,8 +95,6 @@ define([
     this.debugCanvas.width  = this.WIDTH;
     this.debugCanvas.height = this.HEIGHT;
 
-    var DebugDraw = Box2D.Dynamics.b2DebugDraw;
-
     var debugDraw = new DebugDraw();
     debugDraw.SetSprite( this.debugCtx );
     debugDraw.SetDrawScale( 1 );
@@ -100,6 +102,39 @@ define([
     debugDraw.SetLineThickness( 1 );
     debugDraw.SetFlags( DebugDraw.e_shapeBit );
     world.SetDebugDraw( debugDraw );
+
+    var contactListener = new ContactListener();
+
+    function userData( fixture ) {
+      return fixture.GetBody().GetUserData();
+    }
+
+    contactListener.BeginContact = function( contact ) {
+      var a = userData( contact.GetFixtureA() ),
+          b = userData( contact.GetFixtureB() );
+
+      var player;
+      if ( a instanceof Player ) {
+        player = a;
+      } else if ( b instanceof Player ) {
+        player = b;
+      }
+
+      if ( player ) {
+        player.emotion = Player.Emotion.HIT;
+        if ( player.emotionTimeout ) {
+          clearTimeout( player.emotionTimeout );
+        }
+
+        player.emotionTimeout = setTimeout(function() {
+          player.emotion = Player.Emotion.NORMAL;
+          clearTimeout( player.emotionTimeout );
+          player.emotionTimeout = null;
+        }, 1000 );
+      }
+    };
+
+    world.SetContactListener( contactListener );
   }
 
   Game.instance = null;

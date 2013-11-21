@@ -98,20 +98,34 @@
       ctx.strokeStyle = '#fff';
       ctx.stroke();
 
-      // Draw left eye.
-      ctx.beginPath();
-      ctx.rect( -0.1 * width, -0.06 * height, 0.04 * width, 0.08 * width );
-      ctx.fillStyle = '#448';
-      ctx.fill();
+      // Draw eyes.
+      if ( t % 240 < 160 ) {
+        // Draw left eye.
+        ctx.beginPath();
+        ctx.rect( -0.1 * width, -0.06 * height, 0.04 * width, 0.08 * width );
+        ctx.fillStyle = '#448';
+        ctx.fill();
 
-      // Draw right eye.
-      ctx.beginPath();
-      ctx.rect( 0.06 * width, -0.06 * height, 0.04 * width, 0.08 * width );
-      ctx.fillStyle = '#448';
-      ctx.fill();
+        // Draw right eye.
+        ctx.beginPath();
+        ctx.rect( 0.06 * width, -0.06 * height, 0.04 * width, 0.08 * width );
+        ctx.fillStyle = '#448';
+        ctx.fill();
+      } else {
+        // Draw X.
+        ctx.beginPath();
+        ctx.moveTo( -0.1 * width, -0.06 * height );
+        ctx.lineTo( 0.1 * width, 0.02 * height );
+        ctx.moveTo( -0.1 * width, 0.02 * height );
+        ctx.lineTo( 0.1 * width, -0.06 * height );
+        ctx.lineWidth = 0.03 * width;
+        ctx.strokeStyle = '#448';
+        ctx.stroke();
+      }
 
       // Draw mouth.
       if ( t % 240 < 80 ) {
+        // Draw smile.
         ctx.beginPath();
         ctx.arc( 0, 0.02 * height, 0.1 * width, 0.25 * Math.PI, 0.75 * Math.PI );
 
@@ -119,13 +133,15 @@
         ctx.strokeStyle = '#448';
         ctx.stroke();
       } else if ( t % 240 < 160 ) {
+        // Draw line.
         ctx.beginPath();
-        ctx.rect( -0.02 * width, 0.08 * height, 0.04 * width, 0.04 * width );
+        ctx.rect( -0.06 * width, 0.08 * height, 0.12 * width, 0.02 * width );
         ctx.fillStyle = '#448';
         ctx.fill();
       } else {
+        // Draw square.
         ctx.beginPath();
-        ctx.rect( -0.06 * width, 0.08 * height, 0.12 * width, 0.02 * width );
+        ctx.rect( -0.03 * width, 0.06 * height, 0.06 * width, 0.06 * width );
         ctx.fillStyle = '#448';
         ctx.fill();
       }
