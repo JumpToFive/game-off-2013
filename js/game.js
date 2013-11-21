@@ -67,10 +67,10 @@ define([
 
     this.background = new Background( this.WIDTH, this.HEIGHT );
     this.background.fill.set({
-      red: 96,
-      green: 96,
-      blue: 160,
-      alpha: 0.5
+      red: 64,
+      green: 64,
+      blue: 96,
+      alpha: 1
     });
     this.background.camera = this.camera;
     this.background.game = this;

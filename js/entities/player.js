@@ -8,9 +8,9 @@ define([
   function Player( x, y ) {
     PhysicsEntity.call( this, {
       shape: 'circle',
-      radius: 2,
+      radius: 4,
       fixture: {
-        density: 0.5,
+        density: 0.25,
         friction: 0.5,
         restitution: 0.2
       },
@@ -20,6 +20,7 @@ define([
           y: y
         },
         linearDamping: 2,
+        angularDamping: 0.1,
         type: 'dynamic'
       }
     });
@@ -57,6 +58,103 @@ define([
 
     PhysicsEntity.prototype.update.call( this, dt );
   };
+
+  Player.prototype.draw = function( ctx ) {
+    var PI2 = 2 * Math.PI;
+    var width = 8, height = 8;
+
+    ctx.save();
+    ctx.translate( this.x, this.y );
+    if ( this.angle ) {
+      ctx.rotate( this.angle );
+    }
+
+    // Draw casing.
+    ctx.lineWidth = 0.05 * width;
+
+    // Top left.
+    ctx.beginPath();
+    ctx.arc( 0, 0, 0.22 * width, -Math.PI, -0.5 * Math.PI );
+    ctx.strokeStyle = '#fef';
+    ctx.stroke();
+
+    // Top right.
+    ctx.beginPath();
+    ctx.arc( 0, 0, 0.22 * width, -0.5 * Math.PI, 0 );
+    ctx.strokeStyle = '#cbe';
+    ctx.stroke();
+
+    // Bottom right.
+    ctx.beginPath();
+    ctx.arc( 0, 0, 0.22 * width, 0, 0.5 * Math.PI );
+    ctx.strokeStyle = '#98b';
+    ctx.stroke();
+
+    // Bottom left.
+    ctx.beginPath();
+    ctx.arc( 0, 0, 0.22 * width, 0.5 * Math.PI, Math.PI );
+    ctx.strokeStyle = '#658';
+    ctx.stroke();
+
+    // Draw main body.
+    ctx.beginPath();
+    ctx.arc( 0, 0, 0.2 * width, 0, PI2 );
+    ctx.fillStyle = '#ecf';
+    ctx.fill();
+
+    // Strokes.
+    ctx.lineWidth = 0.02 * width;
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc( 0, 0, 0.18 * width, 0, PI2 );
+    ctx.strokeStyle = '#fff';
+    ctx.stroke();
+
+    // Draw left eye.
+    if ( this.angle ) {
+      ctx.save();
+      ctx.rotate( -this.angle );
+    }
+    ctx.beginPath();
+    ctx.rect( -0.1 * width, -0.06 * height, 0.04 * width, 0.08 * width );
+    ctx.fillStyle = '#448';
+    ctx.fill();
+
+    // Draw right eye.
+    ctx.beginPath();
+    ctx.rect( 0.06 * width, -0.06 * height, 0.04 * width, 0.08 * width );
+    ctx.fillStyle = '#448';
+    ctx.fill();
+
+    // Draw mouth.
+    ctx.beginPath();
+    ctx.arc( 0, 0.02 * height, 0.1 * width, 0.25 * Math.PI, 0.75 * Math.PI );
+
+    ctx.lineWidth = 0.03 * width;
+    ctx.strokeStyle = '#448';
+    ctx.stroke();
+
+    if ( this.angle ) {
+      ctx.restore();
+    }
+
+    // Draw ring.
+    ctx.beginPath();
+    ctx.arc( 0, 0, 0.35 * width, 0, PI2 );
+
+    ctx.lineWidth = ( 0.1 + Math.random() * 0.08 ) * width;
+    ctx.strokeStyle = '#f33';
+    ctx.stroke();
+
+    ctx.lineWidth = 0.07 * width;
+    ctx.strokeStyle = '#fff';
+    ctx.stroke();
+
+
+    ctx.restore();
+  }
 
   return Player;
 });
