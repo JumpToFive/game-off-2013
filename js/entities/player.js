@@ -125,7 +125,7 @@ define([
 
     if ( this.angle ) {
       ctx.save();
-      ctx.rotate( -this.angle );
+      ctx.rotate( -this.angle - this.game.camera.angle );
     }
 
     this.drawFace( ctx, width, height );
