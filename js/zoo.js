@@ -322,6 +322,7 @@
     };
   }) ());
 
+  // Based off of https://github.com/soulwire/sketch.js/blob/master/examples/particles.html
   tickFns.push((function drawExplosion() {
     var element = createCanvas( 128 );
 
@@ -335,21 +336,26 @@
     var particles = [];
 
     var options = {
-      drag: 0.9,
-      shrink: 0.97,
+      shrink: 0.95,
       deviation: 0.2
     };
 
     function generateParticles() {
-      var particleCount = 30;
+      var particleCount = 10;
+      var angle, force;
+
       while ( particleCount-- ) {
+        angle = Math.random() * PI2;
+        force = Math.random() * 100 + 50;
+
         particles.push({
           x: 0.5 * width,
           y: 0.5 * height,
-          radius: ( Math.random() * 0.05 + 0.01 ) * width,
-          angle: Math.random() * PI2,
-          vx: 0,
-          vy: 0
+          radius: ( Math.random() * 0.05 + 0.05 ) * width,
+          angle: angle,
+          vx: Math.cos( angle ) * force,
+          vy: Math.sin( angle ) * force,
+          drag: Math.random() * 0.05 + 0.9
         });
       }
     }
@@ -359,13 +365,15 @@
     function draw() {
       ctx.clearRect( 0, 0, width, height );
 
+      ctx.globalCompositeOperation = 'lighter';
       particles.forEach(function ( particle ) {
         ctx.beginPath();
         ctx.arc( particle.x, particle.y, particle.radius, 0, PI2 );
 
-        ctx.fillStyle = 'white';
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
         ctx.fill();
       });
+      ctx.globalCompositeOperation = 'source-over';
     }
 
     return function( dt ) {
@@ -374,13 +382,13 @@
         particle.x += particle.vx * dt;
         particle.y += particle.vy * dt;
 
-        particle.vx *= options.drag;
-        particle.vy *= options.drag;
+        particle.vx *= particle.drag;
+        particle.vy *= particle.drag;
 
         particle.angle += ( Math.random() - 0.5 ) * options.deviation;
 
-        particle.vx += Math.cos( particle.angle ) * dt;
-        particle.vy += Math.sin( particle.angle ) * dt;
+        particle.vx += Math.cos( particle.angle ) * 0.1;
+        particle.vy += Math.sin( particle.angle ) * 0.1;
 
         particle.radius *= options.shrink;
         if ( particle.radius < 0.5 ) {
@@ -406,6 +414,7 @@
         height = element.height;
 
     var hue = 240;
+    var hueSpread = 20;
 
     var t = 0;
 
@@ -445,7 +454,7 @@
         ctx.beginPath();
         ctx.rect( -0.5 * rect.width, -0.5 * rect.height, rect.width, rect.height );
         ctx.fillStyle = 'hsla(' +
-          hue + ', ' +
+          ( hue + Math.round( hueSpread * ( Math.random() - 0.5 ) ) ) + ', ' +
           rect.saturation + ', ' +
           rect.lightness + ', ' +
           Math.random() +
@@ -534,6 +543,7 @@
 
     // Space.
     if ( event.which === 32 ) {
+      event.preventDefault();
       toggleContinuousRendering();
     }
   });
