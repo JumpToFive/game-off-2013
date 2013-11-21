@@ -23,6 +23,8 @@ define([
     this.height = height || 0;
 
     this.count = 100;
+
+    this.game = null;
     this.camera = null;
   }
 
@@ -83,12 +85,12 @@ define([
   };
 
   Background.prototype.draw = function( ctx ) {
-    if ( !this.camera ) {
+    if ( !this.game || !this.camera ) {
       return;
     }
 
     ctx.save();
-    ctx.translate( -this.camera.x * this.parallax, -this.camera.y * this.parallax );
+    ctx.translate( this.camera.x * this.parallax, this.camera.y * this.parallax );
     ctx.scale( this.parallax, this.parallax );
 
     var prevAlpha = ctx.globalAlpha;

@@ -65,7 +65,7 @@ define([
       ]
     ];
 
-    this.background = new Background( 4 * this.WIDTH, 4 * this.HEIGHT );
+    this.background = new Background( this.WIDTH, this.HEIGHT );
     this.background.fill.set({
       red: 96,
       green: 96,
@@ -73,6 +73,7 @@ define([
       alpha: 0.5
     });
     this.background.camera = this.camera;
+    this.background.game = this;
     this.background.prerender();
 
     this.world = world;
