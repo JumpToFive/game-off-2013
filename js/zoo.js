@@ -531,7 +531,7 @@
   }
 
   runCheckbox.addEventListener( 'click', function() {
-    runCheckbox.checked = !runCheckbox.checked();
+    runCheckbox.checked = !runCheckbox.checked;
     toggleContinuousRendering();
   });
 
