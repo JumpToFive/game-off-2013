@@ -1,6 +1,54 @@
 {
   "name": "Introduction to Introductions 101",
-  "physics-entities": [
+  "entities": [
+    {
+      "x": 0,
+      "y": 0,
+      "angle": 0,
+      "shapes": [
+        {
+          "type": "circle",
+          "x": 10,
+          "y": 20,
+          "radius": 10,
+          "fill": {
+            "type": "color",
+            "red": 255,
+            "green": 255,
+            "blue": 255,
+            "alpha": 1.0
+          },
+          "stroke": {
+            "type": "color",
+            "red": 255,
+            "green": 0,
+            "blue": 0,
+            "alpha": 1.0
+          },
+          "lineWidth": 4
+        },
+        {
+          "type": "rect",
+          "x": 20,
+          "y": 10,
+          "width": 10,
+          "height": 20
+        },
+        {
+          "type": "polygon",
+          "vertices": [ 100, 20, 100, 100, 0, 100 ]
+        },
+        {
+          "type": "segment",
+          "x0": -10,
+          "y0": 0,
+          "x1": 10,
+          "y1": 0
+        }
+      ]
+    }
+  ],
+  "physicsEntities": [
     {
       "shape": "circle",
       "radius": 2,

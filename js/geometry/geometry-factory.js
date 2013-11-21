@@ -19,9 +19,10 @@ define(function( require ) {
     }
 
     // Handle color objects.
-    var color;
+    var color, childType;
     for ( var key in attrs ) {
-      if ( attrs[ key ].type === 'Color' ) {
+      childType = attrs[ key ].type;
+      if ( childType && childType.toLowerCase() === 'color' ) {
         color = new Color();
         color.set( attrs[ key ] );
         attrs[ key ] = color;
