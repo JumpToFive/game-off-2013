@@ -335,10 +335,7 @@
 
     var particles = [];
 
-    var options = {
-      shrink: 0.95,
-      deviation: 0.2
-    };
+    var shrink = 0.95;
 
     function generateParticles() {
       var particleCount = 10;
@@ -346,7 +343,7 @@
 
       while ( particleCount-- ) {
         angle = Math.random() * PI2;
-        force = Math.random() * 100 + 50;
+        force = Math.random() * 50 + 100;
 
         particles.push({
           x: 0.5 * width,
@@ -355,7 +352,8 @@
           angle: angle,
           vx: Math.cos( angle ) * force,
           vy: Math.sin( angle ) * force,
-          drag: Math.random() * 0.05 + 0.9
+          drag: Math.random() * 0.05 + 0.9,
+          deviation: Math.random() * 1.5 + 0.5
         });
       }
     }
@@ -385,12 +383,12 @@
         particle.vx *= particle.drag;
         particle.vy *= particle.drag;
 
-        particle.angle += ( Math.random() - 0.5 ) * options.deviation;
+        particle.angle += ( Math.random() - 0.5 ) * particle.deviation;
 
         particle.vx += Math.cos( particle.angle ) * 0.1;
         particle.vy += Math.sin( particle.angle ) * 0.1;
 
-        particle.radius *= options.shrink;
+        particle.radius *= shrink;
         if ( particle.radius < 0.5 ) {
           deleted.push( index );
         }
@@ -399,6 +397,10 @@
       var index = deleted.length;
       while ( index-- ) {
         particles.splice( deleted[ index ], 1 );
+      }
+
+      if ( !particles.length ) {
+        generateParticles();
       }
 
       draw();
