@@ -9,6 +9,26 @@
 
   var tickFns = [];
 
+  function createCanvas( size ) {
+    var canvas = document.createElement( 'canvas' ),
+        ctx    = canvas.getContext( '2d' );
+
+    var width  = size,
+        height = size;
+
+    canvas.width  = width;
+    canvas.height = height;
+
+    el.appendChild( canvas );
+
+    return {
+      canvas: canvas,
+      ctx: ctx,
+      width: width,
+      height: height
+    };
+  }
+
   /**
    * TODO:
    * - Wires,
@@ -18,19 +38,14 @@
    */
 
   tickFns.push((function drawHero() {
-    var canvas = document.createElement( 'canvas' ),
-        ctx    = canvas.getContext( '2d' );
+    var element = createCanvas( 128 );
 
-    var size = 128;
+    var canvas = element.canvas,
+        ctx    = element.ctx,
+        width  = element.width,
+        height = element.height;
 
-    var width  = size,
-        height = size;
-
-    canvas.width  = width;
-    canvas.height = height;
     canvas.style.backgroundColor = 'black';
-
-    el.appendChild( canvas );
 
     var t = 0;
 
@@ -138,19 +153,14 @@
   }) ());
 
   tickFns.push((function drawEmitter() {
-    var canvas = document.createElement( 'canvas' ),
-        ctx    = canvas.getContext( '2d' );
+    var element = createCanvas( 128 );
 
-    var size = 128;
+    var canvas = element.canvas,
+        ctx    = element.ctx,
+        width  = element.width,
+        height = element.height;
 
-    var width  = size,
-        height = size;
-
-    canvas.width  = width;
-    canvas.height = height;
     canvas.style.backgroundColor = '#333';
-
-    el.appendChild( canvas );
 
     var beamWidth  = 0.4 * width,
         beamHeight = 0.3 * height;
@@ -173,7 +183,7 @@
         x: Math.random() * beamWidth,
         y: yRandom() * ( beamHeight - radius ),
         radius: radius,
-        vx: 1.8 * beamHeight,
+        vx: 2 * beamHeight,
         vy: 0
       });
     }
@@ -203,7 +213,6 @@
       grad.addColorStop( 1, colorPrefix + '0.0)' );
       ctx.fillStyle = grad;
       ctx.fill();
-
 
       // Draw particles.
       particles.forEach(function( particle ) {
@@ -252,13 +261,14 @@
   }) ());
 
   tickFns.push((function drawTrash() {
-    var canvas = document.createElement( 'canvas' ),
-        ctx    = canvas.getContext( '2d' );
+    var element = createCanvas( 128 );
 
-    var size = 128;
+    var canvas = element.canvas,
+        ctx    = element.ctx,
+        width  = element.width,
+        height = element.height;
 
-    var width  = size,
-        height = size;
+    canvas.style.backgroundColor = '#222';
 
     var t = 0;
 
@@ -266,12 +276,6 @@
     var va = 60 * Math.PI / 180;
 
     var hue = 240;
-
-    canvas.width  = width;
-    canvas.height = height;
-    canvas.style.backgroundColor = '#222';
-
-    el.appendChild( canvas );
 
     function draw() {
       ctx.clearRect( 0, 0, width, height );
@@ -318,21 +322,90 @@
     };
   }) ());
 
+  tickFns.push((function drawExplosion() {
+    var element = createCanvas( 128 );
+
+    var canvas = element.canvas,
+        ctx    = element.ctx,
+        width  = element.width,
+        height = element.height;
+
+    canvas.style.backgroundColor = '#555';
+
+    var particles = [];
+
+    var options = {
+      drag: 0.9,
+      shrink: 0.97,
+      deviation: 0.2
+    };
+
+    function generateParticles() {
+      var particleCount = 30;
+      while ( particleCount-- ) {
+        particles.push({
+          x: 0.5 * width,
+          y: 0.5 * height,
+          radius: ( Math.random() * 0.05 + 0.01 ) * width,
+          angle: Math.random() * PI2,
+          vx: 0,
+          vy: 0
+        });
+      }
+    }
+
+    generateParticles();
+
+    function draw() {
+      ctx.clearRect( 0, 0, width, height );
+
+      particles.forEach(function ( particle ) {
+        ctx.beginPath();
+        ctx.arc( particle.x, particle.y, particle.radius, 0, PI2 );
+
+        ctx.fillStyle = 'white';
+        ctx.fill();
+      });
+    }
+
+    return function( dt ) {
+      var deleted = [];
+      particles.forEach(function( particle, index ) {
+        particle.x += particle.vx * dt;
+        particle.y += particle.vy * dt;
+
+        particle.vx *= options.drag;
+        particle.vy *= options.drag;
+
+        particle.angle += ( Math.random() - 0.5 ) * options.deviation;
+
+        particle.vx += Math.cos( particle.angle ) * dt;
+        particle.vy += Math.sin( particle.angle ) * dt;
+
+        particle.radius *= options.shrink;
+        if ( particle.radius < 0.5 ) {
+          deleted.push( index );
+        }
+      });
+
+      var index = deleted.length;
+      while ( index-- ) {
+        particles.splice( deleted[ index ], 1 );
+      }
+
+      draw();
+    };
+  }) ());
+
   tickFns.push((function drawBackground() {
-    var canvas = document.createElement( 'canvas' ),
-        ctx    = canvas.getContext( '2d' );
+    var element = createCanvas( 512 );
 
-    var size = 512;
-
-    var width  = size,
-        height = size;
+    var canvas = element.canvas,
+        ctx    = element.ctx,
+        width  = element.width,
+        height = element.height;
 
     var hue = 240;
-
-    canvas.width  = width;
-    canvas.height = height;
-
-    el.appendChild( canvas );
 
     var t = 0;
 
@@ -355,9 +428,6 @@
     }
 
     function draw() {
-      var width  = ctx.canvas.width,
-          height = ctx.canvas.height;
-
       if ( t % 240 < 120 ) {
         hue = 240;
       } else {
@@ -372,7 +442,6 @@
       rects.forEach(function( rect ) {
         ctx.save();
         ctx.translate( rect.x, rect.y );
-
         ctx.beginPath();
         ctx.rect( -0.5 * rect.width, -0.5 * rect.height, rect.width, rect.height );
         ctx.fillStyle = 'hsla(' +
