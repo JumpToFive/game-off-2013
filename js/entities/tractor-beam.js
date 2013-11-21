@@ -6,9 +6,15 @@ define([
   'use strict';
 
   function TractorBeam( x, y, width ) {
-    PhysicsEntity.call( this, x, y, {
+    PhysicsEntity.call( this, {
       fixture: {
         isSensor: true
+      },
+      body: {
+        position: {
+          x: x,
+          y: y
+        }
       }
     });
 

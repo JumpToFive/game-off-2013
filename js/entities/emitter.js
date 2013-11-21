@@ -6,9 +6,15 @@ define([
   'use strict';
 
   function Emitter( x, y ) {
-    PhysicsEntity.call( this, x, y, {
+    PhysicsEntity.call( this, {
       fixture: {
         isSensor: true
+      },
+      body: {
+        position: {
+          x: x,
+          y: y
+        }
       }
     });
 
@@ -77,7 +83,12 @@ define([
 
     var particleJSON = JSON.stringify( this.particle );
 
-    var entity = new PhysicsEntity( x, y, this.properties );
+    // Create entities with the prototypical properties.
+    var entity = new PhysicsEntity( this.properties );
+    entity.x = x;
+    entity.y = y;
+
+    // Add any specified shapes.
     entity.add( GeometryFactory.create( particleJSON ) );
 
     entity.accelerate( cos * this.speed, sin * this.speed );

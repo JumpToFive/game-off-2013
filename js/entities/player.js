@@ -6,7 +6,7 @@ define([
   'use strict';
 
   function Player( x, y ) {
-    PhysicsEntity.call( this, x, y, {
+    PhysicsEntity.call( this, {
       shape: 'circle',
       radius: 2,
       fixture: {
@@ -15,6 +15,10 @@ define([
         restitution: 0.2
       },
       body: {
+        position: {
+          x: x,
+          y: y
+        },
         linearDamping: 2,
         type: 'dynamic'
       }

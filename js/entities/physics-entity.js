@@ -54,11 +54,12 @@ define([
   }
 
 
-  function PhysicsEntity( x, y, options ) {
+  function PhysicsEntity( options ) {
     this.fixture = null;
     this.initialize( options );
 
-    Entity.call( this, x, y );
+    // This tautology stops the Entity constructor from changing the position.
+    Entity.call( this, this.x, this.y );
   }
 
   PhysicsEntity.prototype = new Entity();
@@ -191,7 +192,7 @@ define([
 
   Object.defineProperty( PhysicsEntity.prototype, 'position', {
     get: function() {
-      return this.body.GetPosition();
+      return this.body.GetWorldCenter();
     }
   });
 
