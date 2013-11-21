@@ -3,8 +3,9 @@ define([
   'box2d',
   'input',
   'entities/camera',
+  'effects/background',
   'world'
-], function( Box2D, Input, Camera, world ) {
+], function( Box2D, Input, Camera, Background, world ) {
   'use strict';
 
   function Game() {
@@ -63,6 +64,16 @@ define([
         [ 100, -50, 100, 0 ]
       ]
     ];
+
+    this.background = new Background( 4 * this.WIDTH, 4 * this.HEIGHT );
+    this.background.fill.set({
+      red: 96,
+      green: 96,
+      blue: 160,
+      alpha: 0.5
+    });
+    this.background.camera = this.camera;
+    this.background.prerender();
 
     this.world = world;
     world.GetGravity().SetZero();
@@ -135,6 +146,7 @@ define([
     ctx.save();
     this.camera.applyTransform( ctx );
 
+    this.background.draw( ctx );
     this.entities.forEach(function( entity ) {
       entity.draw( ctx );
     });
