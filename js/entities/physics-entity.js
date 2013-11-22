@@ -179,7 +179,7 @@ define([
   PhysicsEntity.prototype.accelerate = function( x, y ) {
     this.body.ApplyImpulse(
       new Vec2( x, y ),
-      this.body.GetWorldCenter()
+      this.worldCenter
     );
   };
 

@@ -2,7 +2,9 @@
 define(function() {
   'use strict';
 
-  var EPSILON = 1;
+  var PI2 = 2 * Math.PI;
+
+  var EPSILON = 1e-1;
 
   function clamp( value, min, max ) {
     return Math.min( Math.max( value, min ), max );
@@ -72,6 +74,7 @@ define(function() {
   }
 
   return {
+    PI2: PI2,
     EPSILON: EPSILON,
 
     clamp: clamp,
