@@ -1,18 +1,19 @@
 Hyperspace Garbage Collection
 ===
 
-At the multiverse juncture known as Alpha Omnicron Seven, `B0b`, a waste management systems machine, has been diligentily maintaining the Variadic Intergalactic Landfill for the past seven millenia. Day-to-day operations are automated, with the Landfill accepting both matter and anti-matter for processing and recycling. To avoid complete annihilation, waste shipments are temporally staggered.
+At the multiverse juncture known as Alpha Omnicron Seven, `N4n`, a waste management systems machine, has been diligently maintaining the Variadic Intergalactic Garbage Processing Plant for the past seven millenia. A nineteenth generation Cyber-Fruit Inc. design, `N4n` features a dual-mode force-field, a levitation-engine, and a proprietary emotion display.
 
-A nineteenth generation Hyper-Fruit Inc. design, `B0b` features dual-mode materials handling, a regenerative zero-point energy power-plant, and a kinetic ramming mechanism.
+The Plant accepts both matter and anti-matter for processing and recycling. Day-to-day operations are automated and municipalities must adhere to a strict delivery schedule to avoid complete annihilation.
 
 Unfortunately, the Reptilian Corgiods of Universe 8N9 (∆*f* = 2.47 µHz) have teleported several millitons of antimatter space-poop through their garbage warp hole -0.2 seconds ahead of schedule.
 
 The suboptimal imbalance of matter and anti-matter has resulted
-in multiple catastrophic detonation events. Massive structural failures in the landfill loading dock have been reported. The cascade of radiation has overloaded B0b's artifical intelligence processes with soft errors.
+in multiple catastrophic detonation events. Massive structural failures in the loading dock have been reported. The cascade of radiation has overloaded `N4n`'s artificial intelligence cores.
 
-Manual overrides have been activated. Guide `B0b` through the dangerous caverns of trash-heap to reach the Primary Systems Core and restore balance to the Trash.
+Manual overrides have now been activated. Guide `N4n` through the dangerous trash-heap caverns to reach the Primary Systems Core and restore compliance to the Trash.
 
 
 Open-source projects
 ---
-* [box2dweb](code.google.com/p/box2dweb/)
+* [Box2dWeb](code.google.com/p/box2dweb/)
+* [RequireJS](github.com/jrburke/requirejs)
