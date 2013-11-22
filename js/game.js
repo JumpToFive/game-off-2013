@@ -4,9 +4,10 @@ define([
   'input',
   'entities/camera',
   'entities/player',
+  'entities/explosion',
   'effects/background',
   'world'
-], function( Box2D, Input, Camera, Player, Background, world ) {
+], function( Box2D, Input, Camera, Player, Explosion, Background, world ) {
   'use strict';
 
   var DebugDraw = Box2D.Dynamics.b2DebugDraw;
@@ -29,6 +30,8 @@ define([
 
     this.canvas.width  = this.WIDTH;
     this.canvas.height = this.HEIGHT;
+
+    this.removed = [];
 
     this.entities = [];
     this.player = null;
@@ -136,8 +139,18 @@ define([
           clearTimeout( player.emotionTimeout );
           player.emotionTimeout = null;
         }, 700 );
+
+        var explosion = new Explosion( other.x, other.y );
+        explosion.fill.set({
+          red: 64,
+          green: 32,
+          blue: 32,
+          alpha: 1
+        });
+
+        this.add( explosion );
       }
-    };
+    }.bind( this );
 
     world.SetContactListener( contactListener );
   }
@@ -167,6 +180,10 @@ define([
     this.world.Step( 1 / 60, 8, 3 );
 
     this.world.ClearForces();
+
+    this.removed.forEach(function( removed ) {
+      this.remove( removed );
+    }.bind( this ));
   };
 
   Game.prototype.draw = function() {

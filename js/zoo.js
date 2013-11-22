@@ -387,19 +387,20 @@
       }
 
       ctx.globalCompositeOperation = 'lighter';
-      particles.forEach(function ( particle ) {
+
+      particles.forEach(function( particle ) {
         ctx.beginPath();
         ctx.arc( particle.x, particle.y, particle.radius, 0, PI2 );
-
         ctx.fill();
       });
+
       ctx.globalCompositeOperation = 'source-over';
     }
 
     return function( dt ) {
       t++;
 
-      var deleted = [];
+      var removed = [];
       particles.forEach(function( particle, index ) {
         particle.x += particle.vx * dt;
         particle.y += particle.vy * dt;
@@ -414,13 +415,13 @@
 
         particle.radius *= shrink;
         if ( particle.radius < 0.5 ) {
-          deleted.push( index );
+          removed.push( index );
         }
       });
 
-      var index = deleted.length;
+      var index = removed.length;
       while ( index-- ) {
-        particles.splice( deleted[ index ], 1 );
+        particles.splice( removed[ index ], 1 );
       }
 
       if ( !particles.length ) {
