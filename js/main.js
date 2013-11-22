@@ -21,10 +21,12 @@ define(function( require ) {
       Segment = require( 'geometry/segment' ),
       Player  = require( 'entities/player' );
 
+  var Color = require( 'color' );
   var Entity = require( 'entities/entity' );
 
   var Emitter = require( 'entities/emitter' );
   var TractorBeam = require( 'entities/tractor-beam' );
+  var Trail = require( 'effects/trail' );
 
   var game = Game.instance = new Game();
   game.level = new Level();
@@ -141,6 +143,11 @@ define(function( require ) {
   emitter.start( 500 );
   game.add( emitter );
 
+  // Trail.
+  var trail = new Trail();
+  trail.fill = new Color( 255, 255, 255, 0.2 );
+  game.add( trail );
+
   // Player.
   game.player = new Player( 20, 20 );
   game.player.game = game;
@@ -150,6 +157,7 @@ define(function( require ) {
   game.add( game.player );
 
   game.camera.target = game.player;
+  trail.target = game.player;
 
   game.element.classList.add( 'game' );
   document.body.insertBefore( game.element, document.body.firstChild );

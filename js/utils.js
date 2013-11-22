@@ -73,7 +73,19 @@ define(function() {
     };
   }
 
-    /**
+  /**
+   * Remove all values in array with an index in indices.
+   */
+  function removeIndices( array, indices ) {
+    indices.sort();
+
+    var index = indices.length;
+    while( index-- ) {
+      array.splice( indices[ index ], 1 );
+    }
+  }
+
+  /**
    * Set the pre-existing properties of a given object with the values in attrs.
    * Recursively handles properties that are also objects.
    */
@@ -134,6 +146,8 @@ define(function() {
 
     roundNearZero: roundNearZero,
     lineNormal: lineNormal,
+
+    removeIndices: removeIndices,
 
     set: set,
     defaults: defaults

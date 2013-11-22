@@ -95,10 +95,7 @@ define([
       }
     }.bind( this ));
 
-    var index = removed.length;
-    while ( index-- ) {
-      this.particles.splice( removed[ index ], 1 );
-    }
+    Utils.removeIndices( this.particles, removed );
 
     if ( !this.particles.length ) {
       this.game.removed.push( this );
