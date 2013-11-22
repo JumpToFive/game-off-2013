@@ -1,14 +1,16 @@
+/*jshint camelcase: false*/
 /*globals define*/
-define([
-  'box2d',
-  'input',
-  'entities/camera',
-  'entities/player',
-  'entities/explosion',
-  'effects/background',
-  'world'
-], function( Box2D, Input, Camera, Player, Explosion, Background, world ) {
+define(function( require) {
   'use strict';
+
+  var Box2D = require( 'box2d' );
+  var Input = require( 'input' );
+  var Camera = require( 'entities/camera' );
+  var Player = require( 'entities/player' );
+  var Explosion = require( 'entities/explosion' );
+  var Background = require( 'effects/background' );
+  var Shake = require( 'effects/shake' );
+  var world = require( 'world' );
 
   var DebugDraw = Box2D.Dynamics.b2DebugDraw;
   var ContactListener = Box2D.Dynamics.b2ContactListener;
@@ -45,6 +47,8 @@ define([
 
     this.camera.margin = 10;
     this.camera.lineWidth = 0.2;
+
+    this.shake = new Shake();
 
     this.level = null;
 
@@ -149,6 +153,7 @@ define([
         });
 
         this.add( explosion );
+        this.shake.shake( 0.5, 0.2 );
       }
     }.bind( this );
 
@@ -176,6 +181,7 @@ define([
 
     this.updateDebug( dt );
     this.camera.update( dt );
+    this.shake.update( dt );
 
     this.world.Step( 1 / 60, 8, 3 );
 
@@ -203,6 +209,7 @@ define([
 
     ctx.save();
     this.camera.applyTransform( ctx );
+    this.shake.applyTransform( ctx );
 
     this.background.draw( ctx );
     this.entities.forEach(function( entity ) {
