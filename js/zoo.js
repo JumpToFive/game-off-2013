@@ -352,6 +352,7 @@
     var particles = [];
 
     var shrink = 0.95;
+    var t = 0;
 
     function generateParticles() {
       var particleCount = 10;
@@ -364,7 +365,7 @@
         particles.push({
           x: 0.5 * width,
           y: 0.5 * height,
-          radius: ( Math.random() * 0.05 + 0.05 ) * width,
+          radius: ( Math.random() * 0.1 + 0.05 ) * width,
           angle: angle,
           vx: Math.cos( angle ) * force,
           vy: Math.sin( angle ) * force,
@@ -379,18 +380,25 @@
     function draw() {
       ctx.clearRect( 0, 0, width, height );
 
+      if ( t % 240 < 120 ) {
+        ctx.fillStyle = 'rgba(64, 32, 32, 1)';
+      } else {
+        ctx.fillStyle = 'rgba(32, 32, 64, 1)';
+      }
+
       ctx.globalCompositeOperation = 'lighter';
       particles.forEach(function ( particle ) {
         ctx.beginPath();
         ctx.arc( particle.x, particle.y, particle.radius, 0, PI2 );
 
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
         ctx.fill();
       });
       ctx.globalCompositeOperation = 'source-over';
     }
 
     return function( dt ) {
+      t++;
+
       var deleted = [];
       particles.forEach(function( particle, index ) {
         particle.x += particle.vx * dt;
