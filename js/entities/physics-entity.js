@@ -55,6 +55,10 @@ define([
 
 
   function PhysicsEntity( options ) {
+    if ( !options ) {
+      return;
+    }
+
     this.fixture = null;
     this.initialize( options );
 
@@ -193,6 +197,12 @@ define([
 
   Object.defineProperty( PhysicsEntity.prototype, 'position', {
     get: function() {
+      return this.body.GetPosition();
+    }
+  });
+
+  Object.defineProperty( PhysicsEntity.prototype, 'worldCenter', {
+    get: function() {
       return this.body.GetWorldCenter();
     }
   });
@@ -205,7 +215,8 @@ define([
     },
 
     set: function( x ) {
-      this.position.x = x || 0;
+      this.position.x    = x || 0;
+      this.worldCenter.x = x || 0;
     }
   });
 
@@ -217,7 +228,8 @@ define([
     },
 
     set: function( y ) {
-      this.position.y = y || 0;
+      this.position.y    = y || 0;
+      this.worldCenter.y = y || 0;
     }
   });
 
