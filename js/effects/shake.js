@@ -8,7 +8,7 @@ define([
     this.magnitude = 0;
     this.duration = 0;
 
-    this.startTime = 0;
+    this.time = 0;
 
     // Variables pertaining to the current shake cycle.
     // Change shake angle at frequency (20 fps).
@@ -34,10 +34,10 @@ define([
       return;
     }
 
-    this.startTime += dt;
-    if ( this.startTime > this.duration ) {
+    this.time += dt;
+    if ( this.time > this.duration ) {
       this.magnitude = 0;
-      this.startTime = 0;
+      this.time = 0;
       return;
     }
 
@@ -48,7 +48,7 @@ define([
       this.shakeAngle = Math.random() * Utils.PI2;
 
       // Lerp scale magnitude down to zero.
-      var scale = ( this.duration - this.startTime ) / this.duration;
+      var scale = ( this.duration - this.time ) / this.duration;
       this.shakeMagnitude = this.magnitude * scale;
     }
   };
