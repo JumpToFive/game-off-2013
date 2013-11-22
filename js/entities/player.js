@@ -2,8 +2,11 @@
 define([
   'box2d',
   'entities/physics-entity',
-], function( Box2D, PhysicsEntity ) {
+  'utils'
+], function( Box2D, PhysicsEntity, Utils ) {
   'use strict';
+
+  var PI2 = Utils.PI2;
 
   var Emotion = {
     NORMAL: 0,
@@ -71,8 +74,10 @@ define([
   };
 
   Player.prototype.draw = function( ctx ) {
-    var PI2 = 2 * Math.PI;
-    var width = 8, height = 8;
+    var radius = this.fixture.GetShape().GetRadius();
+
+    var width  = 2 * radius,
+        height = 2 * radius;
 
     ctx.save();
     ctx.translate( this.x, this.y );
@@ -135,6 +140,8 @@ define([
     }
 
     // Draw ring.
+    ctx.globalCompositeOperation = 'lighter';
+
     ctx.beginPath();
     ctx.arc( 0, 0, 0.35 * width, 0, PI2 );
 
@@ -146,6 +153,7 @@ define([
     ctx.strokeStyle = '#fff';
     ctx.stroke();
 
+    ctx.globalCompositeOperation = 'source-over';
 
     ctx.restore();
   };

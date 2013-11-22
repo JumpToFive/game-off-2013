@@ -110,14 +110,19 @@ define([
     }
 
     contactListener.BeginContact = function( contact ) {
-      var a = userData( contact.GetFixtureA() ),
-          b = userData( contact.GetFixtureB() );
+      var fixtureA = contact.GetFixtureA(),
+          fixtureB = contact.GetFixtureB();
 
-      var player;
-      if ( a instanceof Player ) {
+      var a = userData( fixtureA ),
+          b = userData( fixtureB );
+
+      var player, other;
+      if ( a instanceof Player && !b.isSensor ) {
         player = a;
-      } else if ( b instanceof Player ) {
+        other = b;
+      } else if ( b instanceof Player && !a.isSensor ) {
         player = b;
+        other = a;
       }
 
       if ( player ) {
@@ -130,7 +135,7 @@ define([
           player.emotion = Player.Emotion.NORMAL;
           clearTimeout( player.emotionTimeout );
           player.emotionTimeout = null;
-        }, 1000 );
+        }, 700 );
       }
     };
 
