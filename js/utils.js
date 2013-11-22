@@ -73,6 +73,50 @@ define(function() {
     };
   }
 
+    /**
+   * Set the pre-existing properties of a given object with the values in attrs.
+   * Recursively handles properties that are also objects.
+   */
+  function set( object, attrs ) {
+    if ( !object || !attrs ) {
+      return;
+    }
+
+    for ( var key in attrs ) {
+      if ( object.hasOwnProperty( key ) ) {
+        if ( typeof object[ key ] === 'object' &&
+             typeof  attrs[ key ] === 'object' ) {
+          set( object[ key ], attrs[ key ] );
+        } else {
+          object[ key ] = attrs[ key ];
+        }
+      }
+    }
+  }
+
+  /**
+   * Sets any undefined values to given default values.
+   * Can have more than one defaults object.
+   *
+   * This is pretty much underscore.js's defaults().
+   */
+  function defaults( object ) {
+    var args = [].slice.call( arguments, 1 );
+
+    args.forEach(function( arg ) {
+      if ( arg ) {
+        for ( var key in arg ) {
+          if ( typeof object[ key ] === 'undefined' ) {
+            object[ key ] = arg[ key ];
+          }
+        }
+      }
+    });
+
+    return object;
+  }
+
+
   return {
     PI2: PI2,
     EPSILON: EPSILON,
@@ -90,5 +134,8 @@ define(function() {
 
     roundNearZero: roundNearZero,
     lineNormal: lineNormal,
+
+    set: set,
+    defaults: defaults
   };
 });

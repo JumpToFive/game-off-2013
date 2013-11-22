@@ -34,25 +34,7 @@ define([
     vector: 'SetAsVector'
   };
 
-  // Set the pre-existing properties of a given object with the values in attrs.
-  // Recursively handles properties that are also objects.
-  function set( object, attrs ) {
-    if ( !object || !attrs ) {
-      return;
-    }
-
-    for ( var key in attrs ) {
-      if ( object.hasOwnProperty( key ) ) {
-        if ( typeof object[ key ] === 'object' &&
-             typeof  attrs[ key ] === 'object' ) {
-          set( object[ key ], attrs[ key ] );
-        } else {
-          object[ key ] = attrs[ key ];
-        }
-      }
-    }
-  }
-
+  var set = Utils.set;
 
   function PhysicsEntity( options ) {
     if ( !options ) {
