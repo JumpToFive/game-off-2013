@@ -259,5 +259,26 @@ define([
     }
   };
 
+  /**
+   * Clear the world before loading the level.
+=  */
+  Game.prototype.clear = function() {
+    this.entities = [];
+    this.player = null;
+
+    var world = this.world;
+    world.ClearForces();
+
+    var body = world.GetBodyList();
+    while ( body ) {
+      world.DestroyBody( body );
+      body = body.GetNext();
+    }
+  };
+
+  Game.prototype.load = function( level ) {
+    this.entities.concat( level.entities );
+  };
+
   return Game;
 });
