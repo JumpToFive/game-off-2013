@@ -11,4 +11,6 @@ define(function( require ) {
   var editor = new Editor({
     el: '#editor'
   });
+
+  document.addEventListener( 'keydown', function() {});
 });
