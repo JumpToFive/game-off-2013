@@ -50,8 +50,19 @@ define(function() {
     };
   }
 
-  function roundNearZero( value ) {
-    return Math.abs( value ) > EPSILON ? value : 0;
+  function distanceSquared( x0, y0, x1, y1 ) {
+    var dx = x1 - x0,
+        dy = y1 - y0;
+
+    return dx * dx + dy * dy;
+  }
+
+  function distance( x0, y0, x1, y1 ) {
+    return Math.sqrt( distanceSquared( x0, y0, x1, y1 ) );
+  }
+
+  function roundNearZero( value, epsilon ) {
+    return Math.abs( value ) > ( epsilon || EPSILON ) ? value : 0;
   }
 
   /**
@@ -71,6 +82,10 @@ define(function() {
       x: -dy * invLength,
       y:  dx * invLength
     };
+  }
+
+  function angleFrom( x0, y0, x1, y1 ) {
+    return Math.atan2( y1 - y0, x1 - x0 );
   }
 
   /**
@@ -144,8 +159,12 @@ define(function() {
     lerp: lerp,
     lerp2d: lerp2d,
 
+    distanceSquared: distanceSquared,
+    distance: distance,
+
     roundNearZero: roundNearZero,
     lineNormal: lineNormal,
+    angleForm: angleFrom,
 
     removeIndices: removeIndices,
 

@@ -141,12 +141,8 @@ define([
     return Utils.lerp2d( x0, y0, x1, y1, t );
   }
 
-  function angleFrom( x0, y0, x1, y1 ) {
-    return Math.atan2( y1 - y0, x1 - x0 );
-  }
-
   function closestPointOnCircle( x, y, cx, cy, radius ) {
-    var angle = angleFrom( cx, cy, x, y );
+    var angle = Utils.angleFrom( cx, cy, x, y );
     return {
       x: cx + Math.cos( angle ) * radius,
       y: cy + Math.sin( angle ) * radius
@@ -172,7 +168,6 @@ define([
     closestPointOnLine: closestPointOnLine,
     closestPointOnSegment: closestPointOnSegment,
 
-    angleFrom: angleFrom,
     closestPointOnCircle: closestPointOnCircle
   };
 });
