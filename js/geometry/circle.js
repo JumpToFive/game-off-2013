@@ -1,7 +1,8 @@
 /*globals define*/
 define([
-  'object2d'
-], function( Object2D ) {
+  'object2d',
+  'utils'
+], function( Object2D, Utils ) {
   'use strict';
 
   function Circle( x, y, radius ) {
@@ -30,6 +31,10 @@ define([
       x: radius * Math.cos( theta ),
       y: radius * Math.sin( theta )
     };
+  };
+
+  Circle.prototype.contains = function( x, y ) {
+    return Utils.distanceSquared( x, y, this.x, this.y ) <= this.radius * this.radius;
   };
 
   Object.defineProperty( Circle.prototype, 'left', {

@@ -27,6 +27,30 @@ define([
     };
   };
 
+  Rect.prototype.contains = function( x, y ) {
+    x -= this.x;
+    y -= this.y;
+
+    var cos, sin;
+    var rx, ry;
+    if ( this.angle ) {
+      cos = Math.cos( this.angle );
+      sin = Math.sin( this.angle );
+
+      rx = cos * x - sin * y;
+      ry = sin * x + cos * y;
+
+      x = rx;
+      y = ry;
+    }
+
+    var halfWidth  = 0.5 * this.width,
+        halfHeight = 0.5 * this.height;
+
+    return -halfWidth  <= x && x <= halfWidth &&
+           -halfHeight <= y && y <= halfHeight;
+  };
+
   Object.defineProperty( Rect.prototype, 'left', {
     get: function() {
       return this.x - 0.5 * this.width;
