@@ -61,14 +61,21 @@ define([
   };
 
   Trail.prototype.draw = function( ctx ) {
+    if ( !this.particles.length ) {
+      return;
+    }
+
     ctx.globalCompositeOperation = 'lighter';
 
+    ctx.beginPath();
+
     this.particles.forEach(function( particle ) {
-      ctx.beginPath();
+      ctx.moveTo( particle.x, particle.y );
       ctx.arc( particle.x, particle.y, particle.radius, 0, PI2 );
-      ctx.fillStyle = this.fill.rgba();
-      ctx.fill();
     }.bind( this ));
+
+    ctx.fillStyle = this.fill.rgba();
+    ctx.fill();
 
     ctx.globalCompositeOperation = 'source-over';
   };
