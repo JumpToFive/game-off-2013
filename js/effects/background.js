@@ -5,24 +5,25 @@ define([
 ], function( Object2D, Utils ) {
   'use strict';
 
-  function Background( width, height ) {
+  var defaults = {
+    count: 100,
+    parallax: 0.25,
+
+    hueSpread: 50,
+    saturationSpread: 15,
+    lightnessSpread: 25
+  };
+
+  function Background( width, height, options ) {
     Object2D.call( this, 0, 0 );
 
-    this.parallax = 0.25;
-
-    this.spread = {
-      hue: 50,
-      saturation: 15,
-      lightness: 25
-    };
+    Utils.defaults( this, options, defaults );
 
     this.canvas = document.createElement( 'canvas' );
     this.ctx = this.canvas.getContext( '2d' );
 
     this.width  = width || 0;
     this.height = height || 0;
-
-    this.count = 100;
 
     this.game = null;
     this.camera = null;
@@ -46,9 +47,9 @@ define([
 
     var rectHue, rectSaturation, rectLightness;
     while ( rectCount-- ) {
-      rectHue = this.spread.hue ? Utils.intSpread( hue, this.spread.hue ) : hue;
-      rectSaturation = this.spread.saturation ? Utils.intSpread( saturation, this.spread.saturation ) : saturation;
-      rectLightness = this.spread.lightness ? Utils.intSpread( lightness, this.spread.lightness ): lightness;
+      rectHue = this.hueSpread ? Utils.intSpread( hue, this.hueSpread ) : hue;
+      rectSaturation = this.saturationSpread ? Utils.intSpread( saturation, this.saturationSpread ) : saturation;
+      rectLightness = this.lightnessSpread ? Utils.intSpread( lightness, this.lightnessSpread ): lightness;
 
       rects.push({
         x: Math.random() * width,
