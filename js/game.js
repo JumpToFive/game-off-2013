@@ -124,10 +124,10 @@ define(function( require) {
           b = userData( fixtureB );
 
       var player, other;
-      if ( a instanceof Player && !b.isSensor ) {
+      if ( a instanceof Player && !fixtureB.IsSensor() ) {
         player = a;
         other = b;
-      } else if ( b instanceof Player && !a.isSensor ) {
+      } else if ( b instanceof Player && !fixtureA.IsSensor() ) {
         player = b;
         other = a;
       }
