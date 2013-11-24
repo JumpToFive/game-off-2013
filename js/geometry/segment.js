@@ -18,8 +18,6 @@ define([
   Segment.prototype.constructor = Segment;
 
   Segment.prototype.drawPath = function( ctx ) {
-    this.drawNormals( ctx );
-
     ctx.beginPath();
     ctx.moveTo( this.x0, this.y0 );
     ctx.lineTo( this.x1, this.y1 );

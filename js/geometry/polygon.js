@@ -25,8 +25,6 @@ define([
   Polygon.prototype.drawPath = function( ctx ) {
     var vertexCount = this.vertexCount();
 
-    this.drawNormals( ctx );
-
     ctx.beginPath();
 
     ctx.moveTo( this.vertices[0], this.vertices[1] );

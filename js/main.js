@@ -28,6 +28,20 @@ define(function( require ) {
   var TractorBeam = require( 'entities/tractor-beam' );
   var Trail = require( 'effects/trail' );
 
+  // Mixin normals drawing for debugging.
+  (function() {
+    function drawNormalsMixin( prototype ) {
+      var drawPathFn = prototype.drawPath;
+      prototype.drawPath = function( ctx ) {
+        this.drawNormals( ctx );
+        drawPathFn.call( this, ctx );
+      };
+    }
+
+    drawNormalsMixin( Segment.prototype );
+    drawNormalsMixin( Polygon.prototype );
+  }) ();
+
   var game = Game.instance = new Game();
   game.level = new Level();
   game.level.fill.set({

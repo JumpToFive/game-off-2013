@@ -1,8 +1,9 @@
 /*globals define*/
 define([
+  'base-object',
   'utils',
   'color'
-], function( Utils, Color ) {
+], function( BaseObject, Utils, Color ) {
   'use strict';
 
   var PI2 = Utils.PI2;
@@ -13,6 +14,8 @@ define([
   };
 
   function Trail( options ) {
+    BaseObject.call( this );
+
     this.target = null;
     this.particles = [];
     this.fill = new Color();
@@ -23,6 +26,9 @@ define([
     this.time = 0;
     this.game = null;
   }
+
+  Trail.prototype = new BaseObject();
+  Trail.prototype.constructor = Trail;
 
   Trail.prototype.update = function( dt ) {
     this.time += dt;
