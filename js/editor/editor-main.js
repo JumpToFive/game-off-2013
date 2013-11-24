@@ -13,4 +13,12 @@ define(function( require ) {
   });
 
   document.addEventListener( 'keydown', function() {});
+
+  var Polygon = require( 'geometry/polygon' );
+
+  var polygon = new Polygon();
+  polygon.vertices = [ -100, 50, 100, 50, 0, -100 ];
+  polygon.angle = 0.5 * Math.PI;
+  editor.add( polygon );
+  editor.draw();
 });
