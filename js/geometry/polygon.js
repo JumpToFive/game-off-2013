@@ -35,7 +35,13 @@ define([
     ctx.closePath();
   };
 
-  Polygon.prototype.drawNormals = function( ctx ) {
+  Polygon.prototype.drawNormals = function( ctx, options ) {
+    options = options || {};
+
+    var length    = options.length || 10,
+        lineWidth = options.lineWidth || 2,
+        stroke    = options.stroke || '#0f0';
+
     var vertexCount = this.vertexCount();
 
     ctx.beginPath();
@@ -58,11 +64,11 @@ define([
       }
 
       ctx.moveTo( mx, my );
-      ctx.lineTo( mx + normal.x * 1, my + normal.y * 1 );
+      ctx.lineTo( mx + normal.x * length, my + normal.y * length );
     }
 
-    ctx.lineWidth = 0.2;
-    ctx.strokeStyle = '#0f0';
+    ctx.lineWidth = lineWidth;
+    ctx.strokeStyle = stroke;
     ctx.stroke();
   };
 

@@ -24,7 +24,13 @@ define([
     ctx.closePath();
   };
 
-  Segment.prototype.drawNormals = function( ctx ) {
+  Segment.prototype.drawNormals = function( ctx, options ) {
+    options = options || {};
+
+    var length    = options.length || 10,
+        lineWidth = options.lineWidth || 2,
+        stroke    = options.stroke || '#0f0';
+
     ctx.beginPath();
 
     var x0 = this.x0,
@@ -41,10 +47,10 @@ define([
     }
 
     ctx.moveTo( mx, my );
-    ctx.lineTo( mx + normal.x, my + normal.y );
+    ctx.lineTo( mx + normal.x * length, my + normal.y * length );
 
-    ctx.lineWidth = 0.2;
-    ctx.strokeStyle = '#0f0';
+    ctx.lineWidth = lineWidth;
+    ctx.strokeStyle = stroke;
     ctx.stroke();
   };
 

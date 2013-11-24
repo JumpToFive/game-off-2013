@@ -30,10 +30,15 @@ define(function( require ) {
 
   // Mixin normals drawing for debugging.
   (function() {
+    var normalOptions = {
+      length: 1,
+      lineWidth: 0.2
+    };
+
     function drawNormalsMixin( prototype ) {
       var drawPathFn = prototype.drawPath;
       prototype.drawPath = function( ctx ) {
-        this.drawNormals( ctx );
+        this.drawNormals( ctx, normalOptions );
         drawPathFn.call( this, ctx );
       };
     }

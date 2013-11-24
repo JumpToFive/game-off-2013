@@ -204,9 +204,16 @@ define([
 
   // Mixin vertices drawing.
   (function() {
+    var normalOptions = {
+      length: 20,
+      lineWidth: 3,
+      stroke: '#0a0'
+    };
+
     var drawPathFn = Polygon.prototype.drawPath;
     Polygon.prototype.drawPath = function( ctx ) {
       this.drawVertices( ctx );
+      this.drawNormals( ctx, normalOptions );
       drawPathFn.call( this, ctx );
     };
   }) ();
