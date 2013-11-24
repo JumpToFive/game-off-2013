@@ -172,8 +172,8 @@ define([
       yi += this.y;
 
       offsets.push({
-        x: px - xi,
-        y: py - yi
+        x: xi - px,
+        y: yi - py
       });
     }.bind( this ));
 
@@ -285,6 +285,7 @@ define([
         if ( vertices ) {
           this.selection = this.selection.concat( vertices.vertices );
           this.offsets = this.offsets.concat( vertices.offsets );
+          return;
         }
       }
 
@@ -306,9 +307,8 @@ define([
       this.selection.forEach(function( element, index ) {
         var offset = this.offsets[ index ];
 
-
-        var x = this.mouse.x - offset.x,
-            y = this.mouse.y - offset.y;
+        var x = this.mouse.x + offset.x,
+            y = this.mouse.y + offset.y;
 
         var cos, sin;
         var rx, ry;
