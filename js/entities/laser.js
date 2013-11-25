@@ -1,9 +1,12 @@
+/*jshint bitwise: false*/
 /*globals define*/
 define([
   'box2d',
   'entities/physics-entity',
+  'config/material',
+  'config/colors',
   'world'
-], function( Box2D, PhysicsEntity, world ) {
+], function( Box2D, PhysicsEntity, Material, Colors, world ) {
   'use strict';
 
   var Vec2 = Box2D.Common.Math.b2Vec2;
@@ -58,15 +61,28 @@ define([
       return;
     }
 
+    ctx.globalCompositeOperation = 'lighter';
+
     ctx.beginPath();
     ctx.moveTo( this.x, this.y );
     ctx.lineTo( this.endpoint.x, this.endpoint.y );
 
-    ctx.lineWidth = 0.2;
+    var material = this.material;
+    if ( material & Material.MATTER ) {
+      ctx.strokeStyle = Colors.Glow.MATTER;
+    } else if ( material & Material.ANTIMATTER ) {
+      ctx.strokeStyle = Colors.Glow.ANTIMATTER;
+    }
+
+    ctx.lineWidth = 0.4 + Math.random() * 0.2;
+    ctx.stroke();
+
+    ctx.lineWidth = 0.1 + Math.random() * 0.1;
     ctx.strokeStyle = '#fff';
     ctx.stroke();
-  };
 
+    ctx.globalCompositeOperation = 'source-over';
+  };
 
   return Laser;
 });

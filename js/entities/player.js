@@ -4,8 +4,9 @@ define([
   'box2d',
   'entities/physics-entity',
   'config/material',
+  'config/colors',
   'utils'
-], function( Box2D, PhysicsEntity, Material, Utils ) {
+], function( Box2D, PhysicsEntity, Material, Colors, Utils ) {
   'use strict';
 
   var PI2 = Utils.PI2;
@@ -194,17 +195,16 @@ define([
   };
 
   Player.prototype.drawRing = function( ctx, width ) {
-    var material = this.material;
-
     ctx.globalCompositeOperation = 'lighter';
 
     ctx.beginPath();
     ctx.arc( 0, 0, 0.35 * width, 0, PI2 );
 
+    var material = this.material;
     if ( material & Material.MATTER ) {
-      ctx.strokeStyle = '#33f';
+      ctx.strokeStyle = Colors.Glow.MATTER;
     } else if ( material & Material.ANTIMATTER ) {
-      ctx.strokeStyle = '#f33';
+      ctx.strokeStyle = Colors.Glow.ANTIMATTER;
     }
 
     ctx.lineWidth = ( 0.1 + Math.random() * 0.08 ) * width;

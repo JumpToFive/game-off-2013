@@ -178,6 +178,7 @@ define(function( require ) {
   });
   laser.angle = -25 * Math.PI / 180;
   laser.add( laserCircle );
+  laser.material = Material.ANTIMATTER;
   game.add( laser );
 
   // Trail.
