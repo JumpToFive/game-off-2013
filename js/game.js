@@ -173,7 +173,6 @@ define(function( require ) {
 
         this.add( explosionA );
         this.add( explosionB );
-        this.shake.shake( 0.5, 0.1 );
         this.removed.push( a );
         this.removed.push( b );
       }

@@ -42,8 +42,14 @@ define([
 
     world.RayCast(
       function( fixture, point, normal, fraction ) {
-        this.target = fixture.GetBody().GetUserData();
+        var target = fixture.GetBody().GetUserData();
+        if ( !( target.material & this.material ) ) {
+          return 1;
+        }
+
+        this.target = target;
         this.endpoint = point;
+
         return fraction;
       }.bind( this ),
       new Vec2( this.x + cos, this.y + sin ),

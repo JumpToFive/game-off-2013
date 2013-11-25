@@ -286,6 +286,39 @@ define(function( require ) {
     });
   });
 
+  // Debug polygons.
+  [
+    [ 5, -5, 5, 5, -5, 0 ]
+  ].forEach(function( polyData ) {
+    var entity = new PhysicsEntity({
+      shape: 'polygon',
+      type: 'vector',
+      data: polyData,
+      fixture: {
+        density: 1.0,
+        friction: 0.5,
+        restitution: 0.2,
+        filter: {
+          categoryBits: Material.BIMATTER
+        }
+      },
+      body: {
+        type: 'static',
+        position: {
+          x: 50,
+          y: 45
+        }
+      }
+    });
+
+    var polygon = new Polygon();
+    polygon.vertices = polyData;
+    polygon.fill.alpha = 1;
+
+    entity.add( polygon );
+    game.add( entity );
+  });
+
 
   // Add game element to body.
   game.element.classList.add( 'game' );
