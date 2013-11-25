@@ -10,6 +10,8 @@ define(function( require ) {
   var Explosion = require( 'entities/explosion' );
   var Background = require( 'effects/background' );
   var Shake = require( 'effects/shake' );
+  var Colors = require( 'config/colors' );
+  var Material = require( 'config/material' );
   var world = require( 'world' );
 
   var DebugDraw = Box2D.Dynamics.b2DebugDraw;
@@ -132,16 +134,48 @@ define(function( require ) {
         }, 700 );
 
         explosion = new Explosion( other.x, other.y );
-        explosion.fill.set({
-          red: 64,
-          green: 32,
-          blue: 32,
-          alpha: 1
-        });
+        if ( other.material & Material.MATTER ) {
+          explosion.fill.set( Colors.Explosion.MATTER );
+        } else if ( other.material & Material.ANTIMATTER ) {
+          explosion.fill.set( Colors.Explosion.ANTIMATTER );
+        } else {
+          return;
+        }
 
         this.add( explosion );
         this.shake.shake( 0.5, 0.2 );
         this.removed.push( other );
+        return;
+      }
+
+      if ( !player &&
+           !fixtureA.IsSensor() &&
+           !fixtureB.IsSensor() &&
+           !( a.material & b.material ) &&
+           a.game &&
+           b.game ) {
+        var explosionA,
+            explosionB;
+
+        explosionA = new Explosion( a.x, a.y );
+        if ( a.material & Material.MATTER ) {
+          explosionA.fill.set( Colors.Explosion.MATTER );
+        } else if ( a.material & Material.ANTIMATTER ) {
+          explosionA.fill.set( Colors.Explosion.ANTIMATTER );
+        }
+
+        explosionB = new Explosion( b.x, b.y );
+        if ( b.material & Material.MATTER ) {
+          explosionB.fill.set( Colors.Explosion.MATTER );
+        } else if ( b.material & Material.ANTIMATTER ) {
+          explosionB.fill.set( Colors.Explosion.ANTIMATTER );
+        }
+
+        this.add( explosionA );
+        this.add( explosionB );
+        this.shake.shake( 0.5, 0.1 );
+        this.removed.push( a );
+        this.removed.push( b );
       }
     }.bind( this );
 

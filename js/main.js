@@ -165,9 +165,56 @@ define(function( require ) {
     }
   };
 
-  emitter.game = game;
   emitter.start( 500 );
   game.add( emitter );
+
+  // Matter emitter.
+  var matEmitter = new Emitter( 45, 20 );
+  matEmitter.spawnArea = new Segment( 0, 2, 0, -2 );
+  matEmitter.spawnArea.stroke.set({
+    red: 64,
+    green: 64,
+    blue: 255,
+    alpha: 1
+  });
+  matEmitter.spawnArea.lineWidth = 0.2;
+  matEmitter.add( matEmitter.spawnArea );
+
+  matEmitter.rate = 0.4;
+  matEmitter.lifeTime = 2000;
+  matEmitter.speed = 100;
+  matEmitter.angle = -0.5 * Math.PI;
+
+  var matEmitterPolygon = new Polygon( 0, 0 );
+  matEmitterPolygon.vertices = [ -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5 ];
+  matEmitterPolygon.stroke.set({
+    red: 64,
+    green: 64,
+    blue: 255,
+    alpha: 1
+  });
+  matEmitterPolygon.lineWidth = 0.2;
+
+  matEmitter.particle = matEmitterPolygon;
+  matEmitter.properties = {
+    radius: 0.5,
+    fixture: {
+      density: 4.0,
+      friction: 0.5,
+      restitution: 0.2,
+      filter: {
+        categoryBits: Material.MATTER
+      }
+    },
+    body: {
+      angularVelocity: 3 * Math.PI,
+      linearDamping: 0.2,
+      type: 'dynamic'
+    }
+  };
+
+  matEmitter.start( 500 );
+  game.add( matEmitter );
 
   // Laser.
   var laser = new Laser( 0, 20 );
@@ -188,7 +235,6 @@ define(function( require ) {
 
   // Player.
   game.player = new Player( 20, 20 );
-  game.player.game = game;
   game.player.add( new Circle( 0, 0, 2 ) );
   game.player.shapes[0].fill.alpha = 0.5;
 
