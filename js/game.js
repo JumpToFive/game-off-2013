@@ -1,6 +1,6 @@
 /*jshint camelcase: false*/
 /*globals define*/
-define(function( require) {
+define(function( require ) {
   'use strict';
 
   var Box2D = require( 'box2d' );
@@ -60,22 +60,6 @@ define(function( require) {
 
     this.debug = {};
 
-    this.debug.objects = [
-      [
-        [ 600, 150, 500, 150 ],
-        [ 500, 150, 300, 250 ],
-        [ 300, 250,  40, 200 ],
-        [  40, 200,  40, 100 ]
-      ],
-      [
-        // Rectangle.
-        [ 100, 0, 200, 0 ],
-        [ 200, 0, 200, -50 ],
-        [ 200, -50, 100, -50 ],
-        [ 100, -50, 100, 0 ]
-      ]
-    ];
-
     this.background = new Background( this.WIDTH, this.HEIGHT );
     this.background.fill.set({
       red: 64,
@@ -83,6 +67,7 @@ define(function( require) {
       blue: 96,
       alpha: 1
     });
+
     this.background.camera = this.camera;
     this.background.game = this;
     this.background.prerender();
@@ -96,7 +81,7 @@ define(function( require) {
     this.debugCanvas = document.createElement( 'canvas' );
     this.debugCtx    = this.debugCanvas.getContext( '2d' );
 
-    this.element.appendChild( this.debugCanvas );
+    document.body.appendChild( this.debugCanvas );
 
     this.debugCanvas.id = 'box2d-debug-canvas';
     this.debugCanvas.width  = this.WIDTH;
@@ -222,7 +207,7 @@ define(function( require) {
   };
 
   Game.prototype.updateDebug = function( dt ) {
-       // Basic camera controls.
+    // Basic camera controls.
     // W. Zoom in.
     if ( this.input.keys[ 87 ] ) {
       this.camera.width = Math.max( this.camera.width - 2, 32 );
@@ -290,7 +275,7 @@ define(function( require) {
 
   /**
    * Clear the world before loading the level.
-=  */
+   */
   Game.prototype.clear = function() {
     this.entities = [];
     this.player = null;
