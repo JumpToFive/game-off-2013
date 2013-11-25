@@ -21,6 +21,7 @@ define([
       }
     });
 
+    this.target = null;
     this.endpoint = null;
   }
 
@@ -33,10 +34,12 @@ define([
     var cos = Math.cos( -this.angle ),
         sin = Math.sin( -this.angle );
 
+    this.target = null;
     this.endpoint = null;
 
     world.RayCast(
       function( fixture, point, normal, fraction ) {
+        this.target = fixture.GetBody().GetUserData();
         this.endpoint = point;
         return fraction;
       }.bind( this ),
@@ -48,7 +51,10 @@ define([
   Laser.prototype.draw = function( ctx ) {
     PhysicsEntity.prototype.draw.call( this, ctx );
 
-    if ( !this.endpoint ) {
+    // Only render if there is no endpoint and target or if the target has not
+    // been remvoed from the game.
+    if ( !this.endpoint || !this.target ||
+        ( this.target && !this.target.game ) ) {
       return;
     }
 

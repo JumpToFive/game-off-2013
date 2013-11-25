@@ -118,7 +118,8 @@ define(function( require ) {
       }
 
       var explosion;
-      if ( player && !( player.material & other.material ) ) {
+      if ( player && !( player.material & other.material ) &&
+           player.game && other.game ) {
         player.emotion = Player.Emotion.HIT;
         if ( player.emotionTimeout ) {
           clearTimeout( player.emotionTimeout );
