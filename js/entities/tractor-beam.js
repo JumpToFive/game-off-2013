@@ -76,7 +76,6 @@ define([
     // Replace with a sensor.
     this.game.entities.forEach(function( entity ) {
       if ( !( entity instanceof PhysicsEntity ) ||
-          entity.fixed ||
           entity === this ) {
         return;
       }

@@ -28,6 +28,7 @@ define(function( require ) {
   var Emitter = require( 'entities/emitter' );
   var TractorBeam = require( 'entities/tractor-beam' );
   var Trail = require( 'effects/trail' );
+  var Laser = require( 'entities/laser' );
 
   var Material = require( 'config/material' );
 
@@ -167,6 +168,17 @@ define(function( require ) {
   emitter.game = game;
   emitter.start( 500 );
   game.add( emitter );
+
+  // Laser.
+  var laser = new Laser( 0, 20 );
+  var laserCircle = new Circle( 0, 0, 1 );
+  laserCircle.fill.set({
+    red: 255,
+    alpha: 1
+  });
+  laser.angle = -25 * Math.PI / 180;
+  laser.add( laserCircle );
+  game.add( laser );
 
   // Trail.
   var trail = new Trail();
