@@ -16,7 +16,7 @@ define([
   function Player( x, y ) {
     PhysicsEntity.call( this, {
       shape: 'circle',
-      radius: 4,
+      radius: 3,
       fixture: {
         density: 0.25,
         friction: 0.5,
@@ -74,7 +74,13 @@ define([
   };
 
   Player.prototype.draw = function( ctx ) {
-    var radius = this.fixture.GetShape().GetRadius();
+    // 0.4 compensates for the difference between the drawn and fixture radii.
+    // The drawn ring is at a radius of 0.35 with a maximum lineWidth of 0.18.
+    // This results in a total relative width of (0.35 + 0.09) * 2 = 0.88.
+    // 0.88 * 3 (physical radius) = 2.64 (draw radius).
+    // Whereas:
+    // 0.88 * (3 + 0.4) = 2.992, which gives some spacing.
+    var radius = this.fixture.GetShape().GetRadius() + 0.4;
 
     var width  = 2 * radius,
         height = 2 * radius;
