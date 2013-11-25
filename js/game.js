@@ -140,6 +140,7 @@ define(function( require ) {
 
         this.add( explosion );
         this.shake.shake( 0.5, 0.2 );
+        this.removed.push( other );
       }
     }.bind( this );
 

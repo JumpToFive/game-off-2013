@@ -285,7 +285,7 @@ define(function( require ) {
 
     // Toggle visibility.
     if ( game.box2dDebug ) {
-      debugCanvas.style.display = 'inline';
+      debugCanvas.style.display = 'block';
     } else {
       debugCanvas.style.display = 'none';
     }

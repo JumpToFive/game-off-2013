@@ -34,6 +34,14 @@ define(function() {
            event.which === 40 ) {
         event.preventDefault();
       }
+
+      // Space.
+      if ( event.which === 32 ) {
+        if ( this.game && this.game.player ) {
+          event.preventDefault();
+          this.game.player.toggleMaterial();
+        }
+      }
     },
 
     onKeyUp: function( event ) {

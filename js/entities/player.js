@@ -201,12 +201,13 @@ define([
     ctx.beginPath();
     ctx.arc( 0, 0, 0.35 * width, 0, PI2 );
 
-    ctx.lineWidth = ( 0.1 + Math.random() * 0.08 ) * width;
     if ( material & Material.MATTER ) {
       ctx.strokeStyle = '#33f';
     } else if ( material & Material.ANTIMATTER ) {
       ctx.strokeStyle = '#f33';
     }
+
+    ctx.lineWidth = ( 0.1 + Math.random() * 0.08 ) * width;
     ctx.stroke();
 
     ctx.lineWidth = 0.07 * width;
@@ -216,6 +217,10 @@ define([
     ctx.globalCompositeOperation = 'source-over';
 
     ctx.restore();
+  };
+
+  Player.prototype.toggleMaterial = function() {
+    this.material = this.material ^ ( Material.MATTER | Material.ANTIMATTER );
   };
 
   return Player;
