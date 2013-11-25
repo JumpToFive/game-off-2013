@@ -11,7 +11,7 @@ define([
 
   var PI2 = Utils.PI2;
 
-  var DEFAULT_LINE_WIDTH = 5;
+  var DEFAULT_LINE_WIDTH = 4;
 
   var fills = {
     DEFAULT: [ 0, 0, 0, 0.5 ],
@@ -23,7 +23,7 @@ define([
     DEFAULT: [ 255, 255, 255, 1.0 ]
   };
 
-  var vertexRadius = 20;
+  var vertexRadius = 10;
 
   // Convert arrays in the Colors object to objects with RGBA values.
   (function() {
@@ -251,6 +251,8 @@ define([
       down: false
     };
 
+    this.keys = [];
+
     this.translate = {
       x: 0.5 * this.canvas.width,
       y: 0.5 * this.canvas.height
@@ -286,6 +288,34 @@ define([
     this.mousePosition( event );
     this.mouse.down = true;
 
+    // Add shape.
+    if ( this.keys[ 65 ] ) {
+      var polygon = new Polygon();
+      polygon.x = this.mouse.x;
+      polygon.y = this.mouse.y;
+      polygon.vertices = [ -100, 50, 100, 50, 0, -100 ];
+      this.add( polygon );
+      this.draw();
+      return;
+    }
+
+    // Remove shape.
+    if ( this.keys[ 68 ] ) {
+      var removed = [];
+      this.elements.forEach(function( element ) {
+        if ( element.contains( this.mouse.x, this.mouse.y ) ) {
+          removed.push( element );
+        }
+      }.bind( this ));
+
+      removed.forEach(function( element ) {
+        this.remove( element );
+      }.bind( this ));
+      this.draw();
+      return;
+    }
+
+    // Select shape.
     this.elements.forEach(function( element ) {
       if ( element.type.toLowerCase() === 'polygon' ) {
         var vertices = element.verticesContain( this.mouse.x, this.mouse.y, vertexRadius );
@@ -366,6 +396,14 @@ define([
     this.offsets = [];
   };
 
+  Editor.prototype.onKeyDown = function( event ) {
+    this.keys[ event.which ] = true;
+  };
+
+  Editor.prototype.onKeyUp = function( event ) {
+    this.keys[ event.which ] = false;
+  };
+
   Editor.prototype.draw = function() {
     var ctx = this.ctx;
 
@@ -399,6 +437,13 @@ define([
     }
 
     this.elements.push( element );
+  };
+
+  Editor.prototype.remove = function( element ) {
+    var index = this.elements.indexOf( element );
+    if ( index !== -1 ) {
+      this.elements.splice( index, 1 );
+    }
   };
 
   return Editor;

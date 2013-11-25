@@ -12,7 +12,8 @@ define(function( require ) {
     el: '#editor'
   });
 
-  document.addEventListener( 'keydown', function() {});
+  document.addEventListener( 'keydown', editor.onKeyDown.bind( editor ) );
+  document.addEventListener( 'keyup', editor.onKeyUp.bind( editor ) );
 
   var Polygon = require( 'geometry/polygon' );
 
