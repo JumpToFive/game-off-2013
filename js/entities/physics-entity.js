@@ -177,6 +177,18 @@ define([
     }
   });
 
+  Object.defineProperty( PhysicsEntity.prototype, 'material', {
+    get: function() {
+      return this.fixture.GetFilterData().categoryBits;
+    },
+
+    set: function( material ) {
+      var filterData = this.fixture.GetFilterData();
+      filterData.categoryBits = material;
+      this.fixture.SetFilterData( filterData );
+    }
+  });
+
   Object.defineProperty( PhysicsEntity.prototype, 'position', {
     get: function() {
       return this.body.GetPosition();

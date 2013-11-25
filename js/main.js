@@ -29,6 +29,8 @@ define(function( require ) {
   var TractorBeam = require( 'entities/tractor-beam' );
   var Trail = require( 'effects/trail' );
 
+  var Material = require( 'config/material' );
+
   // Mixin normals drawing for debugging.
   (function() {
     var normalOptions = {
@@ -150,7 +152,10 @@ define(function( require ) {
     fixture: {
       density: 4.0,
       friction: 0.5,
-      restitution: 0.2
+      restitution: 0.2,
+      filter: {
+        categoryBits: Material.ANTIMATTER
+      }
     },
     body: {
       angularVelocity: 3 * Math.PI,
@@ -203,7 +208,10 @@ define(function( require ) {
         fixture: {
           density: 1.0,
           friction: 0.5,
-          restitution: 0.2
+          restitution: 0.2,
+          filter: {
+            categoryBits: Material.BIMATTER
+          }
         }
       });
 

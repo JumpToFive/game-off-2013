@@ -1,4 +1,4 @@
-/*jshint camelcase: false*/
+/*jshint bitwise: false, camelcase: false*/
 /*globals define*/
 define(function( require ) {
   'use strict';
@@ -117,7 +117,8 @@ define(function( require ) {
         other = a;
       }
 
-      if ( player ) {
+      var explosion;
+      if ( player && !( player.material & other.material ) ) {
         player.emotion = Player.Emotion.HIT;
         if ( player.emotionTimeout ) {
           clearTimeout( player.emotionTimeout );
@@ -129,7 +130,7 @@ define(function( require ) {
           player.emotionTimeout = null;
         }, 700 );
 
-        var explosion = new Explosion( other.x, other.y );
+        explosion = new Explosion( other.x, other.y );
         explosion.fill.set({
           red: 64,
           green: 32,

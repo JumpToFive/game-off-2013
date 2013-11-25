@@ -1,9 +1,11 @@
+/*jshint bitwise: false*/
 /*globals define*/
 define([
   'box2d',
   'entities/physics-entity',
+  'config/material',
   'utils'
-], function( Box2D, PhysicsEntity, Utils ) {
+], function( Box2D, PhysicsEntity, Material, Utils ) {
   'use strict';
 
   var PI2 = Utils.PI2;
@@ -20,7 +22,10 @@ define([
       fixture: {
         density: 0.25,
         friction: 0.5,
-        restitution: 0.2
+        restitution: 0.2,
+        filter: {
+          categoryBits: Material.MATTER
+        }
       },
       body: {
         position: {
@@ -145,23 +150,7 @@ define([
       ctx.restore();
     }
 
-    // Draw ring.
-    ctx.globalCompositeOperation = 'lighter';
-
-    ctx.beginPath();
-    ctx.arc( 0, 0, 0.35 * width, 0, PI2 );
-
-    ctx.lineWidth = ( 0.1 + Math.random() * 0.08 ) * width;
-    ctx.strokeStyle = '#f33';
-    ctx.stroke();
-
-    ctx.lineWidth = 0.07 * width;
-    ctx.strokeStyle = '#fff';
-    ctx.stroke();
-
-    ctx.globalCompositeOperation = 'source-over';
-
-    ctx.restore();
+    this.drawRing( ctx, width );
   };
 
   Player.prototype.drawFace = function( ctx, width, height ) {
@@ -202,6 +191,31 @@ define([
       ctx.fillStyle = '#448';
       ctx.fill();
     }
+  };
+
+  Player.prototype.drawRing = function( ctx, width ) {
+    var material = this.material;
+
+    ctx.globalCompositeOperation = 'lighter';
+
+    ctx.beginPath();
+    ctx.arc( 0, 0, 0.35 * width, 0, PI2 );
+
+    ctx.lineWidth = ( 0.1 + Math.random() * 0.08 ) * width;
+    if ( material & Material.MATTER ) {
+      ctx.strokeStyle = '#33f';
+    } else if ( material & Material.ANTIMATTER ) {
+      ctx.strokeStyle = '#f33';
+    }
+    ctx.stroke();
+
+    ctx.lineWidth = 0.07 * width;
+    ctx.strokeStyle = '#fff';
+    ctx.stroke();
+
+    ctx.globalCompositeOperation = 'source-over';
+
+    ctx.restore();
   };
 
   return Player;
