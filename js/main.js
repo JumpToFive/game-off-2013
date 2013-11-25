@@ -23,6 +23,7 @@ define(function( require ) {
 
   var Color = require( 'color' );
   var Entity = require( 'entities/entity' );
+  var PhysicsEntity = require( 'entities/physics-entity' );
 
   var Emitter = require( 'entities/emitter' );
   var TractorBeam = require( 'entities/tractor-beam' );
@@ -100,11 +101,11 @@ define(function( require ) {
   segmentEntity.x = 20;
   segmentEntity.y = 35;
 
-  var segment = new Segment(0, 0, 10, 5 );
-  segment.stroke.alpha = 1;
-  segment.lineWidth = 0.2;
+  var testSegment = new Segment(0, 0, 10, 5 );
+  testSegment.stroke.alpha = 1;
+  testSegment.lineWidth = 0.2;
 
-  segmentEntity.add( segment );
+  segmentEntity.add( testSegment );
   game.add( segmentEntity );
 
   // Tractor beam.
@@ -178,6 +179,48 @@ define(function( require ) {
   game.camera.target = game.player;
   trail.target = game.player;
 
+  // Debug objects.
+  [
+    [
+      [ 60,  5, 50,  5 ],
+      [ 50,  5, 30, 15 ],
+      [ 30, 15,  3, 10 ],
+      [  3, 10,  3,  0 ]
+    ],
+    [
+      // Rectangle.
+      [ 10, 0, 20, 0 ],
+      [ 20, 0, 20, -5 ],
+      [ 20, -5, 10, -5 ],
+      [ 10, -5, 10, 0 ]
+    ]
+  ].forEach(function( object ) {
+    object.forEach(function( edgeData ) {
+      var entity = new PhysicsEntity({
+        shape: 'polygon',
+        type: 'edge',
+        data: edgeData,
+        fixture: {
+          density: 1.0,
+          friction: 0.5,
+          restitution: 0.2
+        }
+      });
+
+      var segment = new Segment( edgeData[0], edgeData[1], edgeData[2], edgeData[3] );
+      segment.stroke.set({
+        red: 255,
+        alpha: 1
+      });
+      segment.lineWidth = 0.2;
+
+      entity.add( segment );
+      game.add( entity );
+    });
+  });
+
+
+  // Add game element to body.
   game.element.classList.add( 'game' );
   document.body.insertBefore( game.element, document.body.firstChild );
 
@@ -239,6 +282,11 @@ define(function( require ) {
       debugCanvas.style.display = 'none';
     }
   }
+
+  debugCheckbox.addEventListener( 'click', function() {
+    debugCheckbox.checked = !debugCheckbox.checked;
+    toggleDebug();
+  });
 
   document.addEventListener( 'keydown', function( event ) {
     // B.
