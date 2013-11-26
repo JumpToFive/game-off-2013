@@ -83,3 +83,15 @@ canvas {
   width: 640px;
   height: 480px;
 }
+
+/* line 22, ../sass/screen.scss */
+.loader {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+/* line 28, ../sass/screen.scss */
+.loader #level-data {
+  width: 480px;
+}

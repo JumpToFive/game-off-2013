@@ -18,3 +18,14 @@ canvas {
   width: 640px;
   height: 480px;
 }
+
+.loader {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  #level-data {
+    width: 480px;
+  }
+}

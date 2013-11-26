@@ -240,6 +240,11 @@ define([
 
     this.el.appendChild( this.canvas );
 
+    this.textarea = document.createElement( 'textarea' );
+    this.textarea.rows = 10;
+
+    this.el.appendChild( this.textarea );
+
     this.elements = [];
 
     this.selection = [];
@@ -275,7 +280,7 @@ define([
   };
 
   Editor.prototype.asPhysicsEntities = function() {
-    var string = '';
+    var string = '[';
 
     string += this.elements.map(function( element ) {
       return JSON.stringify({
@@ -309,6 +314,8 @@ define([
         ]
       });
     }).join( ', ' );
+
+    string += ']';
 
     return string;
   };
@@ -438,7 +445,10 @@ define([
 
     // Spacebar.
     if ( event.which === 32 ) {
-      console.log( this.asPhysicsEntities() );
+      var data = this.asPhysicsEntities();
+
+      console.log( data );
+      this.textarea.value = data;
     }
 
     // R. Reset view.

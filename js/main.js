@@ -400,6 +400,7 @@ define(function( require ) {
     toggleDebug();
   });
 
+  // Settings.
   var settingsCheckbox = document.getElementById( 'settings-checkbox' );
   settingsCheckbox.addEventListener( 'click', function() {
     if ( settingsCheckbox.checked ) {
@@ -407,6 +408,27 @@ define(function( require ) {
     } else {
       Settings.high();
     }
+  });
+
+  // Load level data.
+  var levelDataEl = document.getElementById( 'level-data' );
+  levelDataEl.addEventListener( 'keydown', function( event ) {
+    // Enter.
+    if ( event.which === 13 ) {
+      load();
+    }
+  });
+
+  function load() {
+    var levelData = levelDataEl.value;
+    JSON.parse( levelData ).forEach(function( entityData ) {
+      game.add( new PhysicsEntity( entityData ) );
+    });
+  }
+
+  var loadBtn = document.getElementById( 'level-data-btn' );
+  loadBtn.addEventListener( 'click', function() {
+    load();
   });
 
   document.addEventListener( 'keydown', function( event ) {
@@ -418,6 +440,19 @@ define(function( require ) {
     // R.
     if ( event.which === 82 ) {
       toggleContinuousRendering( event );
+    }
+
+    // P.
+    if ( event.which === 80 ) {
+      event.preventDefault();
+      var loader = document.querySelector( '.loader' );
+      if ( !loader.style.display || loader.style.display === 'none' ) {
+        loader.style.display = 'inline';
+        levelDataEl.focus();
+      } else {
+        loader.style.display = 'none';
+        levelDataEl.blur();
+      }
     }
   });
 
