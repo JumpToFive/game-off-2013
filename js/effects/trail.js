@@ -32,6 +32,10 @@ define([
   Trail.prototype.constructor = Trail;
 
   Trail.prototype.update = function( dt ) {
+    if ( !Settings.trail ) {
+      return;
+    }
+
     this.time += dt;
 
     if ( this.time > this.period ) {
@@ -62,7 +66,7 @@ define([
   };
 
   Trail.prototype.draw = function( ctx ) {
-    if ( !this.particles.length ) {
+    if ( !this.particles.length || !Settings.trail ) {
       return;
     }
 

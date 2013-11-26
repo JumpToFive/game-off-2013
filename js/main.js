@@ -65,9 +65,9 @@ define(function( require ) {
   var game = Game.instance = new Game();
   game.level = new Level();
   game.level.fill.set({
-    red: 255,
-    green: 255,
-    blue: 255,
+    red: 32,
+    green: 32,
+    blue: 48,
     alpha: 1.0
   });
 
@@ -245,12 +245,10 @@ define(function( require ) {
   game.camera.target = game.player;
 
   // Trail.
-  if ( Settings.trail ) {
-    var trail = new Trail();
-    trail.fill = new Color( 255, 255, 255, 0.2 );
-    game.add( trail );
-    trail.target = game.player;
-  }
+  var trail = new Trail();
+  trail.fill = new Color( 255, 255, 255, 0.2 );
+  game.add( trail );
+  trail.target = game.player;
 
   // Debug objects.
   [
@@ -400,6 +398,15 @@ define(function( require ) {
   debugCheckbox.addEventListener( 'click', function() {
     debugCheckbox.checked = !debugCheckbox.checked;
     toggleDebug();
+  });
+
+  var settingsCheckbox = document.getElementById( 'settings-checkbox' );
+  settingsCheckbox.addEventListener( 'click', function() {
+    if ( settingsCheckbox.checked ) {
+      Settings.low();
+    } else {
+      Settings.high();
+    }
   });
 
   document.addEventListener( 'keydown', function( event ) {
