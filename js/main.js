@@ -49,6 +49,7 @@ define(function( require ) {
 
     drawNormalsMixin( Segment.prototype );
     drawNormalsMixin( Polygon.prototype );
+    drawNormalsMixin( Laser.prototype );
   }) ();
 
   var game = Game.instance = new Game();
