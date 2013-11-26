@@ -110,7 +110,7 @@
     },
     {
       "shape": "polygon",
-      "type": "orientedBox",
+      "type": "orientedbox",
       "data": {
         "hx": 5,
         "hy": 3,

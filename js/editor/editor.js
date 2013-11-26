@@ -5,8 +5,9 @@ define([
   'geometry/circle',
   'geometry/polygon',
   'geometry/rect',
+  'config/material',
   'utils'
-], function( BaseObject, Color, Circle, Polygon, Rect, Utils ) {
+], function( BaseObject, Color, Circle, Polygon, Rect, Material, Utils ) {
   'use strict';
 
   var PI2 = Utils.PI2;
@@ -276,6 +277,38 @@ define([
   Editor.prototype.asPhysicsEntities = function() {
     var string = '';
 
+    string += this.elements.map(function( element ) {
+      return JSON.stringify({
+        shape: 'polygon',
+        type: 'vector',
+        data: element.vertices,
+        fixture: {
+          density: 1.0,
+          friction: 0.5,
+          restitution: 0.2,
+          filter: {
+            categoryBits: Material.BIMATTER
+          }
+        },
+        body: {
+          position: {
+            x: element.x,
+            y: element.y
+          },
+          angle: element.angle
+        },
+        shapes: [
+          {
+            type: element.type,
+            vertices: element.vertices,
+            fill: {
+              alpha: 1
+            }
+          }
+        ]
+      });
+    }).join( ', ' );
+
     return string;
   };
 
@@ -398,6 +431,11 @@ define([
 
   Editor.prototype.onKeyDown = function( event ) {
     this.keys[ event.which ] = true;
+
+    // Spacebar.
+    if ( event.which === 32 ) {
+      console.log( this.asPhysicsEntities() );
+    }
   };
 
   Editor.prototype.onKeyUp = function( event ) {

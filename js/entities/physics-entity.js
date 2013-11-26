@@ -3,9 +3,10 @@
 define([
   'box2d',
   'entities/entity',
+  'geometry/geometry-factory',
   'utils',
   'world'
-], function( Box2D, Entity, Utils, world ) {
+], function( Box2D, Entity, GeometryFactory, Utils, world ) {
   'use strict';
 
   var Vec2 = Box2D.Common.Math.b2Vec2;
@@ -46,6 +47,13 @@ define([
 
     // This tautology stops the Entity constructor from changing the position.
     Entity.call( this, this.x, this.y );
+
+    // Add any shapes.
+    if ( options.shapes ) {
+      this.shapes = this.shapes.concat( options.shapes.map(function( shapeData ) {
+        return GeometryFactory.create( JSON.stringify( shapeData ) );
+      }));
+    }
   }
 
   PhysicsEntity.prototype = new Entity();
@@ -137,7 +145,7 @@ define([
     // - hy:Number
     // - center:Vec2
     // - angle:Number
-    else if ( type === 'orientedBox' ) {
+    else if ( type === 'orientedbox' ) {
       var center;
       if ( typeof data.center !== 'undefined' ) {
         center = new Vec2( data.center.x, data.center.y );

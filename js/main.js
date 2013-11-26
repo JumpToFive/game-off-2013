@@ -318,14 +318,19 @@ define(function( require ) {
           x: 50,
           y: 45
         }
-      }
+      },
+      shapes: [
+        {
+          type: 'polygon',
+          vertices: polyData,
+          fill: {
+            type: 'color',
+            alpha: 1
+          }
+        }
+      ]
     });
 
-    var polygon = new Polygon();
-    polygon.vertices = polyData;
-    polygon.fill.alpha = 1;
-
-    entity.add( polygon );
     game.add( entity );
   });
 

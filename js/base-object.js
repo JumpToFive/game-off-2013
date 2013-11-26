@@ -3,7 +3,7 @@ define(function() {
   'use strict';
 
   function BaseObject() {
-    this.type = this.constructor.name;
+    this.type = this.constructor.name.toLowerCase();
   }
 
   BaseObject.prototype.set = function( attrs ) {
