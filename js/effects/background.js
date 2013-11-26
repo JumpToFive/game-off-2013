@@ -94,10 +94,7 @@ define([
     ctx.translate( this.camera.x * this.parallax, this.camera.y * this.parallax );
     ctx.scale( this.parallax, this.parallax );
 
-    var prevAlpha = ctx.globalAlpha;
-    ctx.globalAlpha = this.fill.alpha;
     ctx.drawImage( this.canvas, -0.5 * this.width, -0.5 * this.height );
-    ctx.globalAlpha = prevAlpha;
 
     ctx.restore();
   };

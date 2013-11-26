@@ -1,7 +1,8 @@
 /*globals define*/
 define([
-  'entities/entity'
-], function( Entity ) {
+  'entities/entity',
+  'utils'
+], function( Entity, Utils ) {
   'use strict';
 
   function Camera( x, y ) {
@@ -99,6 +100,22 @@ define([
     ctx.rect( -halfWidth, -halfHeight, width, height );
     ctx.rect( -halfWidth + margin, -halfHeight + margin, width - 2 * margin, height - 2 * margin );
     ctx.closePath();
+  };
+
+  Camera.prototype.aabb = function() {
+    var halfWidth  = 0.5 * this.width,
+        halfHeight = 0.5 * this.height;
+
+    var left   = -halfWidth,
+        top    = -halfHeight,
+        right  = halfWidth,
+        bottom = halfHeight;
+
+    return Utils.rotateAABB(
+      this.x, this.y,
+      left, top, right, bottom,
+      this.angle
+    );
   };
 
   return Camera;
