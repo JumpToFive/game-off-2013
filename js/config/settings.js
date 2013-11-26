@@ -12,12 +12,14 @@ define([
     background: false,
     explosions: false,
     glow: false,
+    trail: false
   };
 
   var highSettings = {
     background: true,
     explosions: true,
-    glow: true
+    glow: true,
+    trail: true
   };
 
   // Basic setter functions for each quality level.

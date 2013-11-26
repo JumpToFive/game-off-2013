@@ -12,6 +12,7 @@ define(function( require ) {
   var Shake = require( 'effects/shake' );
   var Colors = require( 'config/colors' );
   var Material = require( 'config/material' );
+  var Settings = require( 'config/settings' );
   var world = require( 'world' );
 
   var DebugDraw = Box2D.Dynamics.b2DebugDraw;
@@ -133,16 +134,19 @@ define(function( require ) {
           player.emotionTimeout = null;
         }, 700 );
 
-        explosion = new Explosion( other.x, other.y );
-        if ( other.material & Material.MATTER ) {
-          explosion.fill.set( Colors.Explosion.MATTER );
-        } else if ( other.material & Material.ANTIMATTER ) {
-          explosion.fill.set( Colors.Explosion.ANTIMATTER );
-        } else {
-          return;
+        if ( Settings.explosions ) {
+          explosion = new Explosion( other.x, other.y );
+          if ( other.material & Material.MATTER ) {
+            explosion.fill.set( Colors.Explosion.MATTER );
+          } else if ( other.material & Material.ANTIMATTER ) {
+            explosion.fill.set( Colors.Explosion.ANTIMATTER );
+          } else {
+            return;
+          }
+
+          this.add( explosion );
         }
 
-        this.add( explosion );
         this.shake.shake( 0.5, 0.2 );
         this.removed.push( other );
         return;
@@ -157,22 +161,25 @@ define(function( require ) {
         var explosionA,
             explosionB;
 
-        explosionA = new Explosion( a.x, a.y );
-        if ( a.material & Material.MATTER ) {
-          explosionA.fill.set( Colors.Explosion.MATTER );
-        } else if ( a.material & Material.ANTIMATTER ) {
-          explosionA.fill.set( Colors.Explosion.ANTIMATTER );
+        if ( Settings.explosions ) {
+          explosionA = new Explosion( a.x, a.y );
+          if ( a.material & Material.MATTER ) {
+            explosionA.fill.set( Colors.Explosion.MATTER );
+          } else if ( a.material & Material.ANTIMATTER ) {
+            explosionA.fill.set( Colors.Explosion.ANTIMATTER );
+          }
+
+          explosionB = new Explosion( b.x, b.y );
+          if ( b.material & Material.MATTER ) {
+            explosionB.fill.set( Colors.Explosion.MATTER );
+          } else if ( b.material & Material.ANTIMATTER ) {
+            explosionB.fill.set( Colors.Explosion.ANTIMATTER );
+          }
+
+          this.add( explosionA );
+          this.add( explosionB );
         }
 
-        explosionB = new Explosion( b.x, b.y );
-        if ( b.material & Material.MATTER ) {
-          explosionB.fill.set( Colors.Explosion.MATTER );
-        } else if ( b.material & Material.ANTIMATTER ) {
-          explosionB.fill.set( Colors.Explosion.ANTIMATTER );
-        }
-
-        this.add( explosionA );
-        this.add( explosionB );
         this.removed.push( a );
         this.removed.push( b );
       }
@@ -232,7 +239,10 @@ define(function( require ) {
     this.camera.applyTransform( ctx );
     this.shake.applyTransform( ctx );
 
-    this.background.draw( ctx );
+    if ( Settings.background ) {
+      this.background.draw( ctx );
+    }
+
     this.entities.forEach(function( entity ) {
       entity.draw( ctx );
     });

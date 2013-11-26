@@ -40,6 +40,7 @@ define(function( require ) {
   if ( Settings.background ) {
     console.log( 'not low settings' );
   }
+  Settings.high();
 
   // Mixin normals drawing for debugging.
   (function() {
@@ -238,20 +239,18 @@ define(function( require ) {
   laser.material = Material.ANTIMATTER;
   game.add( laser );
 
-  // Trail.
-  var trail = new Trail();
-  trail.fill = new Color( 255, 255, 255, 0.2 );
-  game.add( trail );
-
   // Player.
   game.player = new Player( 20, 20 );
-  game.player.add( new Circle( 0, 0, 2 ) );
-  game.player.shapes[0].fill.alpha = 0.5;
-
   game.add( game.player );
-
   game.camera.target = game.player;
-  trail.target = game.player;
+
+  // Trail.
+  if ( Settings.trail ) {
+    var trail = new Trail();
+    trail.fill = new Color( 255, 255, 255, 0.2 );
+    game.add( trail );
+    trail.target = game.player;
+  }
 
   // Debug objects.
   [

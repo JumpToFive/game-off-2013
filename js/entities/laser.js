@@ -3,11 +3,12 @@
 define([
   'box2d',
   'entities/physics-entity',
-  'config/material',
   'config/colors',
+  'config/material',
+  'config/settings',
   'utils',
   'world'
-], function( Box2D, PhysicsEntity, Material, Colors, Utils, world ) {
+], function( Box2D, PhysicsEntity, Colors, Material, Settings, Utils, world ) {
   'use strict';
 
   var PI2 = Utils.PI2;
@@ -72,7 +73,9 @@ define([
       return;
     }
 
-    ctx.globalCompositeOperation = 'lighter';
+    if ( Settings.glow ) {
+      ctx.globalCompositeOperation = 'lighter';
+    }
 
     var cos = Math.cos( -this.angle ),
         sin = Math.sin( -this.angle );
@@ -119,7 +122,9 @@ define([
     ctx.fillStyle = '#fff';
     ctx.fill();
 
-    ctx.globalCompositeOperation = 'source-over';
+    if ( Settings.glow ) {
+      ctx.globalCompositeOperation = 'source-over';
+    }
   };
 
   Laser.prototype.drawNormals = function( ctx ) {

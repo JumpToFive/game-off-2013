@@ -2,8 +2,9 @@
 define([
   'base-object',
   'utils',
-  'color'
-], function( BaseObject, Utils, Color ) {
+  'color',
+  'config/settings'
+], function( BaseObject, Utils, Color, Settings ) {
   'use strict';
 
   var PI2 = Utils.PI2;
@@ -65,7 +66,9 @@ define([
       return;
     }
 
-    ctx.globalCompositeOperation = 'lighter';
+    if ( Settings.glow ) {
+      ctx.globalCompositeOperation = 'lighter';
+    }
 
     ctx.beginPath();
 
@@ -77,7 +80,9 @@ define([
     ctx.fillStyle = this.fill.rgba();
     ctx.fill();
 
-    ctx.globalCompositeOperation = 'source-over';
+    if ( Settings.glow ) {
+      ctx.globalCompositeOperation = 'source-over';
+    }
   };
 
   Object.defineProperty( Trail.prototype, 'frequency', {

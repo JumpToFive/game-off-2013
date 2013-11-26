@@ -3,10 +3,11 @@
 define([
   'box2d',
   'entities/physics-entity',
-  'config/material',
   'config/colors',
+  'config/material',
+  'config/settings',
   'utils'
-], function( Box2D, PhysicsEntity, Material, Colors, Utils ) {
+], function( Box2D, PhysicsEntity, Colors, Material, Settings, Utils ) {
   'use strict';
 
   var PI2 = Utils.PI2;
@@ -195,7 +196,9 @@ define([
   };
 
   Player.prototype.drawRing = function( ctx, width ) {
-    ctx.globalCompositeOperation = 'lighter';
+    if ( Settings.glow ) {
+      ctx.globalCompositeOperation = 'lighter';
+    }
 
     ctx.beginPath();
     ctx.arc( 0, 0, 0.35 * width, 0, PI2 );
@@ -214,7 +217,9 @@ define([
     ctx.strokeStyle = '#fff';
     ctx.stroke();
 
-    ctx.globalCompositeOperation = 'source-over';
+    if ( Settings.glow ) {
+     ctx.globalCompositeOperation = 'source-over';
+    }
 
     ctx.restore();
   };

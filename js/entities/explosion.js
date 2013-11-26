@@ -1,8 +1,9 @@
 /*globals define*/
 define([
   'entities/entity',
-  'utils'
-], function( Entity, Utils ) {
+  'utils',
+  'config/settings'
+], function( Entity, Utils, Settings ) {
   'use strict';
 
   var PI2 = Utils.PI2;
@@ -108,7 +109,10 @@ define([
     ctx.translate( this.x, this.y );
     ctx.rotate( -this.angle );
 
-    ctx.globalCompositeOperation = 'lighter';
+    if ( Settings.glow ) {
+      ctx.globalCompositeOperation = 'lighter';
+    }
+
     ctx.fillStyle = this.fill.rgba();
     this.particles.forEach(function( particle ) {
       ctx.beginPath();
@@ -116,7 +120,9 @@ define([
       ctx.fill();
     });
 
-    ctx.globalCompositeOperation = 'source-over';
+    if ( Settings.glow ) {
+      ctx.globalCompositeOperation = 'source-over';
+    }
 
     ctx.restore();
   };
