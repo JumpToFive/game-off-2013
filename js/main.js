@@ -32,6 +32,15 @@ define(function( require ) {
 
   var Material = require( 'config/material' );
 
+  var Settings = require( 'config/settings' );
+  if ( !Settings.background ) {
+    console.log( 'not high settings' );
+  }
+  Settings.low();
+  if ( Settings.background ) {
+    console.log( 'not low settings' );
+  }
+
   // Mixin normals drawing for debugging.
   (function() {
     var normalOptions = {
