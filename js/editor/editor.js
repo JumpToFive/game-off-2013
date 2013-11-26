@@ -302,6 +302,7 @@ define([
             type: element.type,
             vertices: element.vertices,
             fill: {
+              type: 'color',
               alpha: 1
             }
           }
@@ -321,7 +322,7 @@ define([
     this.mousePosition( event );
     this.mouse.down = true;
 
-    // Add shape.
+    // A. Add shape.
     if ( this.keys[ 65 ] ) {
       var polygon = new Polygon();
       polygon.x = this.mouse.x;
@@ -332,7 +333,7 @@ define([
       return;
     }
 
-    // Remove shape.
+    // D. Remove shape.
     if ( this.keys[ 68 ] ) {
       var removed = [];
       this.elements.forEach(function( element ) {
@@ -382,7 +383,7 @@ define([
 
         var cos, sin;
         var rx, ry;
-        if ( element.type.toLowerCase() === 'vertex' ) {
+        if ( element.type === 'vertex' ) {
           x -= element.polygon.x;
           y -= element.polygon.y;
 
@@ -406,7 +407,7 @@ define([
       var ctx = this.ctx;
 
       this.elements.forEach(function( element ) {
-        if ( element.type.toLowerCase() === 'polygon' ) {
+        if ( element.type === 'polygon' ) {
           var vertices = element.verticesContain( this.mouse.x, this.mouse.y, vertexRadius );
 
           if ( vertices ) {
@@ -416,8 +417,11 @@ define([
           }
         }
       }.bind( this ));
+    } else if ( !this.selection.length && this.mouse.down ) {
+      // Pan.
+      this.translate.x += event.webkitMovementX;
+      this.translate.y += event.webkitMovementY;
     }
-
 
     this.draw();
   };
@@ -436,6 +440,13 @@ define([
     if ( event.which === 32 ) {
       console.log( this.asPhysicsEntities() );
     }
+
+    // R. Reset view.
+    if ( event.which === 82 ) {
+      this.translate.x = 0.5 * this.canvas.width;
+      this.translate.y = 0.5 * this.canvas.height;
+      this.draw();
+    }
   };
 
   Editor.prototype.onKeyUp = function( event ) {
@@ -453,18 +464,66 @@ define([
     ctx.save();
     ctx.translate( this.translate.x, this.translate.y );
 
+    this.drawGrid( 16 );
+
     this.elements.forEach(function( element ) {
       element.draw( ctx );
     });
 
     // Now highlight whatever we've selected.
     this.selection.forEach(function( element ) {
-      if ( element.type.toLowerCase() === 'vertex' ) {
+      if ( element.type === 'vertex' ) {
         element.draw( ctx, vertexRadius );
       }
     });
 
     ctx.restore();
+  };
+
+  Editor.prototype.drawGrid = function( spacing ) {
+    var ctx = this.ctx;
+
+    var width  = ctx.canvas.width,
+        height = ctx.canvas.height;
+
+    var halfWidth  = 0.5 * width,
+        halfHeight = 0.5 * height;
+
+    var xCount = width / spacing,
+        yCount = height / spacing;
+
+    ctx.beginPath();
+
+    var i;
+    // Vertical lines.
+    for ( i = 0; i <= xCount; i++ ) {
+      ctx.moveTo( i * spacing - halfWidth, -halfHeight );
+      ctx.lineTo( i * spacing - halfWidth,  halfHeight );
+    }
+
+    // Horizontal lines.
+    for ( i = 0; i <= yCount; i++ ) {
+      ctx.moveTo( -halfWidth, i * spacing - halfHeight );
+      ctx.lineTo(  halfWidth, i * spacing - halfHeight );
+    }
+
+    ctx.lineWidth = 0.5;
+    ctx.strokeStyle = '#222';
+    ctx.stroke();
+
+    // Draw center lines.
+    ctx.beginPath();
+
+    // Vertical.
+    ctx.moveTo( 0, -halfHeight );
+    ctx.lineTo( 0,  halfHeight );
+
+    // Horizontal.
+    ctx.moveTo( -halfWidth, 0 );
+    ctx.lineTo(  halfWidth, 0 );
+
+    ctx.lineWidth = 1;
+    ctx.stroke();
   };
 
   Editor.prototype.add = function( element ) {
