@@ -25,6 +25,7 @@ define([
     });
 
     this.target = null;
+    this.normal = null;
     this.endpoint = null;
   }
 
@@ -49,6 +50,7 @@ define([
 
         this.target = target;
         this.endpoint = point;
+        this.normal = normal;
 
         return fraction;
       }.bind( this ),
@@ -60,8 +62,8 @@ define([
   Laser.prototype.draw = function( ctx ) {
     PhysicsEntity.prototype.draw.call( this, ctx );
 
-    // Only render if there is no endpoint and target or if the target has not
-    // been remvoed from the game.
+    // Only render if there is no endpoint and target, or if the target has not
+    // been removed from the game.
     if ( !this.endpoint || !this.target ||
         ( this.target && !this.target.game ) ) {
       return;
@@ -88,6 +90,13 @@ define([
     ctx.stroke();
 
     ctx.globalCompositeOperation = 'source-over';
+
+    ctx.beginPath();
+    ctx.moveTo( this.endpoint.x, this.endpoint.y );
+    ctx.lineTo( this.endpoint.x + this.normal.x, this.endpoint.y + this.normal.y );
+    ctx.lineWidth = 0.2;
+    ctx.strokeStyle = 'white';
+    ctx.stroke();
   };
 
   return Laser;
