@@ -1,8 +1,7 @@
 /*globals define*/
 define([
-  'object2d',
-  'geometry/rect'
-], function( Object2D, Rect ) {
+  'object2d'
+], function( Object2D ) {
   'use strict';
 
   function Entity( x, y ) {

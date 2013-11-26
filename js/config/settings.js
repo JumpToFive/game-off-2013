@@ -1,6 +1,6 @@
 /*globals define*/
 define([
-  'Utils'
+  'utils'
 ], function( Utils ) {
   'use strict';
 
