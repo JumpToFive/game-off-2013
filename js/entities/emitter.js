@@ -1,8 +1,12 @@
+/*jshint bitwise: false*/
 /*globals define*/
 define([
   'entities/physics-entity',
-  'geometry/geometry-factory'
-], function( PhysicsEntity, GeometryFactory ) {
+  'geometry/geometry-factory',
+  'config/colors',
+  'config/material',
+  'config/settings'
+], function( PhysicsEntity, GeometryFactory, Colors, Material, Settings ) {
   'use strict';
 
   function Emitter( x, y ) {
@@ -116,6 +120,43 @@ define([
     setTimeout(function() {
       this.firing = false;
     }.bind( this ), when );
+  };
+
+  Emitter.prototype.drawPath = function( ctx ) {
+    var material = this.properties.fixture.filter.categoryBits;
+
+    var glowColor;
+    if ( material & Material.MATTER ) {
+      glowColor = Colors.Glow.MATTER;
+    } else if ( material & Material.ANTIMATTER ) {
+      glowColor = Colors.Glow.ANTIMATTER;
+    }
+
+    ctx.save();
+    ctx.scale( 0.1, 1 );
+    ctx.beginPath();
+
+    // Draw warp hole.
+    ctx.arc( 0, 0, 4, 0, 2 * Math.PI );
+    ctx.restore();
+
+    ctx.fillStyle = '#000';
+    ctx.fill();
+
+    // Draw ring.
+    ctx.globalCompositeOperation = 'lighter';
+
+    ctx.strokeStyle = glowColor;
+    ctx.lineWidth = 0.3 + Math.random() * 0.2;
+    ctx.stroke();
+
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 0.1 + Math.random() * 0.1;
+    ctx.stroke();
+
+    ctx.globalCompositeOperation = 'source-over';
+
+    PhysicsEntity.prototype.drawPath.call( this, ctx );
   };
 
   return Emitter;
