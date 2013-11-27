@@ -1,14 +1,13 @@
 /*globals define*/
-define([
-  'base-object',
-  'color',
-  'geometry/circle',
-  'geometry/polygon',
-  'geometry/rect',
-  'config/material',
-  'utils'
-], function( BaseObject, Color, Circle, Polygon, Rect, Material, Utils ) {
+define(function( require ) {
   'use strict';
+
+  var BaseObject = require( 'base-object' );
+  var Color = require( 'color' );
+  var Polygon = require( 'geometry/polygon' );
+  var GeometryFactory = require( 'geometry/geometry-factory' );
+  var Material = require( 'config/material' );
+  var Utils = require( 'utils' );
 
   var storage = window.sessionStorage;
 
@@ -452,8 +451,7 @@ define([
   Editor.prototype.onMouseUp = function() {
     this.mouse.down = false;
 
-    this.selection = [];
-    this.offsets = [];
+    this.clearSelection();
   };
 
   Editor.prototype.onKeyDown = function( event ) {
@@ -576,7 +574,25 @@ define([
   };
 
   Editor.prototype.load = function( value ) {
-    console.log( storage.getItem( value ) );
+    var data = storage.getItem( value );
+    JSON.parse( data ).forEach(function( elementData ) {
+      this.elements.push( GeometryFactory.create( elementData ) );
+    });
+  };
+
+  Editor.prototype.clear = function() {
+    this.elements = [];
+    this.clearSelection();
+  };
+
+  Editor.prototype.clearSelection = function() {
+    this.selection = [];
+    this.offsets = [];
+  };
+
+  Editor.prototype.loadHistory = function() {
+    var historyEl = this.historyEl;
+
   };
 
   return Editor;
