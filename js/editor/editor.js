@@ -311,8 +311,8 @@ define(function( require ) {
         body: {
           type: 'static',
           position: {
-            x: element.x,
-            y: element.y
+            x: element.x * scale,
+            y: element.y * scale
           },
           angle: element.angle
         },
