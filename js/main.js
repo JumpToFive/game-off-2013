@@ -104,7 +104,7 @@ define(function( require ) {
   var polyEntity = new Entity( 50, 35 );
 
   var polygon = new Polygon( 5, 0 );
-  polygon.vertices = [ -5, 3, 5, 3, 0, -5 ];
+  polygon.vertices = [ 5, 3, -5, 3, 0, -5 ];
   polygon.fill.alpha = 0.5;
 
   polyEntity.add( polygon );
@@ -115,7 +115,7 @@ define(function( require ) {
   segmentEntity.x = 20;
   segmentEntity.y = 35;
 
-  var testSegment = new Segment(0, 0, 10, 5 );
+  var testSegment = new Segment(10, 5, 0, 0 );
   testSegment.stroke.alpha = 1;
   testSegment.lineWidth = 0.2;
 
@@ -138,14 +138,14 @@ define(function( require ) {
   // Emitter.
   var emitter = new Emitter( 25, 20 );
   var emitterPolygon = new Polygon( 0, 0 );
-  emitterPolygon.vertices = [ -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5 ];
+  emitterPolygon.vertices = [ 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5 ];
   emitterPolygon.stroke.set({
     red: 255,
     alpha: 1
   });
   emitterPolygon.lineWidth = 0.2;
 
-  emitter.spawnArea = new Segment( 0, 2, 0, -2 );
+  emitter.spawnArea = new Segment( 0, -2, 0, 2 );
   emitter.spawnArea.stroke.set({
     red: 255,
     alpha: 1
@@ -181,7 +181,7 @@ define(function( require ) {
 
   // Matter emitter.
   var matEmitter = new Emitter( 45, 20 );
-  matEmitter.spawnArea = new Segment( 0, 2, 0, -2 );
+  matEmitter.spawnArea = new Segment( 0, -2, 0, 2 );
   matEmitter.spawnArea.stroke.set({
     red: 64,
     green: 64,
@@ -197,14 +197,14 @@ define(function( require ) {
   matEmitter.angle = -0.5 * Math.PI;
 
   var matEmitterPolygon = new Polygon( 0, 0 );
-  matEmitterPolygon.vertices = [ -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5 ];
+  matEmitterPolygon.vertices = emitterPolygon.vertices.slice();
   matEmitterPolygon.stroke.set({
     red: 64,
     green: 64,
     blue: 255,
     alpha: 1
   });
-  matEmitterPolygon.lineWidth = 0.2;
+  matEmitterPolygon.lineWidth = emitterPolygon.lineWidth;
 
   matEmitter.particle = matEmitterPolygon;
   matEmitter.properties = {
@@ -253,17 +253,17 @@ define(function( require ) {
   // Debug objects.
   [
     [
-      [ 60,  5, 50,  5 ],
-      [ 50,  5, 30, 15 ],
-      [ 30, 15,  3, 10 ],
-      [  3, 10,  3,  0 ]
+      [  3,  0,  3, 10 ],
+      [  3, 10, 30, 15 ],
+      [ 30, 15, 50,  5 ],
+      [ 50,  5, 60,  5 ]
     ],
     [
       // Rectangle.
-      [ 10, 0, 20, 0 ],
-      [ 20, 0, 20, -5 ],
-      [ 20, -5, 10, -5 ],
-      [ 10, -5, 10, 0 ]
+      [ 10, 0, 10, -5 ],
+      [ 10, -5, 20, -5 ],
+      [ 20, -5, 20, 0 ],
+      [ 20, 0, 10, 0 ]
     ]
   ].forEach(function( object ) {
     object.forEach(function( edgeData ) {

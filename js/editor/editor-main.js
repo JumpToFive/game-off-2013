@@ -20,7 +20,7 @@ define(function( require ) {
   document.addEventListener( 'keyup', editor.onKeyUp.bind( editor ) );
 
   var polygon = new Polygon();
-  polygon.vertices = [ -100, 50, 100, 50, 0, -100 ];
+  polygon.vertices = [ 100, 50, -100, 50, 0, -100 ];
   polygon.angle = 0.5 * Math.PI;
   editor.add( polygon );
   editor.draw();

@@ -350,7 +350,7 @@ define([
       var polygon = new Polygon();
       polygon.x = this.mouse.x;
       polygon.y = this.mouse.y;
-      polygon.vertices = [ -100, 50, 100, 50, 0, -100 ];
+      polygon.vertices = [ 100, 50, -100, 50, 0, -100 ];
       this.add( polygon );
       this.draw();
       return;
