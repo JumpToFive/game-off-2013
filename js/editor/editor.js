@@ -44,6 +44,18 @@ define(function( require ) {
     arrayToColorObject( strokes );
   }) ();
 
+    /**
+   * Rounds a value to the given precision, removes any trailing zeros produced
+   * by Number.prototype.toFixed().
+   *
+   * Example:
+   *   var x = 100;
+   *   x.toFixed(2); // "100.00"
+   *   round( 100, 2 ); // "100"
+   */
+  function round( value, precision ) {
+    return parseFloat( value.toFixed( precision ) );
+  }
 
   // Utility class to allow for Polygon vertex transforms.
   function Vertex( polygon, index ) {
@@ -301,7 +313,7 @@ define(function( require ) {
 
     string += this.elements.map(function( element ) {
       var vertices = element.vertices.map(function( component ) {
-        return component * scale;
+        return round( component * scale, 2 );
       });
 
       return JSON.stringify({
@@ -319,10 +331,10 @@ define(function( require ) {
         body: {
           type: 'static',
           position: {
-            x: element.x * scale,
-            y: element.y * scale
+            x: round( element.x * scale, 2 ),
+            y: round( element.y * scale, 2 )
           },
-          angle: element.angle
+          angle: round( element.angle, 3 )
         },
         shapes: [
           {
