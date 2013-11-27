@@ -125,6 +125,9 @@ define([
   Emitter.prototype.drawPath = function( ctx ) {
     var material = this.properties.fixture.filter.categoryBits;
 
+    var width = 4,
+        height = 0.4;
+
     var glowColor;
     if ( material & Material.MATTER ) {
       glowColor = Colors.Glow.MATTER;
@@ -133,28 +136,41 @@ define([
     }
 
     ctx.save();
-    ctx.scale( 0.1, 1 );
+    ctx.scale( height / width, 1 );
     ctx.beginPath();
 
     // Draw warp hole.
-    ctx.arc( 0, 0, 4, 0, 2 * Math.PI );
+    ctx.arc( 0, 0, width, 0, 2 * Math.PI );
     ctx.restore();
 
     ctx.fillStyle = '#000';
     ctx.fill();
 
     // Draw ring.
-    ctx.globalCompositeOperation = 'lighter';
+    if ( Settings.glow ) {
+      ctx.globalCompositeOperation = 'lighter';
+    }
 
     ctx.strokeStyle = glowColor;
     ctx.lineWidth = 0.3 + Math.random() * 0.2;
     ctx.stroke();
 
     ctx.strokeStyle = '#fff';
-    ctx.lineWidth = 0.1 + Math.random() * 0.1;
+    ctx.lineWidth = 0.1;
     ctx.stroke();
 
-    ctx.globalCompositeOperation = 'source-over';
+    if ( Settings.gradients ) {
+      var grad = ctx.createLinearGradient( 0, 0, width, 0 );
+      grad.addColorStop( 0, glowColor );
+      grad.addColorStop( 1, 'transparent' );
+
+      ctx.fillStyle = grad;
+      ctx.fillRect( 0, -width, width, 2 * width );
+    }
+
+    if ( Settings.glow ) {
+      ctx.globalCompositeOperation = 'source-over';
+    }
 
     PhysicsEntity.prototype.drawPath.call( this, ctx );
   };

@@ -12,6 +12,7 @@ define([
     background: false,
     explosions: false,
     glow: false,
+    gradients: false,
     trail: false
   };
 
@@ -19,6 +20,7 @@ define([
     background: true,
     explosions: true,
     glow: true,
+    gradients: true,
     trail: true
   };
 
