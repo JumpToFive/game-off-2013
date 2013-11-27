@@ -45,8 +45,10 @@ define([
     this.fixture = null;
     this.initialize( options );
 
-    // This tautology stops the Entity constructor from changing the position.
+    // This tautology stops the Entity constructor from changing the position/angle.
+    var angle = this.angle;
     Entity.call( this, this.x, this.y );
+    this.angle = -angle;
 
     // Add any shapes.
     if ( options.shapes ) {
@@ -239,11 +241,11 @@ define([
     enumerable: true,
 
     get: function() {
-      return this.body.GetAngle();
+      return -this.body.GetAngle();
     },
 
     set: function( angle ) {
-      this.body.SetAngle( angle || 0 );
+      this.body.SetAngle( -angle || 0 );
     }
   });
 
