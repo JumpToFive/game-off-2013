@@ -36,6 +36,11 @@
     .history {
       width: 224px;
     }
+
+    .help > p {
+      font-size: 0.8em;
+      line-height: 0;
+    }
   </style>
 </head>
 <body>
@@ -51,6 +56,11 @@
     <button id="clear-history-btn">Clear</button>
   </div>
   <div id="editor"></div>
+  <div class="help">
+    <p>A - add shape.</p>
+    <p>D - remove shape.</p>
+    <p>Alt+Click - add/remove vertex on polygon edge.</p>
+  </div>
 
   <script data-main="js/editor/editor-main" src="./js/require.js"></script>
 </body>

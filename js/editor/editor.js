@@ -392,6 +392,15 @@ define(function( require ) {
       return;
     }
 
+
+    // Add a point if near an edge and alt is on.
+    if ( event.altKey ) {
+      this.elements.forEach(function( element ) {
+        if ( element.type.toLowerCase() === 'polygon' ) {
+        }
+      })
+    }
+
     // Select shape.
     this.elements.forEach(function( element ) {
       if ( element.type.toLowerCase() === 'polygon' ) {
