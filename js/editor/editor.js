@@ -10,8 +10,9 @@ define([
 ], function( BaseObject, Color, Circle, Polygon, Rect, Material, Utils ) {
   'use strict';
 
-  var PI2 = Utils.PI2;
+  var storage = window.sessionStorage;
 
+  var PI2 = Utils.PI2;
   var DEFAULT_LINE_WIDTH = 4;
 
   var fills = {
@@ -222,13 +223,19 @@ define([
   function Editor( options ) {
     options = options || {};
 
-    var el = options.el || '#editor';
+    var ids = {
+      el: options.el || '#editor',
+      scaleEl: options.scaleEl || '#scale',
+      historyEl: options.historyEl || '#history'
+    };
 
-    this.el = document.querySelector( el );
-    if ( !this.el ) {
-      this.el = document.createElement( 'div' );
-      this.el.id = el;
-    }
+    [ 'el', 'scaleEl', 'historyEl' ].forEach(function( key ) {
+      this[ key ] = document.querySelector( ids[ key ] );
+      if ( !this[ key ] ) {
+        this[ key ] = document.createElement( 'div' );
+        this[ key ].id = ids[ key ];
+      }
+    }.bind( this ));
 
     this.canvas = document.createElement( 'canvas' );
     this.ctx    = this.canvas.getContext( '2d' );
@@ -264,8 +271,6 @@ define([
       y: 0.5 * this.canvas.height
     };
 
-    this.scale = 1;
-
     this.canvas.addEventListener( 'mousedown', this.onMouseDown.bind( this ) );
     this.canvas.addEventListener( 'mousemove', this.onMouseMove.bind( this ) );
     this.canvas.addEventListener( 'mouseup', this.onMouseUp.bind( this ) );
@@ -281,14 +286,20 @@ define([
     return string;
   };
 
-  Editor.prototype.asPhysicsEntities = function() {
+  Editor.prototype.asPhysicsEntities = function( scale ) {
+    scale = scale || 1;
+
     var string = '[';
 
     string += this.elements.map(function( element ) {
+      var vertices = element.vertices.map(function( component ) {
+        return component * scale;
+      });
+
       return JSON.stringify({
         shape: 'polygon',
         type: 'vector',
-        data: element.vertices,
+        data: vertices,
         fixture: {
           density: 1.0,
           friction: 0.5,
@@ -298,6 +309,7 @@ define([
           }
         },
         body: {
+          type: 'static',
           position: {
             x: element.x,
             y: element.y
@@ -307,7 +319,7 @@ define([
         shapes: [
           {
             type: element.type,
-            vertices: element.vertices,
+            vertices: vertices,
             fill: {
               type: 'color',
               alpha: 1
@@ -449,7 +461,7 @@ define([
 
     // Spacebar.
     if ( event.which === 32 ) {
-      var data = this.asPhysicsEntities();
+      var data = this.asPhysicsEntities( parseFloat( this.scaleEl.value ) );
 
       console.log( data );
       this.textarea.value = data;
@@ -560,12 +572,11 @@ define([
   Editor.prototype.save = function() {
     var date = new Date();
 
-    var localStorage = window.localStorage;
-    // localStorage.setItem( date.toString(), this.elements );
+    // storage.setItem( date.toString(), JSON.stringify( this.elements ) );
   };
 
-  Editor.prototype.load = function() {
-
+  Editor.prototype.load = function( value ) {
+    console.log( storage.getItem( value ) );
   };
 
   return Editor;

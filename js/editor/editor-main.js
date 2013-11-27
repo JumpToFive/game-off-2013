@@ -11,7 +11,9 @@ define(function( require ) {
 
 
   var editor = new Editor({
-    el: '#editor'
+    el: '#editor',
+    scaleEl: '#scale',
+    historyEl: '#history'
   });
 
   document.addEventListener( 'keydown', editor.onKeyDown.bind( editor ) );
