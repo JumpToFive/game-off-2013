@@ -9,8 +9,6 @@ define(function( require ) {
   var Material = require( 'config/material' );
   var Utils = require( 'utils' );
 
-  var storage = window.sessionStorage;
-
   var PI2 = Utils.PI2;
   var DEFAULT_LINE_WIDTH = 4;
 
@@ -235,6 +233,9 @@ define(function( require ) {
         this[ key ].id = ids[ key ];
       }
     }.bind( this ));
+
+    this.storage = window.sessionStorage;
+    this.updateHistory();
 
     this.canvas = document.createElement( 'canvas' );
     this.ctx    = this.canvas.getContext( '2d' );
@@ -570,14 +571,42 @@ define(function( require ) {
   Editor.prototype.save = function() {
     var date = new Date();
 
-    // storage.setItem( date.toString(), JSON.stringify( this.elements ) );
+    this.storage.setItem( date.toString(), JSON.stringify( this.elements ) );
+    this.updateHistory();
   };
 
-  Editor.prototype.load = function( value ) {
-    var data = storage.getItem( value );
+  /**
+   * Takes a string of element data.
+   */
+  Editor.prototype.load = function( data ) {
+    this.clear();
+
     JSON.parse( data ).forEach(function( elementData ) {
-      this.elements.push( GeometryFactory.create( elementData ) );
-    });
+      this.elements.push( GeometryFactory.create( JSON.stringify( elementData ) ) );
+    }.bind( this ));
+
+    this.draw();
+  };
+
+  Editor.prototype.loadSelected = function() {
+    var selectedIndex = this.historyEl.selectedIndex;
+    if ( selectedIndex === -1 ) {
+      return;
+    }
+
+    var key = this.storage.key( selectedIndex );
+    this.load( this.storage.getItem( key ) );
+  };
+
+  Editor.prototype.removeSelected = function() {
+    var selectedIndex = this.historyEl.selectedIndex;
+    if ( selectedIndex === -1 ) {
+      return;
+    }
+
+    var key = this.storage.key( selectedIndex );
+    this.storage.removeItem( key );
+    this.updateHistory();
   };
 
   Editor.prototype.clear = function() {
@@ -590,9 +619,26 @@ define(function( require ) {
     this.offsets = [];
   };
 
-  Editor.prototype.loadHistory = function() {
+  Editor.prototype.updateHistory = function() {
     var historyEl = this.historyEl;
 
+    var optionFragment = document.createDocumentFragment();
+    Object.keys( this.storage ).forEach(function( key, index ) {
+      var optionEl = document.createElement( 'option' );
+      optionEl.value = index;
+      optionEl.innerHTML = key;
+      optionFragment.appendChild( optionEl );
+    });
+
+    historyEl.innerHTML = '';
+    historyEl.appendChild( optionFragment );
+  };
+
+  Editor.prototype.clearHistory = function() {
+    if ( window.confirm( 'Clear history?' ) ) {
+      this.storage.clear();
+      this.updateHistory();
+    }
   };
 
   return Editor;

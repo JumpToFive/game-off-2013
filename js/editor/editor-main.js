@@ -24,4 +24,13 @@ define(function( require ) {
   polygon.angle = 0.5 * Math.PI;
   editor.add( polygon );
   editor.draw();
+
+  var loadBtn = document.getElementById( 'load-btn' );
+  loadBtn.addEventListener( 'click', editor.loadSelected.bind( editor ) );
+
+  var removeBtn = document.getElementById( 'remove-btn' );
+  removeBtn.addEventListener( 'click', editor.removeSelected.bind( editor ) );
+
+  var clearBtn = document.getElementById( 'clear-history-btn' );
+  clearBtn.addEventListener( 'click', editor.clearHistory.bind( editor ) );
 });

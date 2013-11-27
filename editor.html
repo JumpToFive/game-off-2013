@@ -24,15 +24,17 @@
       bottom: 0;
       right: 0;
       background-color: #fff;
+      opacity: 0.8;
     }
 
     label,
-    input {
+    input,
+    .history {
       display: block;
     }
 
     .history {
-      width: 128px;
+      width: 224px;
     }
   </style>
 </head>
@@ -43,6 +45,10 @@
 
     <label for="history">History</label>
     <select class="history" id="history" size="20"></select>
+
+    <button id="load-btn">Load</button>
+    <button id="remove-btn">Remove</button>
+    <button id="clear-history-btn">Clear</button>
   </div>
   <div id="editor"></div>
 
