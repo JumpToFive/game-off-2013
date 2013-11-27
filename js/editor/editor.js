@@ -510,6 +510,7 @@ define(function( require ) {
     ctx.translate( this.translate.x, this.translate.y );
 
     this.drawGrid( 16 );
+    this.drawPlayerScale( 3 );
 
     this.elements.forEach(function( element ) {
       element.draw( ctx );
@@ -569,6 +570,15 @@ define(function( require ) {
 
     ctx.lineWidth = 1;
     ctx.stroke();
+  };
+
+  Editor.prototype.drawPlayerScale = function( playerRadius ) {
+    var ctx = this.ctx;
+
+    ctx.beginPath();
+    ctx.arc( 0, 0, playerRadius / this.scale, 0, PI2 );
+    ctx.fillStyle = '#222';
+    ctx.fill();
   };
 
   Editor.prototype.add = function( element ) {
@@ -660,6 +670,12 @@ define(function( require ) {
       this.updateHistory();
     }
   };
+
+  Object.defineProperty( Editor.prototype, 'scale', {
+    get: function() {
+      return parseFloat( this.scaleEl.value ) || 1;
+    }
+  });
 
   return Editor;
 });
