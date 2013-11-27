@@ -205,11 +205,14 @@ define(function( require ) {
 
     dt *= 1e-3;
 
+    // Camera controls.
+    this.updateDebug( dt );
+
     this.entities.forEach(function( entity ) {
       entity.update( dt );
     });
 
-    this.updateDebug( dt );
+    this.player.update( dt );
     this.camera.update( dt );
     this.shake.update( dt );
 
@@ -249,6 +252,7 @@ define(function( require ) {
       entity.draw( ctx );
     });
 
+    this.player.draw( ctx );
     this.camera.draw( ctx );
 
     ctx.restore();
@@ -319,6 +323,11 @@ define(function( require ) {
       this.entities.splice( index, 1 );
       entity.game = null;
     }
+  };
+
+  Game.prototype.setPlayer = function( player ) {
+    player.game = this;
+    this.player = player;
   };
 
   /**

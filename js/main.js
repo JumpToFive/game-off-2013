@@ -240,8 +240,8 @@ define(function( require ) {
   game.add( laser );
 
   // Player.
-  game.player = new Player( 20, 20 );
-  game.add( game.player );
+  game.setPlayer( new Player( 20, 20 ) );
+
   game.camera.target = game.player;
 
   // Trail.
