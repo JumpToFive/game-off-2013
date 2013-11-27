@@ -456,7 +456,18 @@ define(function( require ) {
     }
   });
 
-  window.addEventListener( 'blur', pause );
+  window.addEventListener( 'blur', function() {
+    pause();
+
+    // Disable all inputs.
+    Object.keys( game.input.keys ).forEach(function( key ) {
+      game.input[ key ] = false;
+    });
+
+    Object.keys( game.input.controls ).forEach(function( control ) {
+      game.controls[ control ] = false;
+    });
+  });
 
   setTimeout(function() {
     game.running = false;

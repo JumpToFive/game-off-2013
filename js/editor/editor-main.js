@@ -19,6 +19,13 @@ define(function( require ) {
   document.addEventListener( 'keydown', editor.onKeyDown.bind( editor ) );
   document.addEventListener( 'keyup', editor.onKeyUp.bind( editor ) );
 
+  // Disable all keys on blur.
+  window.addEventListener( 'blur', function() {
+    Object.keys( editor.keys ).forEach(function( key ) {
+      editor.keys[ key ] = false;
+    });
+  });
+
   var polygon = new Polygon();
   polygon.vertices = [ 100, 50, -100, 50, 0, -100 ];
   polygon.angle = 0.5 * Math.PI;
