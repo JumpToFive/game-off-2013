@@ -201,6 +201,13 @@ define(function( require ) {
     }
   };
 
+  Polygon.prototype.drawPosition = function( ctx ) {
+    ctx.beginPath();
+    ctx.arc( 0, 0, 5, 0, PI2 );
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+    ctx.fill();
+  };
+
   // Mixin vertices drawing.
   (function() {
     var normalOptions = {
@@ -213,6 +220,7 @@ define(function( require ) {
     Polygon.prototype.drawPath = function( ctx ) {
       this.drawVertices( ctx );
       this.drawNormals( ctx, normalOptions );
+      this.drawPosition( ctx );
       drawPathFn.call( this, ctx );
     };
   }) ();
