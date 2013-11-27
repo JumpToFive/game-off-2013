@@ -264,6 +264,8 @@ define([
       y: 0.5 * this.canvas.height
     };
 
+    this.scale = 1;
+
     this.canvas.addEventListener( 'mousedown', this.onMouseDown.bind( this ) );
     this.canvas.addEventListener( 'mousemove', this.onMouseMove.bind( this ) );
     this.canvas.addEventListener( 'mouseup', this.onMouseUp.bind( this ) );
@@ -316,6 +318,8 @@ define([
     }).join( ', ' );
 
     string += ']';
+
+    this.save();
 
     return string;
   };
@@ -551,6 +555,17 @@ define([
     if ( index !== -1 ) {
       this.elements.splice( index, 1 );
     }
+  };
+
+  Editor.prototype.save = function() {
+    var date = new Date();
+
+    var localStorage = window.localStorage;
+    // localStorage.setItem( date.toString(), this.elements );
+  };
+
+  Editor.prototype.load = function() {
+
   };
 
   return Editor;
