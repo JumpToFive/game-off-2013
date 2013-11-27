@@ -21,7 +21,6 @@ define(function( require ) {
   function Game() {
     this.prevTime = Date.now();
     this.currTime = this.prevTime;
-    this.accumulator = 0;
 
     this.running = true;
 
@@ -214,11 +213,7 @@ define(function( require ) {
     this.camera.update( dt );
     this.shake.update( dt );
 
-    this.accumulator += dt;
-    while ( this.accumulator > this.FRAME_TIME ) {
-      this.world.Step( this.FRAME_TIME, 8, 3 );
-      this.accumulator -= this.FRAME_TIME;
-    }
+    this.world.Step( this.FRAME_TIME, 8, 3 );
 
     this.world.ClearForces();
 
