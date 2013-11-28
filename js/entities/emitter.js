@@ -5,11 +5,24 @@ define([
   'geometry/geometry-factory',
   'config/colors',
   'config/material',
-  'config/settings'
-], function( PhysicsEntity, GeometryFactory, Colors, Material, Settings ) {
+  'config/settings',
+  'utils'
+], function( PhysicsEntity, GeometryFactory, Colors, Material, Settings, Utils ) {
   'use strict';
 
-  function Emitter( x, y ) {
+  var defaults = {
+    aspectRatio: 0.1,
+
+    portalRadiusRatio: 0.6,
+    coneRadiusRatio: 1.5,
+    coneLengthRatio: 2,
+
+    rate: 0,
+    speed: 0,
+    lifeTime: 0
+  };
+
+  function Emitter( x, y, options ) {
     PhysicsEntity.call( this, {
       fixture: {
         isSensor: true
@@ -22,13 +35,10 @@ define([
       }
     });
 
+    Utils.defaults( this, options, defaults );
+
     this.spawnArea = null;
-
-    this.rate = 0;
-    this.speed = 0;
     this.particle = null;
-    this.lifeTime = 0;
-
     // Any custom particle physics properties go here.
     this.properties = {};
 
@@ -126,7 +136,10 @@ define([
     var material = this.properties.fixture.filter.categoryBits;
 
     // The radius of the portal opening.
-    var width = this.spawnArea.height * 0.8;
+    var portalRadius = this.spawnArea.height * this.portalRadiusRatio;
+
+    var coneRadius = portalRadius * this.coneRadiusRatio,
+        coneLength = portalRadius * this.coneLengthRatio;
 
     var glowColor;
     if ( material & Material.MATTER ) {
@@ -136,11 +149,11 @@ define([
     }
 
     ctx.save();
-    ctx.scale( 0.1, 1 );
+    ctx.scale( this.aspectRatio, 1 );
     ctx.beginPath();
 
     // Draw warp hole.
-    ctx.arc( 0, 0, width, 0, 2 * Math.PI );
+    ctx.arc( 0, 0, portalRadius, 0, 2 * Math.PI );
     ctx.restore();
 
     ctx.fillStyle = '#000';
@@ -160,12 +173,17 @@ define([
     ctx.stroke();
 
     if ( Settings.gradients ) {
-      var grad = ctx.createLinearGradient( 0, 0, width, 0 );
+      var grad = ctx.createLinearGradient( 0, 0, coneLength, 0 );
       grad.addColorStop( 0, glowColor );
       grad.addColorStop( 1, 'transparent' );
 
       ctx.fillStyle = grad;
-      ctx.fillRect( 0, -width, width, 2 * width );
+      ctx.beginPath();
+      ctx.moveTo( 0, -portalRadius );
+      ctx.lineTo( coneLength, -coneRadius );
+      ctx.lineTo( coneLength,  coneRadius );
+      ctx.lineTo( 0, portalRadius );
+      ctx.fill();
     }
 
     if ( Settings.glow ) {

@@ -187,7 +187,7 @@ define([
     ctx.stroke();
 
     if ( Settings.glow ) {
-     ctx.globalCompositeOperation = 'source-over';
+      ctx.globalCompositeOperation = 'source-over';
     }
 
     ctx.restore();
