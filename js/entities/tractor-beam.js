@@ -74,7 +74,8 @@ define([
     var halfWidth = 0.5 * this.width;
 
     // Replace with a sensor.
-    this.game.entities.forEach(function( entity ) {
+    var entities = this.game.entities.concat( this.game.player );
+    entities.forEach(function( entity ) {
       if ( !( entity instanceof PhysicsEntity ) ||
           entity === this ) {
         return;
