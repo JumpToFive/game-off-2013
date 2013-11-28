@@ -95,3 +95,28 @@ canvas {
 .loader #level-data {
   width: 480px;
 }
+
+/* line 33, ../sass/screen.scss */
+.material-btn {
+  background: none;
+  border: none;
+  outline: none;
+  display: block;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 100;
+  font-size: 1em;
+  letter-spacing: 0.08em;
+  color: white;
+  border-radius: 0.2em;
+  padding: 0.5em;
+  width: 256px;
+  text-transform: uppercase;
+}
+/* line 51, ../sass/screen.scss */
+.material-btn.antimatter {
+  background-color: #f43;
+}
+/* line 55, ../sass/screen.scss */
+.material-btn.matter {
+  background-color: #26e;
+}

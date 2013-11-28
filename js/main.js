@@ -1,3 +1,4 @@
+/*jshint bitwise: false*/
 /* globals requirejs, define*/
 requirejs.config({
   shim: {
@@ -354,6 +355,25 @@ define(function( require ) {
   // Start game.
   game.tick();
 
+  // Toggle player material.
+  var materialBtn = document.getElementById( 'material-btn' );
+  function togglePlayerMaterial() {
+    game.player.toggleMaterial();
+
+    if ( game.player.material & Material.MATTER ) {
+      materialBtn.innerHTML = 'matter';
+      materialBtn.classList.add( 'matter' );
+      materialBtn.classList.remove( 'antimatter' );
+    } else if ( game.player.material & Material.ANTIMATTER ) {
+      materialBtn.innerHTML = 'antimatter';
+      materialBtn.classList.add( 'antimatter' );
+      materialBtn.classList.remove( 'matter' );
+    }
+  }
+
+  togglePlayerMaterial();
+  materialBtn.addEventListener( 'click', togglePlayerMaterial );
+
   // Add a checkbox to toggle continuous rendering,
   var runCheckbox = document.getElementById( 'run-checkbox' );
   function play() {
@@ -455,6 +475,14 @@ define(function( require ) {
       } else {
         loader.style.display = 'none';
         levelDataEl.blur();
+      }
+    }
+
+    // Space.
+    if ( event.which === 32 ) {
+      if ( game && game.player ) {
+        event.preventDefault();
+        togglePlayerMaterial();
       }
     }
   });

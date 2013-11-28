@@ -29,3 +29,31 @@ canvas {
     width: 480px;
   }
 }
+
+.material-btn {
+  background: none;
+  border: none;
+  outline: none;
+
+  display: block;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 100;
+  font-size: 1em;
+  letter-spacing: 0.08em;
+  color: white;
+
+  border-radius: 0.2em;
+  padding: 0.5em;
+  width: 256px;
+
+  text-transform: uppercase;
+
+  &.antimatter {
+    background-color: #f43;
+  }
+
+  &.matter {
+    background-color: #26e;
+  }
+}
+
