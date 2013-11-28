@@ -125,8 +125,8 @@ define([
   Emitter.prototype.drawPath = function( ctx ) {
     var material = this.properties.fixture.filter.categoryBits;
 
-    var width = 4,
-        height = 0.4;
+    // The radius of the portal opening.
+    var width = this.spawnArea.height * 0.8;
 
     var glowColor;
     if ( material & Material.MATTER ) {
@@ -136,7 +136,7 @@ define([
     }
 
     ctx.save();
-    ctx.scale( height / width, 1 );
+    ctx.scale( 0.1, 1 );
     ctx.beginPath();
 
     // Draw warp hole.

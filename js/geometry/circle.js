@@ -77,5 +77,23 @@ define([
     }
   });
 
+  Object.defineProperty( Circle.prototype, 'diameter', {
+    get: function() {
+      return this.radius * 2;
+    }
+  });
+
+  Object.defineProperty( Circle.prototype, 'width', {
+    get: function() {
+      return this.diameter;
+    }
+  });
+
+  Object.defineProperty( Circle.prototype, 'height', {
+    get: function() {
+      return this.diameter;
+    }
+  });
+
   return Circle;
 });

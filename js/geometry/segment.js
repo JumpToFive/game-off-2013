@@ -62,5 +62,17 @@ define([
     );
   };
 
+  Object.defineProperty( Segment.prototype, 'width', {
+    get: function() {
+      return Math.abs( this.x1 - this.x0 );
+    }
+  });
+
+  Object.defineProperty( Segment.prototype, 'height', {
+    get: function() {
+      return Math.abs( this.y1 - this.y0 );
+    }
+  });
+
   return Segment;
 });
