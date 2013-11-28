@@ -119,7 +119,7 @@ define([
           var xt, yt;
 
           if ( Utils.distanceSquared( x, y, xi, yi ) > dz * dz ) {
-            angle = Math.atan2( this.dy, this.dx );
+            angle = Math.atan2( dy, dx );
 
             dx -= dz * Math.cos( angle );
             dy -= dz * Math.sin( angle );
