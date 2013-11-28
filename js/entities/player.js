@@ -49,37 +49,6 @@ define([
   Player.prototype = new PhysicsEntity();
   Player.prototype.constructor = Player;
 
-  Player.prototype.update = function( dt ) {
-    if ( this.game ) {
-      var controls = this.game.input.controls;
-
-      var ax = 0,
-          ay = 0;
-
-      if ( controls.LEFT   ) { ax -= 15; }
-      if ( controls.RIGHT  ) { ax += 15; }
-      if ( controls.TOP    ) { ay -= 15; }
-      if ( controls.BOTTOM ) { ay += 15; }
-
-      // Move along camera direction.
-      var camera = this.game.camera;
-      if ( camera.angle ) {
-        var cos = Math.cos( -camera.angle ),
-            sin = Math.sin( -camera.angle );
-
-        var rax = cos * ax - sin * ay,
-            ray = sin * ax + cos * ay;
-
-        ax = rax;
-        ay = ray;
-      }
-
-      this.accelerate( ax, ay );
-    }
-
-    PhysicsEntity.prototype.update.call( this, dt );
-  };
-
   Player.prototype.draw = function( ctx ) {
     // 0.4 compensates for the difference between the drawn and fixture radii.
     // The drawn ring is at a radius of 0.35 with a maximum lineWidth of 0.18.

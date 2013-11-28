@@ -206,7 +206,6 @@ define(function( require ) {
   Game.instance = null;
 
   Game.prototype.update = function() {
-    this.input.update();
 
     this.currTime = Date.now();
     var dt = this.currTime - this.prevTime;
@@ -218,6 +217,7 @@ define(function( require ) {
 
     dt *= 1e-3;
 
+    this.input.update( dt );
     // Camera controls.
     this.updateDebug( dt );
 
@@ -269,6 +269,8 @@ define(function( require ) {
     this.camera.draw( ctx );
 
     ctx.restore();
+
+    this.input.draw( ctx );
   };
 
   Game.prototype.updateDebug = function( dt ) {

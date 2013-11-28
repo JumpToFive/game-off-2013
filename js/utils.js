@@ -36,6 +36,10 @@ define(function() {
     return a + t * ( b - a );
   }
 
+  function inverseLerp( value, a, b ) {
+    return ( value - a ) / ( b - a );
+  }
+
   /**
    * Project along the line given by [(x0, y0), (x1, y1)] by parameter.
    */
@@ -193,6 +197,7 @@ define(function() {
     intSpread: intSpread,
 
     lerp: lerp,
+    inverseLerp : inverseLerp,
     lerp2d: lerp2d,
 
     distanceSquared: distanceSquared,

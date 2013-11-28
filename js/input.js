@@ -1,5 +1,7 @@
 /*globals define*/
-define(function() {
+define([
+  'utils'
+], function( Utils ) {
   'use strict';
 
   function Input() {
@@ -21,6 +23,14 @@ define(function() {
     this.game = null;
 
     this.touches = [];
+
+    this.initialTouch = null;
+    this.touch = null;
+
+    // Pixel radius where touch difference does nothing.
+    this.deadzone = 20;
+    // Maximum radius for touch movement.
+    this.touchLimit = 100;
   }
 
   Input.prototype = {
@@ -42,18 +52,29 @@ define(function() {
 
     onTouchStart: function( event ) {
       this.touches = [].slice.call( event.touches );
+      if ( !this.initialTouch ) {
+        this.initialTouch = {
+          pageX: this.touches[0].pageX,
+          pageY: this.touches[0].pageY
+        };
+      }
     },
 
     onTouchMove: function( event ) {
       event.preventDefault();
       this.touches = [].slice.call( event.touches );
+      this.touch = this.touches[0];
     },
 
     onTouchEnd: function( event ) {
       this.touches = [].slice.call( event.touches );
+      if ( !this.touches.length ) {
+        this.initialTouch = null;
+        this.touch = null;
+      }
     },
 
-    update: function() {
+    update: function( dt ) {
       var controls = this.controls;
 
       Object.keys( controls ).forEach(function( control ) {
@@ -66,46 +87,86 @@ define(function() {
       if ( this.keys[ 39 ] ) { controls.RIGHT  = true; }
       if ( this.keys[ 40 ] ) { controls.BOTTOM = true; }
 
-      // Touch update.
-      var width  = this.game.canvas.width,
-          height = this.game.canvas.height;
+      this.updatePlayer( dt );
+    },
 
-      var halfWidth =  0.5 * width,
-          halfHeight = 0.5 * height;
+    updatePlayer: function( dt ) {
+      if ( this.game ) {
+        var controls = this.game.input.controls;
 
-      var offsetLeft = this.game.canvas.offsetLeft,
-          offsetTop  = this.game.canvas.offsetTop;
+        var ax = 0,
+            ay = 0;
 
-      this.touches.forEach(function( touch ) {
-        var x = touch.pageX - offsetLeft,
-            y = touch.pageY - offsetTop;
+        if ( controls.LEFT   ) { ax -= 800; }
+        if ( controls.RIGHT  ) { ax += 800; }
+        if ( controls.TOP    ) { ay -= 800; }
+        if ( controls.BOTTOM ) { ay += 800; }
 
-        if ( 0 > x || x > width ||
-             0 > y || y > height ) {
-          return;
+        if ( this.touch ) {
+          var x = this.touch.pageX,
+              y = this.touch.pageY;
+
+          var xi = this.initialTouch.pageX,
+              yi = this.initialTouch.pageY;
+
+          var dx = x - xi,
+              dy = y - yi;
+
+          var dz = this.deadzone;
+
+          var angle;
+          // Parameters of touch extents.
+          var xt, yt;
+
+          if ( Utils.distanceSquared( x, y, xi, yi ) > dz * dz ) {
+            angle = Math.atan2( this.dy, this.dx );
+
+            dx -= dz * Math.cos( angle );
+            dy -= dz * Math.sin( angle );
+
+            xt = ( dx < 0 ? -1 : 1 ) * Utils.inverseLerp( Math.abs( dx ), 0, this.touchLimit );
+            yt = ( dy < 0 ? -1 : 1 ) * Utils.inverseLerp( Math.abs( dy ), 0, this.touchLimit );
+
+            ax = xt * 800;
+            ay = yt * 800;
+          }
         }
 
-        var angle = Math.atan2( y - halfHeight, x - halfWidth );
-        // From [ -PI, PI ) to [ 0, 2PI ).
-        angle += Math.PI;
-        // Rotate CCW 45 degrees.
-        angle -= 0.25 * Math.PI;
+        // Move along camera direction.
+        var camera = this.game.camera;
+        if ( camera.angle ) {
+          var cos = Math.cos( -camera.angle ),
+              sin = Math.sin( -camera.angle );
 
-        if ( angle < 0 ) {
-          angle += 2 * Math.PI;
+          var rax = cos * ax - sin * ay,
+              ray = sin * ax + cos * ay;
+
+          ax = rax;
+          ay = ray;
         }
 
-        // 90 degrees.
-        if ( angle < 0.5 * Math.PI ) {
-          controls.TOP = true;
-        } else if ( angle < Math.PI ) {
-          controls.RIGHT = true;
-        } else if ( angle < 1.5 * Math.PI ) {
-          controls.BOTTOM = true;
-        } else {
-          controls.LEFT = true;
-        }
-      }.bind( this ));
+        this.game.player.accelerate( ax * dt, ay * dt );
+      }
+    },
+
+    draw: function( ctx ) {
+      if ( this.game && this.initialTouch ) {
+        var x = this.initialTouch.pageX - this.game.canvas.offsetLeft,
+            y = this.initialTouch.pageY - this.game.canvas.offsetTop;
+
+        ctx.lineWidth = 8;
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+
+        ctx.beginPath();
+        ctx.arc( x, y, this.deadzone, 0, Utils.PI2 );
+
+        ctx.moveTo( x + this.touchLimit, y );
+        ctx.arc( x, y, this.touchLimit, 0, Utils.PI2 );
+
+        ctx.moveTo( x + this.deadzone + this.touchLimit, y );
+        ctx.arc( x, y, this.deadzone + this.touchLimit, 0, Utils.PI2 );
+        ctx.stroke();
+      }
     }
   };
 
