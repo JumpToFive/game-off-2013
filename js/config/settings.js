@@ -48,6 +48,10 @@ define([
     object[ key ] = {
       get: function() {
         return settings[ key ];
+      },
+
+      set: function( value ) {
+        settings[ key ] = value;
       }
     };
 

@@ -44,6 +44,7 @@ define(function( require ) {
 
   var SettingsView = require( 'views/settings-view' );
   var settingsView = new SettingsView();
+  document.body.appendChild( settingsView.el );
 
   // Mixin normals drawing for debugging.
   (function() {

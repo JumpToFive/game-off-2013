@@ -5,6 +5,11 @@ define([
 ], function( Settings, settingsTemplate ) {
   'use strict';
 
+  function checkboxListener( event ) {
+    var id = event.target.id;
+    Settings[ id ] = event.target.checked;
+  }
+
   function SettingsView( el ) {
     this.el = document.querySelector( el );
     if ( !this.el ) {
@@ -13,15 +18,30 @@ define([
     }
 
     this.template = settingsTemplate;
-
     this.initialize();
   }
 
   SettingsView.prototype.initialize = function() {
-    this.el.innerHTMML = this.template;
+    this.el.innerHTML = this.template;
 
-    console.log( this.template );
-    console.log( Settings.keys );
+    Settings.keys.map(function( key ) {
+      var element = this.el.querySelector( '#' + key );
+      element.addEventListener( 'click', checkboxListener );
+      element.checked = Settings[ key ];
+    }.bind( this ));
+  };
+
+  SettingsView.prototype.remove = function() {
+    Settings.keys.map(function( key ) {
+      var element = this.el.querySelector( '#' + key );
+      element.removeEventListener( 'click', checkboxListener );
+    }.bind( this ));
+
+    this.el.innerHTML = '';
+
+    if ( this.el.parentElement ) {
+      this.el.parentElement.removeChild( this.el );
+    }
   };
 
   return SettingsView;
