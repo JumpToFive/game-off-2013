@@ -465,7 +465,7 @@ define(function( require ) {
     });
 
     Object.keys( game.input.controls ).forEach(function( control ) {
-      game.controls[ control ] = false;
+      game.input.controls[ control ] = false;
     });
   });
 
