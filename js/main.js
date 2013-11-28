@@ -42,6 +42,9 @@ define(function( require ) {
   }
   Settings.high();
 
+  var SettingsView = require( 'views/settings-view' );
+  var settingsView = new SettingsView();
+
   // Mixin normals drawing for debugging.
   (function() {
     var normalOptions = {

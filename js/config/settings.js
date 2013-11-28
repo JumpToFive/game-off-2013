@@ -56,5 +56,11 @@ define([
 
   Object.defineProperties( Settings, properties );
 
+  Object.defineProperty( Settings, 'keys', {
+    get: function() {
+      return Object.keys( settings );
+    }
+  });
+
   return Settings;
 });
