@@ -2,13 +2,15 @@
 /*globals define*/
 define([
   'box2d',
+  'entities/explosion',
   'entities/physics-entity',
+  'entities/player',
   'config/colors',
   'config/material',
   'config/settings',
   'utils',
   'world'
-], function( Box2D, PhysicsEntity, Colors, Material, Settings, Utils, world ) {
+], function( Box2D, Explosion, PhysicsEntity, Player, Colors, Material, Settings, Utils, world ) {
   'use strict';
 
   var PI2 = Utils.PI2;
@@ -61,6 +63,34 @@ define([
       new Vec2( this.x + cos, this.y + sin ),
       new Vec2( this.x + 1e4 * cos, this.y + 1e4 * sin )
     );
+
+    if ( !this.target ) {
+      return;
+    }
+
+    // Delete target.
+    var target = this.target;
+    if ( target !== this &&
+         target.material !== Material.BIMATTER &&
+         !( target instanceof Player ) &&
+         target.game ) {
+      this.game.removed.push( target );
+
+      if ( Settings.explosions ) {
+        var explosion, fill;
+        if ( target.material & Material.MATTER ) {
+          fill = Colors.Explosion.MATTER;
+        } else if ( target.material & Material.ANTIMATTER ) {
+          fill = Colors.Explosion.ANTIMATTER;
+        }
+
+        if ( fill ) {
+          explosion = new Explosion( target.x, target.y );
+          explosion.fill.set( fill );
+          this.game.add( explosion );
+        }
+      }
+    }
   };
 
   Laser.prototype.draw = function( ctx ) {
