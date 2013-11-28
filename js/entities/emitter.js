@@ -68,11 +68,38 @@ define([
       return;
     }
 
+    // Initial state of a random point.
+    var state = this.random();
+
+    // Create entities with the properties of the initial state.
+    var entity = new PhysicsEntity( this.properties );
+
+    entity.x = state.x;
+    entity.y = state.y;
+    entity.accelerate( state.vx, state.vy );
+
+    // Add any specified shapes.
+    var particleJSON = JSON.stringify( this.particle );
+    entity.add( GeometryFactory.create( particleJSON ) );
+
+    this.game.add( entity );
+
+    setTimeout(function() {
+      this.game.remove( entity );
+      this.game.world.DestroyBody( entity.body );
+    }.bind( this ), this.lifeTime );
+  };
+
+  /**
+   * Get the initial position and acceleration of particle.
+   */
+  Emitter.prototype.random = function() {
     var x = this.x,
         y = this.y;
 
     var cos = 1,
         sin = 0;
+
     if ( this.angle ) {
       cos = Math.cos( -this.angle );
       sin = Math.sin( -this.angle );
@@ -95,24 +122,12 @@ define([
       y += point.y;
     }
 
-    var particleJSON = JSON.stringify( this.particle );
-
-    // Create entities with the prototypical properties.
-    var entity = new PhysicsEntity( this.properties );
-    entity.x = x;
-    entity.y = y;
-
-    // Add any specified shapes.
-    entity.add( GeometryFactory.create( particleJSON ) );
-
-    entity.accelerate( cos * this.speed, sin * this.speed );
-
-    this.game.add( entity );
-
-    setTimeout(function() {
-      this.game.remove( entity );
-      this.game.world.DestroyBody( entity.body );
-    }.bind( this ), this.lifeTime );
+    return {
+      x: x,
+      y: y,
+      vx: cos * this.speed,
+      vy: sin * this.speed
+    };
   };
 
   Emitter.prototype.start = function( when ) {
@@ -136,7 +151,7 @@ define([
     var material = this.properties.fixture.filter.categoryBits;
 
     // The radius of the portal opening.
-    var portalRadius = this.spawnArea.height * this.portalRadiusRatio;
+    var portalRadius = this.portalRadius;
 
     var coneRadius = portalRadius * this.coneRadiusRatio,
         coneLength = portalRadius * this.coneLengthRatio;
@@ -192,6 +207,12 @@ define([
 
     PhysicsEntity.prototype.drawPath.call( this, ctx );
   };
+
+  Object.defineProperty( Emitter.prototype, 'portalRadius', {
+    get: function() {
+      return this.spawnArea.height * this.portalRadiusRatio;
+    }
+  });
 
   return Emitter;
 });
