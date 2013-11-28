@@ -45,7 +45,8 @@ define([
   TractorBeam.prototype.construct = function() {
     var particleCount = this.particleCount;
 
-    var spacing = this.distance / ( particleCount - 1 );
+    var chevronDistance = this.distance + 0.5 * this.particleHeight;
+    var spacing = chevronDistance / particleCount;
     while ( particleCount-- ) {
       this.particles.push( particleCount * spacing );
     }
@@ -75,7 +76,7 @@ define([
     ctx.lineTo( this.distance, halfWidth );
 
     ctx.lineWidth = 0.3;
-    ctx.strokeStyle = '#fff';
+    ctx.strokeStyle = '#ddd';
     ctx.stroke();
 
     ctx.lineCap = 'butt';
@@ -86,18 +87,25 @@ define([
     ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
     ctx.fill();
 
-    // Draw particles.
-    var halfParticleWidth  = 0.5 * this.particleWidth,
-        halfParticleHeight = 0.5 * this.particleHeight;
+    // Draw particle chevrons.
+    var halfParticleHeight = 0.5 * this.particleHeight;
+
+    // Keep chevrons inside the path.
+    ctx.save();
+    ctx.clip();
 
     ctx.beginPath();
     this.particles.forEach(function( x ) {
-      ctx.moveTo( x, 0 );
-      ctx.rect( -halfParticleWidth + x, -halfParticleHeight, this.particleWidth, this.particleHeight );
+      ctx.moveTo( x - halfParticleHeight, -halfParticleHeight );
+      ctx.lineTo( x,  0 );
+      ctx.lineTo( x - halfParticleHeight,  halfParticleHeight );
     }.bind( this ));
 
-    ctx.fillStyle = '#fff';
-    ctx.fill();
+    ctx.lineWidth = this.particleWidth;
+    ctx.strokeStyle = '#aaa';
+    ctx.stroke();
+
+    ctx.restore();
 
     if ( Settings.glow ) {
       ctx.globalCompositeOperation = 'source-over';
@@ -150,8 +158,13 @@ define([
   };
 
   PhysicsEntity.prototype.updateParticles = function( force ) {
+    // Slow it down to resemble ingame effect.
+    force *= 1e-2;
+
+    // Keep particle chevrons within path.
+    var chevronDistance = this.distance + 0.5 * this.particleHeight;
     for ( var i = 0, il = this.particles.length; i < il; i++ ) {
-      this.particles[i] = ( this.particles[i] + force ) % this.distance;
+      this.particles[i] = ( this.particles[i] + force ) % chevronDistance;
     }
   };
 

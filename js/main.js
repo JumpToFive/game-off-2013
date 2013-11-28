@@ -460,7 +460,7 @@ define(function( require ) {
 
     // Disable all inputs.
     Object.keys( game.input.keys ).forEach(function( key ) {
-      game.input[ key ] = false;
+      game.input.keys[ key ] = false;
     });
 
     Object.keys( game.input.controls ).forEach(function( control ) {
