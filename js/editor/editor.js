@@ -6,6 +6,7 @@ define(function( require ) {
   var Color = require( 'color' );
   var Polygon = require( 'geometry/polygon' );
   var GeometryFactory = require( 'geometry/geometry-factory' );
+  var Intersection = require( 'geometry/intersection' );
   var Material = require( 'config/material' );
   var Utils = require( 'utils' );
 
@@ -392,10 +393,50 @@ define(function( require ) {
       return;
     }
 
+    // Add vertex.
+    if ( this.keys[ 86 ] ) {
+      var minDistanceSquared = Number.POSITIVE_INFINITY,
+          minElement, minPoint;
 
-    // Add a vertex if near an edge or remove a vertex.
+      var x, y;
+      var cos, sin;
+      var rx, ry;
+      this.elements.forEach(function( element ) {
+        if ( element.type.toLowerCase() === 'polygon' ) {
+          // Transform x, y to element coords.
+          x = this.mouse.x - element.x;
+          y = this.mouse.y - element.y;
+
+          if ( element.angle ) {
+            cos = Math.cos( element.angle );
+            sin = Math.sin( element.angle );
+
+            rx = cos * x - sin * y;
+            ry = sin * x + cos * y;
+
+            x = rx;
+            y = ry;
+          }
+
+          var vertexCount = element.vertexCount;
+
+          // Find the segment with minimal distance to the point.
+          var xi, yi, xj, yj;
+          for ( var i = 0; i < vertexCount; i++ ) {
+            xi = element.vertices[ 2 * i ];
+            yi = element.vertices[ 2 * i + 1 ];
+            xj = element.vertices[ 2 * ( ( i + 1 ) % vertexCount ) ];
+            yj = element.vertices[ 2 * ( ( i + 1 ) % vertexCount ) + 1 ];
+
+            var point = Intersection.closestPointOnSegment( x, y, xi, yi, xj, yj );
+          }
+        }
+      }.bind( this ));
+    }
+
+
+    // Remove vertices.
     if ( event.altKey ) {
-      // Remove vertices.
       this.elements.forEach(function( element ) {
         if ( element.type.toLowerCase() === 'polygon' ) {
           var vertices = element.verticesContain( this.mouse.x, this.mouse.y, vertexRadius );
