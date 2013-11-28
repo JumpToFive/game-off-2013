@@ -393,12 +393,28 @@ define(function( require ) {
     }
 
 
-    // Add a point if near an edge and alt is on.
+    // Add a vertex if near an edge or remove a vertex.
     if ( event.altKey ) {
+      // Remove vertices.
       this.elements.forEach(function( element ) {
         if ( element.type.toLowerCase() === 'polygon' ) {
+          var vertices = element.verticesContain( this.mouse.x, this.mouse.y, vertexRadius );
+          if ( vertices ) {
+            vertices.vertices.sort(function( a, b ) {
+              return a.index - b.index;
+            });
+
+            vertices.vertices.forEach(function( vertex ) {
+              if ( element.vertexCount > 3 ) {
+                element.vertices.splice( 2 * vertex.index + 1, 1 );
+                element.vertices.splice( 2 * vertex.index, 1 );
+              } else {
+                console.log( 'Minimum vertex count for polygon reached.' );
+              }
+            });
+          }
         }
-      })
+      }.bind( this ));
     }
 
     // Select shape.
