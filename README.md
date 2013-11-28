@@ -13,7 +13,11 @@ in multiple catastrophic detonation events. Massive structural failures in the l
 Manual overrides have now been activated. Guide `N4n` through the dangerous trash-heap caverns to reach the Primary Systems Core and restore compliance to the Trash.
 
 
-Open-source projects
+Dependencies
 ---
 * [Box2dWeb](code.google.com/p/box2dweb/)
 * [RequireJS](github.com/jrburke/requirejs)
+
+* [Sass](github.com/nex3/sass)
+* [Compass](github.com/chriseppstein/compass)
+* [Jade](github.com/visionmedia/jade)
