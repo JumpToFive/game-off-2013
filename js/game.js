@@ -113,6 +113,7 @@ define(function( require ) {
       var a = userData( fixtureA ),
           b = userData( fixtureB );
 
+      // Handle player explosions.
       var player, other;
       if ( a instanceof Player && !fixtureB.IsSensor() ) {
         player = a;
@@ -122,7 +123,7 @@ define(function( require ) {
         other = a;
       }
 
-      var explosion;
+      var explosion, fill;
       if ( player && !( player.material & other.material ) &&
            player.game && other.game ) {
         player.emotion = Player.Emotion.HIT;
@@ -137,16 +138,17 @@ define(function( require ) {
         }, 700 );
 
         if ( Settings.explosions ) {
-          explosion = new Explosion( other.x, other.y );
           if ( other.material & Material.MATTER ) {
-            explosion.fill.set( Colors.Explosion.MATTER );
+            fill = Colors.Explosion.MATTER;
           } else if ( other.material & Material.ANTIMATTER ) {
-            explosion.fill.set( Colors.Explosion.ANTIMATTER );
-          } else {
-            return;
+            fill = Colors.Explosion.ANTIMATTER;
           }
 
-          this.add( explosion );
+          if ( fill ) {
+            explosion = new Explosion( other.x, other.y );
+            explosion.fill.set( fill );
+            this.add( explosion );
+          }
         }
 
         this.shake.shake( 0.5, 0.2 );
@@ -154,6 +156,7 @@ define(function( require ) {
         return;
       }
 
+      // Handle explosions.
       if ( !player &&
            !fixtureA.IsSensor() &&
            !fixtureB.IsSensor() &&
@@ -163,23 +166,33 @@ define(function( require ) {
         var explosionA,
             explosionB;
 
+        var fillA,
+            fillB;
+
         if ( Settings.explosions ) {
-          explosionA = new Explosion( a.x, a.y );
           if ( a.material & Material.MATTER ) {
-            explosionA.fill.set( Colors.Explosion.MATTER );
+            fillA = Colors.Explosion.MATTER;
           } else if ( a.material & Material.ANTIMATTER ) {
-            explosionA.fill.set( Colors.Explosion.ANTIMATTER );
+            fillA = Colors.Explosion.ANTIMATTER;
           }
 
-          explosionB = new Explosion( b.x, b.y );
           if ( b.material & Material.MATTER ) {
-            explosionB.fill.set( Colors.Explosion.MATTER );
+            fillB = Colors.Explosion.MATTER;
           } else if ( b.material & Material.ANTIMATTER ) {
-            explosionB.fill.set( Colors.Explosion.ANTIMATTER );
+            fillB = Colors.Explosion.ANTIMATTER;
           }
 
-          this.add( explosionA );
-          this.add( explosionB );
+          if ( fillA ) {
+            explosionA = new Explosion( a.x, a.y );
+            explosionA.fill.set( fillA )
+            this.add( explosionA );
+          }
+
+          if ( fillB ) {
+            explosionB = new Explosion( b.x, b.y );
+            explosionB.fill.set( fillB );
+            this.add( explosionB );
+          }
         }
 
         this.removed.push( a );
