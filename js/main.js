@@ -123,8 +123,7 @@ define(function( require ) {
   game.add( segmentEntity );
 
   // Tractor beam.
-  var tractorBeam = new TractorBeam( 20, 30, 5 );
-  tractorBeam.distance = 20;
+  var tractorBeam = new TractorBeam( 20, 30, 20, 5 );
   tractorBeam.force = 1500;
   game.add( tractorBeam );
 

@@ -1,11 +1,19 @@
 /*globals define*/
 define([
   'entities/physics-entity',
-  'geometry/rect'
-], function( PhysicsEntity, Rect ) {
+  'geometry/rect',
+  'config/settings',
+  'utils'
+], function( PhysicsEntity, Rect, Settings, Utils ) {
   'use strict';
 
-  function TractorBeam( x, y, width ) {
+  var defaults = {
+    particleCount: 10,
+    particleWidth: 0.05,
+    particleHeight: 3
+  };
+
+  function TractorBeam( x, y, distance, width, options ) {
     PhysicsEntity.call( this, {
       fixture: {
         isSensor: true
@@ -18,13 +26,16 @@ define([
       }
     });
 
+    Utils.defaults( this, options, defaults );
+
     // Width of the tractor beam effect.
     this.width = width || 0;
     // Distance to which tractor beam affects other physics entities.
-    this.distance = 0;
+    this.distance = distance || 0;
     // Strength of the tractor beam.
     this.force = 0;
 
+    this.particles = [];
     this.construct();
   }
 
@@ -32,29 +43,65 @@ define([
   TractorBeam.prototype.constructor = TractorBeam;
 
   TractorBeam.prototype.construct = function() {
-    var rect = new Rect( 0, 0, 1, this.width );
+    var particleCount = this.particleCount;
 
-    rect.fill.set({
-      red: 255,
-      alpha: 1.0
-    });
-
-    rect.stroke.alpha = 1.0;
-    rect.lineWidth = 0.2;
-
-    this.shapes.push( rect );
+    var spacing = this.distance / ( particleCount - 1 );
+    while ( particleCount-- ) {
+      this.particles.push( particleCount * spacing );
+    }
   };
 
   TractorBeam.prototype.draw = function( ctx ) {
     PhysicsEntity.prototype.draw.call( this, ctx );
+
+    var halfWidth = 0.5 * this.width;
 
     ctx.save();
 
     ctx.translate( this.x, this.y );
     ctx.rotate( -this.angle );
 
-    ctx.fillStyle = 'rgba(0, 255, 0, 0.5)';
-    ctx.fillRect( 0, -0.5 * this.width, this.distance, this.width );
+    if ( Settings.glow ) {
+      ctx.globalCompositeOperation = 'lighter';
+    }
+
+    // Draw endpoints.
+    ctx.lineCap = 'round';
+
+    ctx.beginPath();
+    ctx.moveTo( 0, -halfWidth );
+    ctx.lineTo( 0,  halfWidth );
+    ctx.moveTo( this.distance, -halfWidth );
+    ctx.lineTo( this.distance, halfWidth );
+
+    ctx.lineWidth = 0.3;
+    ctx.strokeStyle = '#fff';
+    ctx.stroke();
+
+    ctx.lineCap = 'butt';
+
+    // Draw path.
+    ctx.beginPath();
+    ctx.rect( 0, -0.5 * this.width, this.distance, this.width );
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+    ctx.fill();
+
+    // Draw particles.
+    var halfParticleWidth  = 0.5 * this.particleWidth,
+        halfParticleHeight = 0.5 * this.particleHeight;
+
+    ctx.beginPath();
+    this.particles.forEach(function( x ) {
+      ctx.moveTo( x, 0 );
+      ctx.rect( -halfParticleWidth + x, -halfParticleHeight, this.particleWidth, this.particleHeight );
+    }.bind( this ));
+
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+
+    if ( Settings.glow ) {
+      ctx.globalCompositeOperation = 'source-over';
+    }
 
     ctx.restore();
   };
@@ -67,6 +114,7 @@ define([
     }
 
     var force = this.force * dt;
+    this.updateParticles( force );
 
     var cos = Math.cos( -this.angle ),
         sin = Math.sin( -this.angle );
@@ -99,6 +147,12 @@ define([
       }
 
     }.bind( this ));
+  };
+
+  PhysicsEntity.prototype.updateParticles = function( force ) {
+    for ( var i = 0, il = this.particles.length; i < il; i++ ) {
+      this.particles[i] = ( this.particles[i] + force ) % this.distance;
+    }
   };
 
   return TractorBeam;
