@@ -1,7 +1,11 @@
+/*jshint bitwise: false*/
 /*globals define*/
 define([
-  'entities/physics-entity'
-], function( PhysicsEntity ) {
+  'entities/physics-entity',
+  'entities/explosion',
+  'config/colors',
+  'config/material'
+], function( PhysicsEntity, Explosion, Colors, Material ) {
   'use strict';
 
   function Trash( options, lifeTime ) {
@@ -19,8 +23,22 @@ define([
     PhysicsEntity.prototype.update.call( this, dt );
 
     this.time += dt;
+
+    var explosion, fill;
     if ( this.time > this.lifeTime ) {
       this.game.removed.push( this );
+
+      if ( this.material & Material.MATTER ) {
+        fill = Colors.Explosion.MATTER;
+      } else if ( this.material & Material.ANTIMATTER ) {
+        fill = Colors.Explosion.ANTIMATTER;
+      }
+
+      if ( fill ) {
+        explosion = new Explosion( this.x, this.y );
+        explosion.fill.set( fill );
+        this.game.add( explosion );
+      }
     }
   };
 
