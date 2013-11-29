@@ -227,7 +227,7 @@ define(function( require ) {
       }
     }.bind( this ));
 
-    this.storage = window.sessionStorage;
+    this.storage = window.localStorage;
     this.updateHistory();
 
     this.canvas = document.createElement( 'canvas' );
