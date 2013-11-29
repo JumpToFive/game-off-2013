@@ -28,21 +28,9 @@ define([
   };
 
   Rect.prototype.contains = function( x, y ) {
-    x -= this.x;
-    y -= this.y;
-
-    var cos, sin;
-    var rx, ry;
-    if ( this.angle ) {
-      cos = Math.cos( this.angle );
-      sin = Math.sin( this.angle );
-
-      rx = cos * x - sin * y;
-      ry = sin * x + cos * y;
-
-      x = rx;
-      y = ry;
-    }
+    var point = this.toLocal( x, y );
+    x = point.x;
+    y = point.y;
 
     var halfWidth  = 0.5 * this.width,
         halfHeight = 0.5 * this.height;

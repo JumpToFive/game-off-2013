@@ -79,21 +79,9 @@ define([
   Polygon.prototype.contains = function( x, y ) {
     var vertexCount = this.vertexCount();
 
-    x -= this.x;
-    y -= this.y;
-
-    var cos, sin;
-    var rx, ry;
-    if ( this.angle ) {
-      cos = Math.cos( this.angle );
-      sin = Math.sin( this.angle );
-
-      rx = cos * x - sin * y;
-      ry = sin * x + cos * y;
-
-      x = rx;
-      y = ry;
-    }
+    var point = this.toLocal( x, y );
+    x = point.x;
+    y = point.y;
 
     var contains = false;
     var xi, yi, xj, yj;

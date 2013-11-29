@@ -87,49 +87,11 @@ define(function( require ) {
   };
 
   Vertex.prototype.toWorld = function() {
-    var x = this.x,
-        y = this.y;
-
-    var cos, sin;
-    var rx, ry;
-    if ( this.polygon.angle ) {
-      cos = Math.cos( -this.polygon.angle );
-      sin = Math.sin( -this.polygon.angle );
-
-      rx = cos * x - sin * y;
-      ry = sin * x + cos * y;
-
-      x = rx;
-      y = ry;
-    }
-
-    return {
-      x: x + this.polygon.x,
-      y: y + this.polygon.y
-    };
+    return this.polygon.toWorld( this.x, this.y );
   };
 
   Vertex.prototype.toLocal = function( x, y ) {
-    x -= this.polygon.x;
-    y -= this.polygon.y;
-
-    var cos, sin;
-    var rx, ry;
-    if ( this.polygon.angle ) {
-      cos = Math.cos( this.polygon.angle );
-      sin = Math.sin( this.polygon.angle );
-
-      rx = cos * x - sin * y;
-      ry = sin * x + cos * y;
-
-      x = rx;
-      y = ry;
-    }
-
-    return {
-      x: x,
-      y: y
-    };
+    return this.polygon.toLocal( x, y );
   };
 
   Object.defineProperty( Vertex.prototype, 'x', {
@@ -165,21 +127,9 @@ define(function( require ) {
     var px = x,
         py = y;
 
-    x -= this.x;
-    y -= this.y;
-
-    var cos, sin;
-    var rx, ry;
-    if ( this.angle ) {
-      cos = Math.cos( this.angle );
-      sin = Math.sin( this.angle );
-
-      rx = cos * x - sin * y;
-      ry = sin * x + cos * y;
-
-      x = rx;
-      y = ry;
-    }
+    var point = this.toLocal( x, y );
+    x = point.x;
+    y = point.y;
 
     var vertices = [];
     var radiusSquared = radius * radius;
@@ -201,19 +151,9 @@ define(function( require ) {
     // Get world space coordinates of vertices.
     var offsets = [];
     vertices.forEach(function( vertex ) {
-      var xi = vertex.x,
-          yi = vertex.y;
-
-      if ( this.angle ) {
-        rx =  cos * xi + sin * yi;
-        ry = -sin * xi + cos * yi;
-
-        xi = rx;
-        yi = ry;
-      }
-
-      xi += this.x;
-      yi += this.y;
+      point = vertex.toWorld();
+      xi = point.x;
+      yi = point.y;
 
       offsets.push({
         x: xi - px,
@@ -433,28 +373,17 @@ define(function( require ) {
       var minDistanceSquared = Number.POSITIVE_INFINITY,
           minElement, minIndex;
 
+      var mouse;
       var x, y;
-      var cos, sin;
-      var rx, ry;
 
       var vertexCount;
       var xi, yi, xj, yj;
       this.elements.forEach(function( element ) {
         if ( element.type === 'polygon' ) {
-          // Transform x, y to element coords.
-          x = this.mouse.x - element.x;
-          y = this.mouse.y - element.y;
-
-          if ( element.angle ) {
-            cos = Math.cos( element.angle );
-            sin = Math.sin( element.angle );
-
-            rx = cos * x - sin * y;
-            ry = sin * x + cos * y;
-
-            x = rx;
-            y = ry;
-          }
+          // Transform mouse x, y to element coords.
+          mouse = this.toLocal( this.mouse.x, this.mouse.y );
+          x = mouse.x;
+          y = mouse.y;
 
           vertexCount = element.vertexCount();
 

@@ -137,17 +137,9 @@ define([
         return;
       }
 
-      var x = entity.x - this.x,
-          y = entity.y - this.y;
-
-      var rx, ry;
-      if ( this.angle ) {
-        rx =  cos * x + sin * y;
-        ry = -sin * x + cos * y;
-
-        x = rx;
-        y = ry;
-      }
+      var point = this.toLocal( entity.x, entity.y );
+      var x = point.x,
+          y = point.y;
 
       if ( -halfWidth <= y && y <= halfWidth &&
             0 <= x && x <= this.distance ) {

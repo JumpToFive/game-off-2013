@@ -36,20 +36,9 @@ define([
         bottom = halfHeight;
 
     // Target coordinates in local space.
-    var x = this.target.x - this.x,
-        y = this.target.y - this.y;
-
-    var cos, sin;
-    if ( this.angle ) {
-      cos = Math.cos( this.angle );
-      sin = Math.sin( this.angle );
-
-      var rx = cos * x - sin * y,
-          ry = sin * x + cos * y;
-
-      x = rx;
-      y = ry;
-    }
+    var point = this.toLocal( this.target.x, this.target.y );
+    var x = point.x,
+        y = point.y;
 
     // Recenter at a rate influenced by weight and dt.
     var dx = this.weight * x * dt,
@@ -68,16 +57,9 @@ define([
       dy += y - ( bottom - margin );
     }
 
-    if ( this.angle ) {
-      var rdx =  cos * dx + sin * dy,
-          rdy = -sin * dx + cos * dy;
-
-      dx = rdx;
-      dy = rdy;
-    }
-
-    this.x += dx;
-    this.y += dy;
+    var d = this.toWorld( dx, dy );
+    this.x = d.x;
+    this.y = d.y;
   };
 
   Camera.prototype.applyTransform = function( ctx ) {
