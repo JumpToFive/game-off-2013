@@ -75,6 +75,18 @@ define(function( require ) {
   Vertex.prototype.draw = function( ctx, radius ) {
     ctx.beginPath();
 
+    var point = this.toWorld();
+    ctx.arc( point.x, point.y, radius, 0, PI2 );
+
+    ctx.fillStyle = fills.DEBUG.rgba();
+    ctx.fill();
+
+    ctx.strokeStyle = strokes.DEFAULT.rgba();
+    ctx.lineWidth = DEFAULT_LINE_WIDTH;
+    ctx.stroke();
+  };
+
+  Vertex.prototype.toWorld = function() {
     var x = this.x,
         y = this.y;
 
@@ -91,17 +103,33 @@ define(function( require ) {
       y = ry;
     }
 
-    x += this.polygon.x;
-    y += this.polygon.y;
+    return {
+      x: x + this.polygon.x,
+      y: y + this.polygon.y
+    };
+  };
 
-    ctx.arc( x, y, radius, 0, PI2 );
+  Vertex.prototype.toLocal = function( x, y ) {
+    x -= this.polygon.x;
+    y -= this.polygon.y;
 
-    ctx.fillStyle = fills.DEBUG.rgba();
-    ctx.fill();
+    var cos, sin;
+    var rx, ry;
+    if ( this.polygon.angle ) {
+      cos = Math.cos( this.polygon.angle );
+      sin = Math.sin( this.polygon.angle );
 
-    ctx.strokeStyle = strokes.DEFAULT.rgba();
-    ctx.lineWidth = DEFAULT_LINE_WIDTH;
-    ctx.stroke();
+      rx = cos * x - sin * y;
+      ry = sin * x + cos * y;
+
+      x = rx;
+      y = ry;
+    }
+
+    return {
+      x: x,
+      y: y
+    };
   };
 
   Object.defineProperty( Vertex.prototype, 'x', {
@@ -296,6 +324,9 @@ define(function( require ) {
       y: 0.5 * this.canvas.height
     };
 
+    this.snapping = true;
+    this.snappingRadius = 10;
+
     this.canvas.addEventListener( 'mousedown', this.onMouseDown.bind( this ) );
     this.canvas.addEventListener( 'mousemove', this.onMouseMove.bind( this ) );
     this.canvas.addEventListener( 'mouseup', this.onMouseUp.bind( this ) );
@@ -409,7 +440,7 @@ define(function( require ) {
       var vertexCount;
       var xi, yi, xj, yj;
       this.elements.forEach(function( element ) {
-        if ( element.type.toLowerCase() === 'polygon' ) {
+        if ( element.type === 'polygon' ) {
           // Transform x, y to element coords.
           x = this.mouse.x - element.x;
           y = this.mouse.y - element.y;
@@ -469,7 +500,7 @@ define(function( require ) {
     // Remove vertices.
     if ( event.altKey ) {
       this.elements.forEach(function( element ) {
-        if ( element.type.toLowerCase() === 'polygon' ) {
+        if ( element.type === 'polygon' ) {
           var vertices = element.verticesContain( this.mouse.x, this.mouse.y, vertexRadius );
           if ( vertices ) {
             vertices.vertices.sort(function( a, b ) {
@@ -492,7 +523,7 @@ define(function( require ) {
 
     // Select shape.
     this.elements.forEach(function( element ) {
-      if ( element.type.toLowerCase() === 'polygon' ) {
+      if ( element.type === 'polygon' ) {
         var vertices = element.verticesContain( this.mouse.x, this.mouse.y, vertexRadius );
         if ( vertices ) {
           this.selection = this.selection.concat( vertices.vertices );
@@ -522,22 +553,26 @@ define(function( require ) {
         var x = this.mouse.x + offset.x,
             y = this.mouse.y + offset.y;
 
-        var cos, sin;
-        var rx, ry;
+        // Handle snapping.
+        var point;
+        // World coordinates of the vertex.
+        var wx, wy;
+        if ( this.snapping && element.type === 'vertex' ) {
+          point = element.toWorld( x, y );
+          wx = point.x;
+          wy = point.y;
+
+          this.elements.forEach(function( other ) {
+            if ( other.type === 'polygon' && other !== element.polygon ) {
+            }
+          }.bind( this ));
+        }
+
+        // Convert transformed vertex coordinates to polygon space.
         if ( element.type === 'vertex' ) {
-          x -= element.polygon.x;
-          y -= element.polygon.y;
-
-          if ( element.polygon.angle ) {
-            cos = Math.cos( element.polygon.angle );
-            sin = Math.sin( element.polygon.angle );
-
-            rx = cos * x - sin * y;
-            ry = sin * x + cos * y;
-
-            x = rx;
-            y = ry;
-          }
+          point = element.toLocal( x, y );
+          x = point.x;
+          y = point.y;
         }
 
         element.x = x;
@@ -596,7 +631,7 @@ define(function( require ) {
       event.preventDefault();
 
       this.elements.forEach(function( element ) {
-        if ( element.type.toLowerCase() !== 'polygon' ) {
+        if ( element.type !== 'polygon' ) {
           return;
         }
 
