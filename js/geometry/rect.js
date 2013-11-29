@@ -22,8 +22,8 @@ define([
 
   Rect.prototype.random = function() {
     return {
-      x: this.y + Math.random() * this.width,
-      y: this.y + Math.random() * this.height
+      x: this.x + ( Math.random() - 0.5 ) * this.width,
+      y: this.y + ( Math.random() - 0.5 ) * this.height
     };
   };
 

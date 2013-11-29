@@ -107,19 +107,11 @@ define([
 
     // Spawn inside an area (rect, circle, segment).
     var point;
-    var rx, ry;
     if ( this.spawnArea ) {
       point = this.spawnArea.random();
-      if ( this.angle ) {
-        rx = cos * point.x - sin * point.y;
-        ry = sin * point.x + cos * point.y;
-
-        point.x = rx;
-        point.y = ry;
-      }
-
-      x += point.x;
-      y += point.y;
+      point = this.toWorld( point.x, point.y );
+      x = point.x;
+      y = point.y;
     }
 
     return {

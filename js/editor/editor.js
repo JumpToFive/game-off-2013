@@ -684,21 +684,9 @@ define(function( require ) {
         }
 
         // Rotate centroid to world space.
-        var cos, sin;
-        var rdx, rdy;
-        if ( element.angle ) {
-          cos = Math.cos( -element.angle );
-          sin = Math.sin( -element.angle );
-
-          rdx = cos * dx - sin * dy;
-          rdy = sin * dx + cos * dy;
-
-          dx = rdx;
-          dy = rdy;
-        }
-
-        element.x += dx;
-        element.y += dy;
+        var d = element.toWorld( dx, dy );
+        element.x = d.x;
+        element.y = d.y;
       });
 
       this.draw();
