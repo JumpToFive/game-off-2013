@@ -276,7 +276,7 @@ define(function( require ) {
     var ctx = this.ctx;
 
     var level = this.level;
-    if ( level.fill.alpha ) {
+    if ( level && level.fill.alpha ) {
       ctx.fillStyle = level.fill.rgba();
       ctx.fillRect( 0, 0, ctx.canvas.width, ctx.canvas.height );
     } else {
