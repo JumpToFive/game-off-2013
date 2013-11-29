@@ -265,7 +265,7 @@ define(function( require ) {
     };
 
     this.snapping = true;
-    this.snappingRadius = 10;
+    this.snappingRadius = 15;
 
     this.canvas.addEventListener( 'mousedown', this.onMouseDown.bind( this ) );
     this.canvas.addEventListener( 'mousemove', this.onMouseMove.bind( this ) );
@@ -381,7 +381,7 @@ define(function( require ) {
       this.elements.forEach(function( element ) {
         if ( element.type === 'polygon' ) {
           // Transform mouse x, y to element coords.
-          mouse = this.toLocal( this.mouse.x, this.mouse.y );
+          mouse = element.toLocal( this.mouse.x, this.mouse.y );
           x = mouse.x;
           y = mouse.y;
 
@@ -404,7 +404,6 @@ define(function( require ) {
             }
           }
         }
-
       }.bind( this ));
 
       var mx, my;
@@ -447,6 +446,8 @@ define(function( require ) {
           }
         }
       }.bind( this ));
+
+      this.draw();
       return;
     }
 
@@ -484,17 +485,49 @@ define(function( require ) {
 
         // Handle snapping.
         var point;
+        var localPoint;
         // World coordinates of the vertex.
         var wx, wy;
+
+        var minDistanceSquared = Number.POSITIVE_INFINITY,
+            distanceSquared;
+
+        var minElement, minIndex;
         if ( this.snapping && element.type === 'vertex' ) {
           point = element.toWorld( x, y );
           wx = point.x;
           wy = point.y;
 
+          // Get closest point.
           this.elements.forEach(function( other ) {
             if ( other.type === 'polygon' && other !== element.polygon ) {
+              localPoint = other.toLocal( wx, wy );
+
+              for ( var i = 0, il = other.vertexCount(); i < il; i++ ) {
+                distanceSquared = Utils.distanceSquared(
+                  localPoint.x, localPoint.y,
+                  other.vertices[ 2 * i ], other.vertices[ 2 * i + 1 ]
+                );
+
+                if ( distanceSquared < minDistanceSquared ) {
+                  minDistanceSquared = distanceSquared;
+                  minElement = other;
+                  minIndex = i;
+                }
+              }
             }
           }.bind( this ));
+
+          // Snap to closest vertex.
+          if ( minDistanceSquared < this.snappingRadius ) {
+            point = minElement.toWorld(
+              minElement.vertices[ 2 * minIndex ],
+              minElement.vertices[ 2 * minIndex + 1 ]
+            );
+
+            x = point.x;
+            y = point.y;
+          }
         }
 
         // Convert transformed vertex coordinates to polygon space.
