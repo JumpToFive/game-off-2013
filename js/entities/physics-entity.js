@@ -71,9 +71,11 @@ define([
 
     var bodyDef = new BodyDef();
     set( bodyDef, options.body );
-    // Convert body type from string to flag.
-    if ( options.body ) {
-      bodyDef.type = typeof bodyDef.type !== 'undefined' ? bodyTypes[ bodyDef.type ] : Body.b2_staticBody;
+    // Calling set() with a options.body.type will stick a
+    // 'static'/'dynamic'/'kinematic' string in bodyDef.type, so we need to
+    // convert it to the correct Box2D flag.
+    if ( options.body && typeof bodyDef.type === 'string' ) {
+      bodyDef.type = bodyTypes[ bodyDef.type ] || Body.b2_staticBody;
     }
 
     this.fixture = world.CreateBody( bodyDef ).CreateFixture( fixDef );
