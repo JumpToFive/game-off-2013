@@ -3,7 +3,7 @@ define([
   'object2d',
   'geometry/geometry-factory',
   'entities/physics-entity',
-  'Utils'
+  'utils'
 ], function( Object2D, GeometryFactory, PhysicsEntity, Utils ) {
   'use strict';
 

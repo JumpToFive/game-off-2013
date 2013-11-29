@@ -5,8 +5,9 @@ define([
   'entities/entity',
   'geometry/geometry-factory',
   'utils',
+  'utils-box2d',
   'world'
-], function( Box2D, Entity, GeometryFactory, Utils, world ) {
+], function( Box2D, Entity, GeometryFactory, Utils, Box2DUtils, world ) {
   'use strict';
 
   var Vec2 = Box2D.Common.Math.b2Vec2;
@@ -127,11 +128,7 @@ define([
     if ( type === 'array' ||
          type === 'vector' ) {
       // Convert flat array of numbers to a Vec2 array.
-      var vector = [];
-      for ( var i = 0, il = 0.5 * data.length; i < il; i++ ) {
-        vector.push( new Vec2( data[ 2 * i ], data[ 2 * i + 1 ] ) );
-      }
-
+      var vector = Box2DUtils.b2Vec2Array( data );
       setAsFunction.call( fixDef.shape, vector, vector.length );
     }
 
