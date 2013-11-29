@@ -31,6 +31,7 @@ define(function( require ) {
   var Trail = require( 'effects/trail' );
   var Laser = require( 'entities/laser' );
   var Trigger = require( 'entities/trigger' );
+  var Door = require( 'entities/door' );
 
   var Material = require( 'config/material' );
 
@@ -263,6 +264,23 @@ define(function( require ) {
   triggerCircle.lineWidth = 0.2;
   trigger.add( triggerCircle );
   game.add( trigger );
+
+  // Door.
+  var door = new Door( 50, 30, 3 );
+  var doorCircle = new Circle( 0, 0, 3 );
+  doorCircle.fill.set({
+    alpha: 0.1
+  });
+  doorCircle.stroke.set({
+    red: 255,
+    green: 255,
+    blue: 255,
+    alpha: 1
+  });
+  doorCircle.lineWidth = 0.2;
+  door.add( doorCircle );
+  door.trigger = trigger;
+  game.add( door );
 
   // Player.
   game.setPlayer( new Player( 20, 20 ) );

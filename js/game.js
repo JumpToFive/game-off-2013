@@ -9,6 +9,7 @@ define(function( require ) {
   var Player = require( 'entities/player' );
   var Explosion = require( 'entities/explosion' );
   var Trigger = require( 'entities/trigger' );
+  var Door = require( 'entities/door' );
   var Background = require( 'effects/background' );
   var Shake = require( 'effects/shake' );
   var Colors = require( 'config/colors' );
@@ -220,7 +221,20 @@ define(function( require ) {
         trigger.object = other;
       }
 
+      // Handle door.
+      var door;
+      if ( a instanceof Door && b instanceof Player ) {
+        door = a;
+        player = b;
+      } else if ( b instanceof Door && a instanceof Player ) {
+        door = b;
+        player = a;
+      }
 
+      if ( door && door.open ) {
+        door.player = player;
+        console.log( 'Change level now!' );
+      }
     }.bind( this );
 
     world.SetContactListener( contactListener );
