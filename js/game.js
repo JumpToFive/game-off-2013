@@ -263,6 +263,8 @@ define(function( require ) {
         this.world.DestroyBody( removed.body );
       }
     }.bind( this ));
+
+    this.removed = [];
   };
 
   Game.prototype.draw = function() {
@@ -377,14 +379,16 @@ define(function( require ) {
    */
   Game.prototype.clear = function() {
     this.entities = [];
-    this.player = null;
 
     var world = this.world;
     world.ClearForces();
 
     var body = world.GetBodyList();
     while ( body ) {
-      world.DestroyBody( body );
+      if ( !( body.GetUserData() instanceof Player ) ) {
+        world.DestroyBody( body );
+      }
+
       body = body.GetNext();
     }
   };
