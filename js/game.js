@@ -184,7 +184,7 @@ define(function( require ) {
 
           if ( fillA ) {
             explosionA = new Explosion( a.x, a.y );
-            explosionA.fill.set( fillA )
+            explosionA.fill.set( fillA );
             this.add( explosionA );
           }
 
