@@ -396,11 +396,14 @@ define(function( require ) {
     // Add vertex.
     if ( this.keys[ 86 ] ) {
       var minDistanceSquared = Number.POSITIVE_INFINITY,
-          minElement, minPoint;
+          minElement, minIndex;
 
       var x, y;
       var cos, sin;
       var rx, ry;
+
+      var vertexCount;
+      var xi, yi, xj, yj;
       this.elements.forEach(function( element ) {
         if ( element.type.toLowerCase() === 'polygon' ) {
           // Transform x, y to element coords.
@@ -418,20 +421,44 @@ define(function( require ) {
             y = ry;
           }
 
-          var vertexCount = element.vertexCount;
+          vertexCount = element.vertexCount();
 
           // Find the segment with minimal distance to the point.
-          var xi, yi, xj, yj;
           for ( var i = 0; i < vertexCount; i++ ) {
             xi = element.vertices[ 2 * i ];
             yi = element.vertices[ 2 * i + 1 ];
             xj = element.vertices[ 2 * ( ( i + 1 ) % vertexCount ) ];
             yj = element.vertices[ 2 * ( ( i + 1 ) % vertexCount ) + 1 ];
 
+            // Since we don't change scale at all, distances are okay.
             var point = Intersection.closestPointOnSegment( x, y, xi, yi, xj, yj );
+            var distanceSquared = Utils.distanceSquared( x, y, point.x, point.y );
+            if ( distanceSquared < minDistanceSquared ) {
+              minDistanceSquared = distanceSquared;
+              minElement = element;
+              minIndex = i;
+            }
           }
         }
+
       }.bind( this ));
+
+      var mx, my;
+      if ( minElement ) {
+        vertexCount = minElement.vertexCount();
+
+        xi = minElement.vertices[ 2 * minIndex ];
+        yi = minElement.vertices[ 2 * minIndex + 1 ];
+        xj = minElement.vertices[ 2 * ( ( minIndex + 1 ) % vertexCount ) ];
+        yj = minElement.vertices[ 2 * ( ( minIndex + 1 ) % vertexCount ) + 1 ];
+
+        mx = 0.5 * ( xi + xj );
+        my = 0.5 * ( yi + yj );
+
+        minElement.vertices.splice( 2 * ( ( minIndex + 1 ) % vertexCount ), 0, mx, my );
+      }
+
+      this.draw();
     }
 
 
@@ -446,7 +473,7 @@ define(function( require ) {
             });
 
             vertices.vertices.forEach(function( vertex ) {
-              if ( element.vertexCount > 3 ) {
+              if ( element.vertexCount() > 3 ) {
                 element.vertices.splice( 2 * vertex.index + 1, 1 );
                 element.vertices.splice( 2 * vertex.index, 1 );
               } else {
