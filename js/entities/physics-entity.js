@@ -180,11 +180,6 @@ define([
     this.vy = Utils.roundNearZero( this.vy );
   };
 
-  PhysicsEntity.prototype.destroy = function() {
-    Entity.prototype.destroy.call( this );
-    world.DestroyBody( this.body );
-  };
-
   Object.defineProperty( PhysicsEntity.prototype, 'body', {
     get: function() {
       return this.fixture.GetBody();

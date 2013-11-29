@@ -16,9 +16,11 @@ define([
   Trash.prototype.constructor = Trash;
 
   Trash.prototype.update = function( dt ) {
+    PhysicsEntity.prototype.update.call( this, dt );
+
     this.time += dt;
     if ( this.time > this.lifeTime ) {
-      this.destroy();
+      this.game.removed.push( this );
     }
   };
 

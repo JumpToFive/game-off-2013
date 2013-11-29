@@ -258,6 +258,10 @@ define(function( require ) {
 
     this.removed.forEach(function( removed ) {
       this.remove( removed );
+
+      if ( removed.body ) {
+        this.world.DestroyBody( removed.body );
+      }
     }.bind( this ));
   };
 
