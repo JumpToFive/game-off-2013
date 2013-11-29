@@ -201,10 +201,34 @@ define(function( require ) {
       stroke: '#0a0'
     };
 
+    Polygon.prototype.draw = function( ctx, isSelected ) {
+      ctx.save();
+
+      ctx.translate( this.x, this.y );
+      ctx.rotate( -this.angle );
+
+      this.drawPath( ctx, isSelected );
+
+      ctx.restore();
+
+      if ( this.fill.alpha ) {
+        ctx.fillStyle = this.fill.rgba();
+        ctx.fill();
+      }
+
+      if ( this.lineWidth && this.stroke.alpha ) {
+        ctx.lineWidth = this.lineWidth;
+        ctx.strokeStyle = this.stroke.rgba();
+        ctx.stroke();
+      }
+    };
+
     var drawPathFn = Polygon.prototype.drawPath;
-    Polygon.prototype.drawPath = function( ctx ) {
-      this.drawVertices( ctx );
-      this.drawNormals( ctx, normalOptions );
+    Polygon.prototype.drawPath = function( ctx, isSelected ) {
+      if ( isSelected ) {
+        this.drawVertices( ctx );
+        this.drawNormals( ctx, normalOptions );
+      }
       this.drawPosition( ctx );
       drawPathFn.call( this, ctx );
     };
@@ -254,6 +278,7 @@ define(function( require ) {
       x: 0,
       y: 0,
 
+      moved: false,
       down: false
     };
 
@@ -384,6 +409,7 @@ define(function( require ) {
 
   Editor.prototype.onMouseDown = function( event ) {
     this.mousePosition( event );
+    this.mouse.moved = false;
     this.mouse.down = true;
 
     // A. Add shape.
@@ -519,6 +545,7 @@ define(function( require ) {
 
   Editor.prototype.onMouseMove = function( event ) {
     this.mousePosition( event );
+    this.mouse.moved = true;
 
     // Move selection.
     if ( this.selection.length ) {
@@ -605,7 +632,10 @@ define(function( require ) {
   Editor.prototype.onMouseUp = function() {
     this.mouse.down = false;
 
-    this.clearSelection();
+    // If mouse hasn't moved, empty selection.
+    if ( !this.mouse.moved ) {
+      this.clearSelection();
+    }
   };
 
   Editor.prototype.onKeyDown = function( event ) {
@@ -694,15 +724,9 @@ define(function( require ) {
     this.drawPlayerScale( 3 );
 
     this.elements.forEach(function( element ) {
-      element.draw( ctx );
-    });
-
-    // Now highlight whatever we've selected.
-    this.selection.forEach(function( element ) {
-      if ( element.type === 'vertex' ) {
-        element.draw( ctx, vertexRadius );
-      }
-    });
+      var isSelected = this.selection.indexOf( element ) !== -1;
+      element.draw( ctx, true );
+    }.bind( this ));
 
     ctx.restore();
   };
