@@ -2,12 +2,13 @@
 /*globals define*/
 define([
   'entities/physics-entity',
+  'entities/trash',
   'geometry/geometry-factory',
   'config/colors',
   'config/material',
   'config/settings',
   'utils'
-], function( PhysicsEntity, GeometryFactory, Colors, Material, Settings, Utils ) {
+], function( PhysicsEntity, Trash, GeometryFactory, Colors, Material, Settings, Utils ) {
   'use strict';
 
   var defaults = {
@@ -17,8 +18,10 @@ define([
     coneRadiusRatio: 1.5,
     coneLengthRatio: 2,
 
-    rate: 0,
     speed: 0,
+
+    // Both are in seconds.
+    rate: 0,
     lifeTime: 0
   };
 
@@ -72,7 +75,7 @@ define([
     var state = this.random();
 
     // Create entities with the properties of the initial state.
-    var entity = new PhysicsEntity( this.properties );
+    var entity = new Trash( this.properties, this.lifeTime );
 
     entity.x = state.x;
     entity.y = state.y;
@@ -83,10 +86,6 @@ define([
     entity.add( GeometryFactory.create( particleJSON ) );
 
     this.game.add( entity );
-
-    setTimeout(function() {
-      entity.destroy();
-    }.bind( this ), this.lifeTime );
   };
 
   /**

@@ -164,7 +164,7 @@ define(function( require ) {
   emitter.add( emitter.spawnArea );
 
   emitter.rate = 0.4;
-  emitter.lifeTime = 2000;
+  emitter.lifeTime = 2;
   emitter.speed = 100;
   emitter.angle = -0.5 * Math.PI;
 
@@ -202,7 +202,7 @@ define(function( require ) {
   matEmitter.add( matEmitter.spawnArea );
 
   matEmitter.rate = 0.4;
-  matEmitter.lifeTime = 2000;
+  matEmitter.lifeTime = 2;
   matEmitter.speed = 100;
   matEmitter.angle = -0.5 * Math.PI;
 
