@@ -205,7 +205,7 @@ define(function() {
 
     roundNearZero: roundNearZero,
     lineNormal: lineNormal,
-    angleForm: angleFrom,
+    angleFrom: angleFrom,
 
     removeIndices: removeIndices,
 
