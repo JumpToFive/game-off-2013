@@ -170,7 +170,9 @@ define(function( require ) {
 
   emitter.particle = emitterPolygon;
   emitter.properties = {
-    radius: 0.5,
+    shape: 'polygon',
+    type: 'vector',
+    data: emitterPolygon.vertices.slice(),
     fixture: {
       density: 4.0,
       friction: 0.5,
@@ -218,7 +220,9 @@ define(function( require ) {
 
   matEmitter.particle = matEmitterPolygon;
   matEmitter.properties = {
-    radius: 0.5,
+    shape: 'polygon',
+    type: 'vector',
+    data: matEmitterPolygon.vertices.slice(),
     fixture: {
       density: 4.0,
       friction: 0.5,
