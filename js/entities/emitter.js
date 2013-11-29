@@ -146,12 +146,7 @@ define([
     var coneRadius = portalRadius * this.coneRadiusRatio,
         coneLength = portalRadius * this.coneLengthRatio;
 
-    var glowColor;
-    if ( material & Material.MATTER ) {
-      glowColor = Colors.Glow.MATTER;
-    } else if ( material & Material.ANTIMATTER ) {
-      glowColor = Colors.Glow.ANTIMATTER;
-    }
+    var glowColor = Colors.Glow[ Material.type( material ) ];
 
     ctx.save();
     ctx.scale( this.aspectRatio, 1 );
@@ -169,15 +164,17 @@ define([
       ctx.globalCompositeOperation = 'lighter';
     }
 
-    ctx.strokeStyle = glowColor;
-    ctx.lineWidth = 0.3 + Math.random() * 0.2;
-    ctx.stroke();
+    if ( glowColor ) {
+      ctx.strokeStyle = glowColor;
+      ctx.lineWidth = 0.3 + Math.random() * 0.2;
+      ctx.stroke();
+    }
 
     ctx.strokeStyle = '#fff';
     ctx.lineWidth = 0.1;
     ctx.stroke();
 
-    if ( Settings.gradients ) {
+    if ( Settings.gradients && glowColor ) {
       var grad = ctx.createLinearGradient( 0, 0, coneLength, 0 );
       grad.addColorStop( 0, glowColor );
       grad.addColorStop( 1, 'transparent' );

@@ -78,11 +78,7 @@ define([
 
       if ( Settings.explosions ) {
         var explosion, fill;
-        if ( target.material & Material.MATTER ) {
-          fill = Colors.Explosion.MATTER;
-        } else if ( target.material & Material.ANTIMATTER ) {
-          fill = Colors.Explosion.ANTIMATTER;
-        }
+        fill = Colors.Explosion[ Material.type( target.material ) ]
 
         if ( fill ) {
           explosion = new Explosion( target.x, target.y );
@@ -119,21 +115,17 @@ define([
     ctx.moveTo( x0, y0 );
     ctx.lineTo( x1, y1 );
 
-    var material = this.material;
-    var glowColor;
-    if ( material & Material.MATTER ) {
-      glowColor = Colors.Glow.MATTER;
-    } else if ( material & Material.ANTIMATTER ) {
-      glowColor = Colors.Glow.ANTIMATTER;
-    }
-
     var outerWidth = 0.4 + Math.random() * 0.2,
         innerWidth = 0.1 + Math.random() * 0.1;
 
     // Draw beam.
-    ctx.lineWidth = outerWidth;
-    ctx.strokeStyle = glowColor;
-    ctx.stroke();
+    var glowColor = Colors.Glow[ Material.type( this.material ) ];
+
+    if ( glowColor ) {
+      ctx.lineWidth = outerWidth;
+      ctx.strokeStyle = glowColor;
+      ctx.stroke();
+    }
 
     ctx.lineWidth = innerWidth;
     ctx.strokeStyle = '#fff';
@@ -145,9 +137,11 @@ define([
     ctx.moveTo( x1, y1 );
     ctx.arc( x1, y1, innerWidth * 2, 0, PI2 );
 
-    ctx.lineWidth = outerWidth;
-    ctx.strokeStyle = glowColor;
-    ctx.stroke();
+    if ( glowColor ) {
+      ctx.lineWidth = outerWidth;
+      ctx.strokeStyle = glowColor;
+      ctx.stroke();
+    }
 
     ctx.fillStyle = '#fff';
     ctx.fill();

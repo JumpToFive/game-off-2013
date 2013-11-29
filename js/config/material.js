@@ -8,9 +8,19 @@ define(function() {
 
   var BIMATTER = MATTER | ANTIMATTER;
 
+  function type( material ) {
+    if ( material & MATTER ) {
+      return 'MATTER';
+    } else if ( material & ANTIMATTER ) {
+      return 'ANTIMATTER';
+    }
+  }
+
   return {
     MATTER:     MATTER,
     ANTIMATTER: ANTIMATTER,
-    BIMATTER:   BIMATTER
+    BIMATTER:   BIMATTER,
+
+    type: type
   };
 });

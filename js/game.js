@@ -140,11 +140,7 @@ define(function( require ) {
         }, 700 );
 
         if ( Settings.explosions ) {
-          if ( other.material & Material.MATTER ) {
-            fill = Colors.Explosion.MATTER;
-          } else if ( other.material & Material.ANTIMATTER ) {
-            fill = Colors.Explosion.ANTIMATTER;
-          }
+          fill = Colors.Explosion[ Material.type( other.material )];
 
           if ( fill ) {
             explosion = new Explosion( other.x, other.y );
@@ -172,17 +168,8 @@ define(function( require ) {
             fillB;
 
         if ( Settings.explosions ) {
-          if ( a.material & Material.MATTER ) {
-            fillA = Colors.Explosion.MATTER;
-          } else if ( a.material & Material.ANTIMATTER ) {
-            fillA = Colors.Explosion.ANTIMATTER;
-          }
-
-          if ( b.material & Material.MATTER ) {
-            fillB = Colors.Explosion.MATTER;
-          } else if ( b.material & Material.ANTIMATTER ) {
-            fillB = Colors.Explosion.ANTIMATTER;
-          }
+          fillA = Colors.Explosion[ Material.type( a.material )];
+          fillB = Colors.Explosion[ Material.type( b.material )];
 
           if ( fillA ) {
             explosionA = new Explosion( a.x, a.y );

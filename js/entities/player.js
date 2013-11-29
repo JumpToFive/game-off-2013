@@ -172,15 +172,13 @@ define([
     ctx.beginPath();
     ctx.arc( 0, 0, 0.35 * width, 0, PI2 );
 
-    var material = this.material;
-    if ( material & Material.MATTER ) {
-      ctx.strokeStyle = Colors.Glow.MATTER;
-    } else if ( material & Material.ANTIMATTER ) {
-      ctx.strokeStyle = Colors.Glow.ANTIMATTER;
-    }
+    var glowColor = Colors.Glow[ Material.type( this.material ) ];
 
-    ctx.lineWidth = ( 0.1 + Math.random() * 0.08 ) * width;
-    ctx.stroke();
+    if ( glowColor ) {
+      ctx.lineWidth = ( 0.1 + Math.random() * 0.08 ) * width;
+      ctx.strokeStyle = glowColor;
+      ctx.stroke();
+    }
 
     ctx.lineWidth = 0.07 * width;
     ctx.strokeStyle = '#fff';

@@ -28,11 +28,7 @@ define([
     if ( this.time > this.lifeTime ) {
       this.game.removed.push( this );
 
-      if ( this.material & Material.MATTER ) {
-        fill = Colors.Explosion.MATTER;
-      } else if ( this.material & Material.ANTIMATTER ) {
-        fill = Colors.Explosion.ANTIMATTER;
-      }
+      fill = Colors.Explosion[ Material.type( this.material ) ];
 
       if ( fill ) {
         explosion = new Explosion( this.x, this.y );
