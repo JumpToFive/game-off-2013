@@ -47,5 +47,51 @@ define([
     }
   };
 
+  Object2D.prototype.toWorld = function( x, y ) {
+    var cos, sin;
+    var rx, ry;
+
+    if ( this.angle ) {
+      cos = Math.cos( -this.angle );
+      sin = Math.sin( -this.angle );
+
+      rx = cos * x - sin * y;
+      ry = sin * x + cos * y;
+
+      x = rx;
+      y = ry;
+    }
+
+    return {
+      x: x + this.x,
+      y: y + this.y
+    };
+  };
+
+  Object.prototype.toLocal = function( x, y ) {
+    x -= this.x;
+    y -= this.y;
+
+    var cos, sin;
+    var rx, ry;
+
+    if ( this.angle ) {
+      cos = Math.cos( this.angle );
+      sin = Math.sin( this.angle );
+
+      rx = cos * x - sin * y;
+      ry = sin * x + cos * y;
+
+      x = rx;
+      y = ry;
+    }
+
+    return {
+      x: x,
+      y: y
+    };
+  };
+
+
   return Object2D;
 });
