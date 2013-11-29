@@ -68,7 +68,7 @@ define([
     };
   };
 
-  Object.prototype.toLocal = function( x, y ) {
+  Object2D.prototype.toLocal = function( x, y ) {
     x -= this.x;
     y -= this.y;
 
