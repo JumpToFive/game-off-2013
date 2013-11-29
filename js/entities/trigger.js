@@ -5,14 +5,10 @@ define([
 ], function( PhysicsEntity ) {
   'use strict';
 
-  function Trigger( x, y, width, height, material ) {
+  function Trigger( x, y, radius, material ) {
     PhysicsEntity.call( this, {
-      shape: 'polygon',
-      type: 'box',
-      data: {
-        hx: 0.5 * ( width || 0 ),
-        hy: 0.5 * ( height || 0 )
-      },
+      shape: 'circle',
+      radius: radius,
       fixture: {
         isSensor: true,
         filter: {

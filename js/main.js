@@ -250,14 +250,14 @@ define(function( require ) {
   game.add( laser );
 
   // Trigger.
-  var trigger = new Trigger( 42, 30, 4, 4, Material.MATTER );
-  var triggerRect = new Rect( 0, 0, 4, 4 );
-  triggerRect.stroke.set({
+  var trigger = new Trigger( 42, 30, 3, Material.MATTER );
+  var triggerCircle = new Circle( 0, 0, 3 );
+  triggerCircle.stroke.set({
     blue: 255,
     alpha: 1
   });
-  triggerRect.lineWidth = 0.2;
-  trigger.add( triggerRect );
+  triggerCircle.lineWidth = 0.2;
+  trigger.add( triggerCircle );
   game.add( trigger );
 
   // Player.
