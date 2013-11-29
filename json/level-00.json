@@ -126,5 +126,93 @@
       "type": "edge",
       "data": [ -3, 0, 3, 0 ]
     }
+  ],
+  "batchPhysicsEntities": [
+    {
+      "data": [
+        {
+          "x": 0,
+          "y": 0,
+          "angle": 0,
+          // This could be an array/{hx, hy}/etc.
+          "data": []
+        }
+      ],
+      "properties": {
+        "shape": "polygon",
+        "type": "vector",
+        "fixture": {
+          "density": 1.0,
+          "friction": 0.5,
+          "restitution": 0.2,
+          "isSensor": false,
+          "filter": {
+            "categoryBits": 1,
+            "maskBits": 65535,
+            "groupIndex": 0
+          }
+        },
+        "body": {
+          "linearVelocity": {
+            "x": 0,
+            "y": 0
+          },
+          "angularVelocity": 0,
+          "linearDamping": 0,
+          "angularDamping": 0,
+          "allowSleep": true,
+          "awake": true,
+          "fixedRotation": false,
+          "bullet": false,
+          "type": "static",
+          "active": true,
+          "inertiaScale": 1.0
+        },
+        "shapes": [
+          {
+            "type": "polygon",
+            "fill": {
+              "type": "color",
+              "alpha": 1
+            }
+          }
+        ]
+      }
+    },
+    // Example of real-world usage.
+    {
+      "data": [
+        {
+          "x": -29.8,
+          "y": 8.2,
+          "angle": 1.571,
+          "data": [ -7.8, 9.6, -2.9, -7.4, 8, 0.8 ]
+        },
+        {
+          "x": -18.1,
+          "y": 5.4,
+          "angle": 0,
+          "data": [ 9.5, 0.3, -2.3, 10.6, -10.6, -5.3 ]
+        },
+        {
+          "x": -9.4,
+          "y": 11,
+          "angle": 0,
+          "data": [ 4.3, 1.6, -11, 5, 0.9, -5.3 ]
+        }
+      ],
+      "properties": {
+        "shape": "polygon",
+        "type": "vector",
+        "fixture": {
+          "density": 1,
+          "friction": 0.5,
+          "restitution": 0.2,
+          "filter": {
+            "categoryBits": 6
+          }
+        }
+      }
+    }
   ]
 }

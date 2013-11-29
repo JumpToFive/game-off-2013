@@ -363,7 +363,9 @@ define(function( require ) {
   };
 
   Game.prototype.load = function( level ) {
-    this.entities.concat( level.entities );
+    level.entities.forEach(function( entity ) {
+      this.add( entity );
+    }.bind( this ));
   };
 
   return Game;

@@ -76,6 +76,11 @@ define(function( require ) {
     alpha: 1.0
   });
 
+  var level = new Level();
+  level.fromJSON( '{"batchPhysicsEntities":[{"data":[{"x":-29.8,"y":8.2,"angle":1.571,"data":[-7.8,9.6,-2.9,-7.4,8,0.8]},{"x":-18.1,"y":5.4,"angle":0,"data":[9.5,0.3,-2.3,10.6,-10.6,-5.3]},{"x":-9.4,"y":11,"angle":0,"data":[4.3,1.6,-11,5,0.9,-5.3]}],"properties":{"shape":"polygon","type":"vector","fixture":{"density":1,"friction":0.5,"restitution":0.2,"filter":{"categoryBits":6}},"body":{"type":"static"}}}]}')
+  console.log(level.entities.length)
+  game.load( level )
+
   // Circle.
   var circleEntity = new Entity();
 
