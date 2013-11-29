@@ -8,6 +8,7 @@ define(function( require ) {
   var Camera = require( 'entities/camera' );
   var Player = require( 'entities/player' );
   var Explosion = require( 'entities/explosion' );
+  var Trigger = require( 'entities/trigger' );
   var Background = require( 'effects/background' );
   var Shake = require( 'effects/shake' );
   var Colors = require( 'config/colors' );
@@ -198,6 +199,28 @@ define(function( require ) {
         this.removed.push( a );
         this.removed.push( b );
       }
+
+      // Handles trigger.
+      var trigger;
+      if ( a instanceof Trigger &&
+           !fixtureB.IsSensor() &&
+           !( b instanceof Player ) ) {
+        trigger = a;
+        other = b;
+      } else if ( b instanceof Trigger &&
+                  !fixtureA.IsSensor() &&
+                  !( a instanceof Player ) ) {
+        trigger = b;
+        other = a;
+      }
+
+      if ( trigger &&
+           !trigger.active &&
+           ( trigger.material & other.material ) ) {
+        trigger.object = other;
+      }
+
+
     }.bind( this );
 
     world.SetContactListener( contactListener );

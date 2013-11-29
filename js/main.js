@@ -30,6 +30,7 @@ define(function( require ) {
   var TractorBeam = require( 'entities/tractor-beam' );
   var Trail = require( 'effects/trail' );
   var Laser = require( 'entities/laser' );
+  var Trigger = require( 'entities/trigger' );
 
   var Material = require( 'config/material' );
 
@@ -247,6 +248,17 @@ define(function( require ) {
   laser.add( laserCircle );
   laser.material = Material.ANTIMATTER;
   game.add( laser );
+
+  // Trigger.
+  var trigger = new Trigger( 42, 30, 4, 4, Material.MATTER );
+  var triggerRect = new Rect( 0, 0, 4, 4 );
+  triggerRect.stroke.set({
+    blue: 255,
+    alpha: 1
+  });
+  triggerRect.lineWidth = 0.2;
+  trigger.add( triggerRect );
+  game.add( trigger );
 
   // Player.
   game.setPlayer( new Player( 20, 20 ) );
