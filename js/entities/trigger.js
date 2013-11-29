@@ -46,6 +46,10 @@ define([
       this.object.vx = 0;
       this.object.vy = 0;
       this.object.fixture.SetSensor( true );
+      if ( typeof this.object.lifeTime !== 'undefined' ) {
+        this.object.lifeTime = Number.POSITIVE_INFINITY;
+      }
+
       this.active = true;
     }
   };
