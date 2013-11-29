@@ -485,27 +485,20 @@ define(function( require ) {
 
         // Handle snapping.
         var point;
-        var localPoint;
-        // World coordinates of the vertex.
-        var wx, wy;
 
         var minDistanceSquared = Number.POSITIVE_INFINITY,
             distanceSquared;
 
         var minElement, minIndex;
         if ( this.snapping && element.type === 'vertex' ) {
-          point = element.toWorld( x, y );
-          wx = point.x;
-          wy = point.y;
-
           // Get closest point.
           this.elements.forEach(function( other ) {
             if ( other.type === 'polygon' && other !== element.polygon ) {
-              localPoint = other.toLocal( wx, wy );
+              point = other.toLocal( x, y );
 
               for ( var i = 0, il = other.vertexCount(); i < il; i++ ) {
                 distanceSquared = Utils.distanceSquared(
-                  localPoint.x, localPoint.y,
+                  point.x, point.y,
                   other.vertices[ 2 * i ], other.vertices[ 2 * i + 1 ]
                 );
 
@@ -519,7 +512,7 @@ define(function( require ) {
           }.bind( this ));
 
           // Snap to closest vertex.
-          if ( minDistanceSquared < this.snappingRadius ) {
+          if ( minDistanceSquared < this.snappingRadius * this.snappingRadius ) {
             point = minElement.toWorld(
               minElement.vertices[ 2 * minIndex ],
               minElement.vertices[ 2 * minIndex + 1 ]
