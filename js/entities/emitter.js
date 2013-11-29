@@ -85,8 +85,7 @@ define([
     this.game.add( entity );
 
     setTimeout(function() {
-      this.game.remove( entity );
-      this.game.world.DestroyBody( entity.body );
+      entity.destroy();
     }.bind( this ), this.lifeTime );
   };
 

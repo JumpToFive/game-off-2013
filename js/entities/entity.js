@@ -33,5 +33,11 @@ define([
     }
   };
 
+  Entity.prototype.destroy = function() {
+    if ( this.game ) {
+      this.game.remove( this );
+    }
+  };
+
   return Entity;
 });
