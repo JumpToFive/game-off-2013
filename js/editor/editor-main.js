@@ -40,11 +40,11 @@ define(function( require ) {
   editor.add( polygon );
   editor.draw();
 
-  var loadBtn = document.getElementById( 'load-btn' );
-  loadBtn.addEventListener( 'click', editor.loadSelected.bind( editor ) );
+  var loadHistoryBtn = document.getElementById( 'load-history-btn' );
+  loadHistoryBtn.addEventListener( 'click', editor.loadSelected.bind( editor ) );
 
-  var removeBtn = document.getElementById( 'remove-btn' );
-  removeBtn.addEventListener( 'click', editor.removeSelected.bind( editor ) );
+  var removeHistoryBtn = document.getElementById( 'remove-history-btn' );
+  removeHistoryBtn.addEventListener( 'click', editor.removeSelected.bind( editor ) );
 
   var clearBtn = document.getElementById( 'clear-history-btn' );
   clearBtn.addEventListener( 'click', editor.clearHistory.bind( editor ) );
