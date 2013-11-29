@@ -51,21 +51,19 @@ define(function( require ) {
   clearBtn.addEventListener( 'click', editor.clearHistory.bind( editor ) );
 
   // Text area buttons.
+  function loadDataFn( fnName ) {
+    return function() {
+      var data = editor.textarea.value;
+      var scale = parseFloat( document.getElementById( 'load-scale' ).value );
+      if ( data.length ) {
+        editor[ fnName ]( data, scale );
+      }
+    };
+  }
+
   var loadDataBtn = document.getElementById( 'load-data-btn' );
-  loadDataBtn.addEventListener( 'click', function() {
-    var data = editor.textarea.value;
-    var scale = parseFloat( document.getElementById( 'load-scale' ).value );
-    if ( data.length ) {
-      editor.loadData( data, scale );
-    }
-  });
+  loadDataBtn.addEventListener( 'click', loadDataFn( 'loadData' ) );
 
   var loadBatchBtn = document.getElementById( 'load-batch-btn' );
-  loadBatchBtn.addEventListener( 'click', function() {
-    var data = editor.textarea.value;
-    var scale = parseFloat( document.getElementById( 'load-scale' ).value );
-    if ( data.length ) {
-      editor.loadBatchData( data, scale );
-    }
-  });
+  loadBatchBtn.addEventListener( 'click', loadDataFn( 'loadBatchData' ) );
 });
