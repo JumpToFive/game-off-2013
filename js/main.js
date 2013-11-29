@@ -441,8 +441,11 @@ define(function( require ) {
   // Load level data.
   var levelDataEl = document.getElementById( 'level-data' );
   levelDataEl.addEventListener( 'keydown', function( event ) {
-    // Enter.
-    if ( event.which === 13 ) {
+    // Alt + Enter.
+    if ( event.which === 13 && event.altKey ) {
+      loadBatch();
+    } else if ( event.which === 13 ) {
+      // Enter.
       load();
     }
   });
@@ -452,6 +455,17 @@ define(function( require ) {
     JSON.parse( levelData ).forEach(function( entityData ) {
       game.add( new PhysicsEntity( entityData ) );
     });
+  }
+
+  function loadBatch() {
+    var batchDataObject = JSON.parse( levelDataEl.value );
+    var levelData = JSON.stringify({
+      batchPhysicsEntities: [ batchDataObject ]
+    });
+
+    var batchLevel = new Level();
+    batchLevel.fromJSON( levelData );
+    game.load( batchLevel );
   }
 
   var loadBtn = document.getElementById( 'level-data-btn' );

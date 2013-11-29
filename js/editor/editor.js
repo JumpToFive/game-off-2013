@@ -285,14 +285,18 @@ define(function( require ) {
   Editor.prototype.asPhysicsEntities = function( scale ) {
     scale = scale || 1;
 
-    var string = '[';
+    this.save();
 
-    string += this.elements.map(function( element ) {
+    var elements = this.elements.map(function( element ) {
+      if ( element.type !== 'polygon' ) {
+        return null;
+      }
+
       var vertices = element.vertices.map(function( component ) {
         return round( component * scale, 2 );
       });
 
-      return JSON.stringify({
+      return {
         shape: 'polygon',
         type: 'vector',
         data: vertices,
@@ -322,14 +326,55 @@ define(function( require ) {
             }
           }
         ]
-      });
-    }).join( ', ' );
+      };
+    }).filter(function( element ) {
+      return element;
+    });
 
-    string += ']';
+    return JSON.stringify( elements );
+  };
+
+  Editor.prototype.asBatchPhysicsEntities = function( scale ) {
+    scale = scale || 1;
 
     this.save();
 
-    return string;
+    var elements = this.elements.map(function( element ) {
+      if ( element.type !== 'polygon' ) {
+        return null;
+      }
+
+      var vertices = element.vertices.map(function( component ) {
+        return round( component * scale, 2 );
+      });
+
+      return {
+        x: round( element.x * scale, 2 ),
+        y: round( element.y * scale, 2 ),
+        angle: round( element.angle, 3 ),
+        data: vertices
+      };
+    }).filter(function( element ) {
+      return element;
+    });
+
+    var batchData = {
+      data: elements,
+      properties: {
+        shape: 'polygon',
+        type: 'vector',
+        fixture: {
+          density: 1,
+          friction: 0.5,
+          restitution: 0.2,
+          filter: {
+            categoryBits: Material.BIMATTER
+          }
+        }
+      }
+    };
+
+    return JSON.stringify( batchData );
   };
 
   Editor.prototype.mousePosition = function( event ) {
@@ -566,9 +611,15 @@ define(function( require ) {
   Editor.prototype.onKeyDown = function( event ) {
     this.keys[ event.which ] = true;
 
-    // Spacebar.
+    // Space. Save.
     if ( event.which === 32 ) {
-      var data = this.asPhysicsEntities( parseFloat( this.scaleEl.value ) );
+      var data;
+      // Alt + Space.
+      if ( event.altKey ) {
+        data = this.asBatchPhysicsEntities( parseFloat( this.scaleEl.value ) );
+      } else {
+        data = this.asPhysicsEntities( parseFloat( this.scaleEl.value ) );
+      }
 
       console.log( data );
       this.textarea.value = data;
