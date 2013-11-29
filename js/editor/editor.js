@@ -632,6 +632,7 @@ define(function( require ) {
   Editor.prototype.onMouseUp = function() {
     this.mouse.down = false;
 
+    this.clearSelection();
     // If mouse hasn't moved, empty selection.
     if ( !this.mouse.moved ) {
       this.clearSelection();

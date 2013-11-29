@@ -77,7 +77,7 @@ define(function( require ) {
   });
 
   var level = new Level();
-  level.fromJSON( '{"batchPhysicsEntities":[{"data":[{"x":-29.8,"y":8.2,"angle":1.571,"data":[-7.8,9.6,-2.9,-7.4,8,0.8]},{"x":-18.1,"y":5.4,"angle":0,"data":[9.5,0.3,-2.3,10.6,-10.6,-5.3]},{"x":-9.4,"y":11,"angle":0,"data":[4.3,1.6,-11,5,0.9,-5.3]}],"properties":{"shape":"polygon","type":"vector","fixture":{"density":1,"friction":0.5,"restitution":0.2,"filter":{"categoryBits":6}},"body":{"type":"static"}}}]}' );
+  level.fromJSON( '{"batchPhysicsEntities":[{"data":[{"x":-28.67,"y":9.53,"angle":1.571,"data":[-7.17,8.47,-1.57,-8.53,8.73,0.07]},{"x":-19.63,"y":7.67,"angle":0,"data":[9.53,-2.17,-0.57,9.03,-8.97,-6.87]},{"x":-11.8,"y":11.6,"angle":0,"data":[6.7,1,-8.4,5.1,1.7,-6.1]}],"properties":{"shape":"polygon","type":"vector","fixture":{"density":1,"friction":0.5,"restitution":0.2,"filter":{"categoryBits":6}}}}]}' );
   console.log( level.entities.length );
   game.load( level );
 
