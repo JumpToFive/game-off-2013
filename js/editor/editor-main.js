@@ -40,6 +40,7 @@ define(function( require ) {
   editor.add( polygon );
   editor.draw();
 
+  // History buttons.
   var loadHistoryBtn = document.getElementById( 'load-history-btn' );
   loadHistoryBtn.addEventListener( 'click', editor.loadSelected.bind( editor ) );
 
@@ -48,4 +49,23 @@ define(function( require ) {
 
   var clearBtn = document.getElementById( 'clear-history-btn' );
   clearBtn.addEventListener( 'click', editor.clearHistory.bind( editor ) );
+
+  // Text area buttons.
+  var loadDataBtn = document.getElementById( 'load-data-btn' );
+  loadDataBtn.addEventListener( 'click', function() {
+    var data = editor.textarea.value;
+    var scale = parseFloat( document.getElementById( 'load-scale' ).value );
+    if ( data.length ) {
+      editor.loadData( data, scale );
+    }
+  });
+
+  var loadBatchBtn = document.getElementById( 'load-batch-btn' );
+  loadBatchBtn.addEventListener( 'click', function() {
+    var data = editor.textarea.value;
+    var scale = parseFloat( document.getElementById( 'load-scale' ).value );
+    if ( data.length ) {
+      editor.loadBatchData( data, scale );
+    }
+  });
 });

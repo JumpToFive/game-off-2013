@@ -793,7 +793,7 @@ define(function( require ) {
     this.clear();
 
     JSON.parse( data ).forEach(function( elementData ) {
-      this.elements.push( GeometryFactory.create( JSON.stringify( elementData ) ) );
+      this.add( GeometryFactory.create( JSON.stringify( elementData ) ) );
     }.bind( this ));
 
     this.draw();
@@ -807,6 +807,65 @@ define(function( require ) {
 
     var key = this.storage.key( selectedIndex );
     this.load( this.storage.getItem( key ) );
+  };
+
+  Editor.prototype.loadData = function( data, scale  ) {
+    scale = scale || 1;
+    var inverseScale = 1 / scale;
+
+    var shapesData = JSON.parse( data ).map(function( entityData ) {
+      var x = 0,
+          y = 0,
+          angle = 0;
+
+      if ( entityData.body ) {
+        if ( entityData.body.position ) {
+          x = entityData.body.position.x || 0;
+          y = entityData.body.position.y || 0;
+        }
+
+        if ( entityData.body.angle ) {
+          angle = entityData.body.angle || 0;
+        }
+      }
+
+      var shape = entityData.shapes[0];
+      shape.x = x * inverseScale;
+      shape.y = y * inverseScale;
+      shape.angle = angle;
+      shape.vertices = shape.vertices.map(function( component ) {
+        return component * inverseScale;
+      });
+
+      return shape;
+    });
+
+    this.load( JSON.stringify( shapesData ) );
+  };
+
+  Editor.prototype.loadBatchData = function( batchData, scale ) {
+    var data = JSON.parse( batchData ).data;
+
+    scale = scale || 1;
+    var inverseScale = 1 / scale;
+
+    var shapesData = data.map(function( elementData ) {
+      var vertices = elementData.data.map(function( component ) {
+        return component * inverseScale;
+      });
+
+      return {
+        type: 'polygon',
+        x: elementData.x * inverseScale,
+        y: elementData.y * inverseScale,
+        angle: elementData.angle,
+        fill: new Color(),
+        stroke: new Color(),
+        vertices: vertices
+      };
+    });
+
+    this.load( JSON.stringify( shapesData ) );
   };
 
   Editor.prototype.removeSelected = function() {
