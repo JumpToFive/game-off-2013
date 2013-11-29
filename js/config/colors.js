@@ -8,8 +8,24 @@ define(function() {
       ANTIMATTER: '#f33'
     },
     Solid: {
-      MATTER: '#66c',
-      ANTIMATTER: '#c66'
+      MATTER: {
+        red: 96,
+        green: 96,
+        blue: 192,
+        alpha: 1
+      },
+      ANTIMATTER: {
+        red: 192,
+        green: 96,
+        blue: 96,
+        alpha: 1
+      }
+    },
+    White: {
+      red: 255,
+      green: 255,
+      blue: 255,
+      alpha: 1
     },
     Explosion: {
       MATTER: {

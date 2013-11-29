@@ -33,6 +33,7 @@ define(function( require ) {
   var Trigger = require( 'entities/trigger' );
   var Door = require( 'entities/door' );
 
+  var Colors = require( 'config/colors' );
   var Material = require( 'config/material' );
 
   var Settings = require( 'config/settings' );
@@ -150,10 +151,8 @@ define(function( require ) {
   var emitter = new Emitter( 25, 20 );
   var emitterPolygon = new Polygon( 0, 0 );
   emitterPolygon.vertices = [ 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5 ];
-  emitterPolygon.stroke.set({
-    red: 255,
-    alpha: 1
-  });
+  emitterPolygon.fill.set( Colors.Solid.ANTIMATTER );
+  emitterPolygon.stroke.set( Colors.White );
   emitterPolygon.lineWidth = 0.2;
 
   emitter.spawnArea = new Segment( 0, -2, 0, 2 );
@@ -211,12 +210,8 @@ define(function( require ) {
 
   var matEmitterPolygon = new Polygon( 0, 0 );
   matEmitterPolygon.vertices = emitterPolygon.vertices.slice();
-  matEmitterPolygon.stroke.set({
-    red: 64,
-    green: 64,
-    blue: 255,
-    alpha: 1
-  });
+  matEmitterPolygon.fill.set( Colors.Solid.MATTER );
+  matEmitterPolygon.stroke.set( Colors.White );
   matEmitterPolygon.lineWidth = emitterPolygon.lineWidth;
 
   matEmitter.particle = matEmitterPolygon;
@@ -271,12 +266,7 @@ define(function( require ) {
   doorCircle.fill.set({
     alpha: 0.1
   });
-  doorCircle.stroke.set({
-    red: 255,
-    green: 255,
-    blue: 255,
-    alpha: 1
-  });
+  doorCircle.stroke.set( Colors.White );
   doorCircle.lineWidth = 0.2;
   door.add( doorCircle );
   door.trigger = trigger;
