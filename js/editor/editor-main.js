@@ -1,6 +1,14 @@
 /*globals requirejs, define*/
 requirejs.config({
-  baseUrl: '../js'
+  baseUrl: '../js',
+  shim: {
+    box2d: {
+      exports: 'Box2D'
+    }
+  },
+  paths: {
+    box2d: 'Box2dWeb/Box2dWeb-2.1.a.3.min'
+  }
 });
 
 define(function( require ) {

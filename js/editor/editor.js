@@ -2,6 +2,7 @@
 define(function( require ) {
   'use strict';
 
+  var Box2D = require( 'box2d' );
   var BaseObject = require( 'base-object' );
   var Color = require( 'color' );
   var Polygon = require( 'geometry/polygon' );
@@ -9,6 +10,9 @@ define(function( require ) {
   var Intersection = require( 'geometry/intersection' );
   var Material = require( 'config/material' );
   var Utils = require( 'utils' );
+  var Box2DUtils = require( 'utils-box2d' );
+
+  var PolygonShape = Box2D.Collision.Shapes.b2PolygonShape;
 
   var PI2 = Utils.PI2;
   var DEFAULT_LINE_WIDTH = 4;
@@ -459,8 +463,8 @@ define(function( require ) {
       }
 
       this.draw();
+      return;
     }
-
 
     // Remove vertices.
     if ( event.altKey ) {
@@ -483,6 +487,7 @@ define(function( require ) {
           }
         }
       }.bind( this ));
+      return;
     }
 
     // Select shape.
@@ -583,6 +588,48 @@ define(function( require ) {
     if ( event.which === 82 ) {
       this.translate.x = 0.5 * this.canvas.width;
       this.translate.y = 0.5 * this.canvas.height;
+      this.draw();
+    }
+
+    // Alt+P. Recenter all polygon elements.
+    if ( event.which === 80 && event.altKey ) {
+      event.preventDefault();
+
+      this.elements.forEach(function( element ) {
+        if ( element.type.toLowerCase() !== 'polygon' ) {
+          return;
+        }
+
+        var vertices = Box2DUtils.b2Vec2Array( element.vertices );
+        var centroid = PolygonShape.ComputeCentroid( vertices, vertices.length );
+
+        var dx = centroid.x,
+            dy = centroid.y;
+
+        var vertexCount = element.vertexCount();
+        for ( var i = 0; i < vertexCount; i++ ) {
+          element.vertices[ 2 * i ] -= dx;
+          element.vertices[ 2 * i + 1 ] -= dy;
+        }
+
+        // Rotate centroid to world space.
+        var cos, sin;
+        var rdx, rdy;
+        if ( element.angle ) {
+          cos = Math.cos( -element.angle );
+          sin = Math.sin( -element.angle );
+
+          rdx = cos * dx - sin * dy;
+          rdy = sin * dx + cos * dy;
+
+          dx = rdx;
+          dy = rdy;
+        }
+
+        element.x += dx;
+        element.y += dy;
+      });
+
       this.draw();
     }
   };
