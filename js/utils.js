@@ -2,7 +2,8 @@
 define(function() {
   'use strict';
 
-  var PI2 = 2 * Math.PI;
+  var PI2 = 2 * Math.PI,
+      HALF_PI = 0.5 * Math.PI;
 
   var EPSILON = 1e-1;
 
@@ -186,6 +187,8 @@ define(function() {
 
   return {
     PI2: PI2,
+    HALF_PI: HALF_PI,
+
     EPSILON: EPSILON,
 
     clamp: clamp,
