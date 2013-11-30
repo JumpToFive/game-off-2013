@@ -178,8 +178,8 @@ define([
 
     draw: function( ctx ) {
       if ( this.game && this.initialTouch ) {
-        var x = this.initialTouch.pageX - this.game.canvas.offsetLeft,
-            y = this.initialTouch.pageY - this.game.canvas.offsetTop;
+        var x = this.initialTouch.pageX,
+            y = this.initialTouch.pageY;
 
         ctx.lineWidth = 8;
         ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
