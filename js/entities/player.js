@@ -125,6 +125,8 @@ define([
   };
 
   Player.prototype.drawFace = function( ctx, width, height ) {
+    var faceColor = Colors.Face;
+
     if ( this.emotion === Emotion.NORMAL ) {
       // Draw eyes.
       ctx.beginPath();
@@ -133,7 +135,7 @@ define([
       // Draw right eye.
       ctx.rect( 0.06 * width, -0.06 * height, 0.04 * width, 0.08 * width );
 
-      ctx.fillStyle = '#448';
+      ctx.fillStyle = faceColor;
       ctx.fill();
 
       // Draw smile.
@@ -141,7 +143,7 @@ define([
       ctx.arc( 0, 0.02 * height, 0.1 * width, 0.25 * Math.PI, 0.75 * Math.PI );
 
       ctx.lineWidth = 0.03 * width;
-      ctx.strokeStyle = '#448';
+      ctx.strokeStyle = faceColor;
       ctx.stroke();
     } else if ( this.emotion === Emotion.HIT ) {
       // Draw X.
@@ -155,13 +157,13 @@ define([
       ctx.lineTo( 0.1 * width, -0.06 * height );
 
       ctx.lineWidth = 0.03 * width;
-      ctx.strokeStyle = '#448';
+      ctx.strokeStyle = faceColor;
       ctx.stroke();
 
       // Draw square.
       ctx.beginPath();
       ctx.rect( -0.02 * width, 0.08 * height, 0.04 * width, 0.04 * width );
-      ctx.fillStyle = '#448';
+      ctx.fillStyle = faceColor;
       ctx.fill();
     }
   };

@@ -7,6 +7,7 @@ define(function() {
       MATTER: '#33f',
       ANTIMATTER: '#f33'
     },
+    Face: '#448',
     Solid: {
       MATTER: {
         red: 96,
