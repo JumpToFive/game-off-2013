@@ -80,4 +80,9 @@ define(function( require ) {
       game.input.controls[ control ] = false;
     });
   });
+
+  window.addEventListener( 'focus', function() {
+    game.running = true;
+    game.tick();
+  });
 });
