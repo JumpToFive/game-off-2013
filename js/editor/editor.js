@@ -399,7 +399,7 @@ define(function( require ) {
       }
     };
 
-    return JSON.stringify( batchData );
+    return JSON.stringify( [ batchData ] );
   };
 
   Editor.prototype.mousePosition = function( event ) {

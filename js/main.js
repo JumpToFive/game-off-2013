@@ -106,6 +106,9 @@ define(function( require ) {
 
     // Start game.
     game.tick();
+
+    var level01 = require( 'levels/level-01' );
+    level01( game );
   }
 
   startBtn.addEventListener( 'click', start );
