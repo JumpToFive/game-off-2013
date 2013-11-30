@@ -50,20 +50,47 @@ define([
       this.keys[ event.which ] = false;
     },
 
+    /**
+     * Accounts for difference between canvas dimensions and
+     * computed CSS-specified dimensions, as well as any canvas offsets.
+     */
+    normalizeTouch: function( event ) {
+      var x = event.pageX,
+          y = event.pageY;
+
+      if ( this.game ) {
+        var canvasWidth  = this.game.canvas.width,
+            canvasHeight = this.game.canvas.height;
+
+        var computedStyle = window.getComputedStyle( this.game.canvas );
+
+        var computedWidth  = parseInt( computedStyle.width,  10 ),
+            computedHeight = parseInt( computedStyle.height, 10 );
+
+        x *= canvasWidth  / computedWidth;
+        y *= canvasHeight / computedHeight;
+
+        x -= this.game.canvas.offsetLeft;
+        y -= this.game.canvas.offsetTop;
+      }
+
+      return {
+        pageX: x,
+        pageY: y
+      };
+    },
+
     onTouchStart: function( event ) {
       this.touches = [].slice.call( event.touches );
       if ( !this.initialTouch ) {
-        this.initialTouch = {
-          pageX: this.touches[0].pageX,
-          pageY: this.touches[0].pageY
-        };
+        this.initialTouch = this.normalizeTouch( this.touches[0] );
       }
     },
 
     onTouchMove: function( event ) {
       event.preventDefault();
       this.touches = [].slice.call( event.touches );
-      this.touch = this.touches[0];
+      this.touch = this.normalizeTouch( this.touches[0] );
     },
 
     onTouchEnd: function( event ) {
