@@ -270,12 +270,13 @@ define(function( require ) {
   game.add( trigger );
 
   // Door.
-  var door = new Door( 50, 30, 3 );
+  var door = new Door( 10, 40, 4 );
   var doorCircle = new Circle( 0, 0, 3 );
   doorCircle.fill.set({
     alpha: 0.1
   });
   doorCircle.stroke.set( Colors.White );
+  doorCircle.stroke.alpha = 0.1;
   doorCircle.lineWidth = 0.2;
   door.add( doorCircle );
   door.trigger = trigger;
