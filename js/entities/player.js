@@ -126,15 +126,13 @@ define([
 
   Player.prototype.drawFace = function( ctx, width, height ) {
     if ( this.emotion === Emotion.NORMAL ) {
+      // Draw eyes.
+      ctx.beginPath();
       // Draw left eye.
-      ctx.beginPath();
       ctx.rect( -0.1 * width, -0.06 * height, 0.04 * width, 0.08 * width );
-      ctx.fillStyle = '#448';
-      ctx.fill();
-
       // Draw right eye.
-      ctx.beginPath();
       ctx.rect( 0.06 * width, -0.06 * height, 0.04 * width, 0.08 * width );
+
       ctx.fillStyle = '#448';
       ctx.fill();
 
@@ -148,10 +146,14 @@ define([
     } else if ( this.emotion === Emotion.HIT ) {
       // Draw X.
       ctx.beginPath();
+
+      // Left diagonal.
       ctx.moveTo( -0.1 * width, -0.06 * height );
       ctx.lineTo( 0.1 * width, 0.02 * height );
+      // Right diagonal.
       ctx.moveTo( -0.1 * width, 0.02 * height );
       ctx.lineTo( 0.1 * width, -0.06 * height );
+
       ctx.lineWidth = 0.03 * width;
       ctx.strokeStyle = '#448';
       ctx.stroke();
