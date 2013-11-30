@@ -1,6 +1,6 @@
 /*globals requirejs, define*/
 requirejs.config({
-  baseUrl: '../js',
+  baseUrl: './../js',
   shim: {
     box2d: {
       exports: 'Box2D'
