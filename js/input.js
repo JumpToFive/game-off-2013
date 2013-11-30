@@ -67,11 +67,14 @@ define([
         var computedWidth  = parseInt( computedStyle.width,  10 ),
             computedHeight = parseInt( computedStyle.height, 10 );
 
-        x *= canvasWidth  / computedWidth;
-        y *= canvasHeight / computedHeight;
+        var xRatio = canvasWidth  / computedWidth,
+            yRatio = canvasHeight / computedHeight;
 
         x -= this.game.canvas.offsetLeft;
         y -= this.game.canvas.offsetTop;
+
+        x *= xRatio;
+        y *= yRatio;
       }
 
       return {
