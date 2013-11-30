@@ -32,6 +32,7 @@ define(function( require ) {
   var Laser = require( 'entities/laser' );
   var Trigger = require( 'entities/trigger' );
   var Door = require( 'entities/door' );
+  var TriggerWire = require( 'effects/trigger-wire' );
 
   var Colors = require( 'config/colors' );
   var Material = require( 'config/material' );
@@ -286,6 +287,29 @@ define(function( require ) {
   door.triggers.push( trigger );
   door.triggers.push( antiTrigger );
   game.add( door );
+
+  // Trigger wire.
+  var triggerWire = new TriggerWire( trigger, door, {
+    vertices: [
+      -0.1, 0,
+      -0.1, 0.6,
+      0.2, 0.6,
+      0.2, 1
+    ],
+    sourceDirection: TriggerWire.Direction.RIGHT,
+    targetDirection: TriggerWire.Direction.RIGHT
+  });
+  game.add( triggerWire );
+
+  var antiTriggerWire = new TriggerWire( antiTrigger, door, {
+    vertices: [
+      0, 0.5,
+      1, 0.5
+    ],
+    sourceDirection: TriggerWire.Direction.BOTTOM,
+    targetDirection: TriggerWire.Direction.TOP
+  });
+  game.add( antiTriggerWire );
 
   // Player.
   game.setPlayer( new Player( 20, 20 ) );
