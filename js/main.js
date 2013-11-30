@@ -95,4 +95,9 @@ define(function( require ) {
     game.running = true;
     game.tick();
   });
+
+  // Title view.
+  var TitleView = require( 'views/title-view' );
+  var titleView = new TitleView();
+  document.body.insertBefore( titleView.el, document.body.firstChild );
 });

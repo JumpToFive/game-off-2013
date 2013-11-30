@@ -1,6 +1,8 @@
 @import "compass/reset";
 
 @import "compass/css3/user-interface";
+@import "compass/css3/transform";
+@import "compass/css3/text-shadow";
 
 body {
   background-color: black;
@@ -11,6 +13,7 @@ body {
 
 canvas {
   @include user-select(none);
+  position: absolute;
 }
 
 .game {
@@ -30,14 +33,17 @@ canvas {
   }
 }
 
-.material-btn {
+button {
   background: none;
   border: none;
   outline: none;
   @include user-select(none);
 
-  display: block;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.material-btn {
+  display: block;
   font-weight: 100;
   font-size: 1em;
   letter-spacing: 0.08em;
@@ -56,6 +62,87 @@ canvas {
   &.matter {
     background-color: #26e;
   }
+}
+
+.title-view {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: #222;
+
+  .title-container {
+    display: table;
+    width: 100%;
+    height: 40%;
+    @include transform3d(translateZ(2000px));
+
+    @include transform-style(preserve-3d);
+    @include perspective(1000px);
+    @include perspective-origin(center center);
+
+    .titles {
+      display: table-cell;
+      text-align: center;
+      vertical-align: middle;
+      margin: auto;
+
+      @include transform-style(preserve-3d);
+    }
+  }
+
+
+  $start-btn-width: 128px;
+  $start-btn-height: 64px;
+
+  .start-btn {
+    position: absolute;
+    top: 75%;
+    left: 50%;
+
+    width: $start-btn-width;
+    height: $start-btn-height;
+
+    margin-left: -0.5 * $start-btn-width;
+    margin-top: -0.5 * $start-btn-height;
+
+    text-transform: uppercase;
+    background-color: rgba(34, 34, 34, 0.8);
+    border: 2px solid white;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+
+    @include translateZ(10000px);
+
+    &:active {
+      background-color: white;
+    }
+  }
+
+  z-index: 1;
+}
+
+.title,
+.title-shadow {
+  position: absolute;
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 10vw;
+  font-weight: bold;
+  @include user-select(none);
+}
+
+.title {
+  color: white;
+  @include text-shadow(0 0 10px black);
+}
+
+.title-shadow {
+  color: black;
+  @include translateZ(-100px);
 }
 
 @media screen and
