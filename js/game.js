@@ -32,18 +32,18 @@ define(function( require ) {
 
     this.element.appendChild( this.canvas );
 
-    this.WIDTH  = 640;
-    this.HEIGHT = 480;
+    var width  = 640,
+        height = 480;
 
-    this.canvas.width  = this.WIDTH;
-    this.canvas.height = this.HEIGHT;
+    this.canvas.width  = width;
+    this.canvas.height = height;
 
     this.removed = [];
 
     this.entities = [];
     this.player = null;
 
-    this.camera = new Camera( 0.5 * this.WIDTH, 0.5 * this.HEIGHT );
+    this.camera = new Camera( 0.5 * width, 0.5 * height );
     this.camera.margin = 10;
     this.camera.world = this;
 
@@ -61,7 +61,7 @@ define(function( require ) {
 
     this.debug = false;
 
-    this.background = new Background( this.WIDTH, this.HEIGHT );
+    this.background = new Background( width, height );
     this.background.fill.set({
       red: 64,
       green: 64,
@@ -215,8 +215,8 @@ define(function( require ) {
     document.body.appendChild( this.debugCanvas );
 
     this.debugCanvas.id = 'box2d-debug-canvas';
-    this.debugCanvas.width  = this.WIDTH;
-    this.debugCanvas.height = this.HEIGHT;
+    this.debugCanvas.width  = this.canvas.width;
+    this.debugCanvas.height = this.canvas.height;
 
     var debugDraw = new DebugDraw();
     debugDraw.SetSprite( this.debugCtx );
@@ -225,7 +225,7 @@ define(function( require ) {
     debugDraw.SetLineThickness( 1 );
     debugDraw.SetFlags( DebugDraw.e_shapeBit );
     world.SetDebugDraw( debugDraw );
-  }
+  };
 
   Game.prototype.update = function() {
 
