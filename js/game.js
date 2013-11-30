@@ -43,7 +43,7 @@ define(function( require ) {
     this.entities = [];
     this.player = null;
 
-    this.camera = new Camera( 0.5 * width, 0.5 * height );
+    this.camera = new Camera();
     this.camera.margin = 10;
     this.camera.world = this;
 
@@ -304,15 +304,16 @@ define(function( require ) {
   };
 
   Game.prototype.updateDebug = function( dt ) {
+    var aspectRatio = this.camera.width / this.camera.height;
     // Basic camera controls.
     // W. Zoom in.
     if ( this.input.keys[ 87 ] ) {
-      this.camera.width = Math.max( this.camera.width - 2, 32 );
+      this.camera.width = Math.max( this.camera.width - 1.5 * aspectRatio, 32 );
       this.camera.height = Math.max( this.camera.height - 1.5, 24 );
     }
     // S. Zoom out.
     if ( this.input.keys[ 83 ] ) {
-      this.camera.width += 2;
+      this.camera.width += 1.5 * aspectRatio;
       this.camera.height += 1.5;
     }
     // A. Rotate left.

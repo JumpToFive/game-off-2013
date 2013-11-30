@@ -5,11 +5,11 @@ define([
 ], function( Entity, Utils ) {
   'use strict';
 
-  function Camera( x, y ) {
+  function Camera( x, y, width, height ) {
     Entity.call( this, x, y );
 
-    this.width  = 64;
-    this.height = 48;
+    this.width  = width  || 64;
+    this.height = height || 48;
 
     this.target = null;
     this.margin = 0;
