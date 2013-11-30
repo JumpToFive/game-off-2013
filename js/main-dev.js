@@ -47,6 +47,8 @@ define(function( require ) {
   }
   Settings.high();
 
+  var TitleView = require( 'views/title-view' );
+
   var SettingsView = require( 'views/settings-view' );
   var settingsView = new SettingsView();
   document.body.appendChild( settingsView.el );
@@ -423,14 +425,6 @@ define(function( require ) {
   // Start game.
   game.tick();
 
-  // Title view.
-  var TitleView = require( 'views/title-view' );
-  var titleView = new TitleView();
-  document.body.insertBefore( titleView.el, document.body.firstChild );
-  setTimeout(function() {
-    titleView.remove();
-  }, 500 );
-
   // Toggle player material.
   var materialBtn = document.getElementById( 'material-btn' );
   function togglePlayerMaterial() {
@@ -574,6 +568,16 @@ define(function( require ) {
         event.preventDefault();
         togglePlayerMaterial();
       }
+    }
+
+    // T. Show title screen.
+    if ( event.which === 77 ) {
+      // Title view.
+      var titleView = new TitleView();
+      document.body.insertBefore( titleView.el, document.body.firstChild );
+      setTimeout(function() {
+        titleView.remove();
+      }, 2000 );
     }
   });
 

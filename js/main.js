@@ -46,9 +46,6 @@ define(function( require ) {
     game.canvas.addEventListener( 'touchend', input.onTouchEnd.bind( input ) );
   }
 
-  // Start game.
-  game.tick();
-
   // Toggle player material.
   var materialBtn = document.getElementById( 'material-btn' );
   function togglePlayerMaterial() {
@@ -100,4 +97,16 @@ define(function( require ) {
   var TitleView = require( 'views/title-view' );
   var titleView = new TitleView();
   document.body.insertBefore( titleView.el, document.body.firstChild );
+
+  // Start on click.
+  var startBtn = titleView.el.querySelector( '#start-btn' );
+  function start() {
+    titleView.remove();
+    startBtn.removeEventListener( 'click', start );
+
+    // Start game.
+    game.tick();
+  }
+
+  startBtn.addEventListener( 'click', start );
 });
