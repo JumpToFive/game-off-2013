@@ -46,7 +46,6 @@ canvas {
   border-radius: 0.2em;
   margin: 0 auto;
   padding: 0.5em;
-  width: 256px;
 
   text-transform: uppercase;
 
@@ -60,7 +59,8 @@ canvas {
 }
 
 @media screen and
-  (min-width: 300px) and
+  (min-width: 320px),
+  screen and
   (min-height: 240px) {
   .game {
     margin: auto;
@@ -79,14 +79,14 @@ canvas {
 
 @media screen and
   (min-width: 480px) and
-  (min-height: 360px) {
+  (min-height: 400px) {
   .game {
     margin: auto;
   }
 
   .game,
   canvas {
-    width:  480px;
+    width: 480px;
     height: 360px;
   }
 
@@ -97,7 +97,7 @@ canvas {
 
 @media screen and
   (min-width: 640px) and
-  (min-height: 512px) {
+  (min-height: 576px) {
 
   .game {
     margin: 32px auto;
