@@ -9,10 +9,14 @@ define([
 ], function( PhysicsEntity, Colors, Material, Settings, Utils ) {
   'use strict';
 
-  var PI2 = Utils.PI2;
+  var PI2 = Utils.PI2,
+      HALF_PI = Utils.HALF_PI;
 
   var defaults = {
-    duration: 0.3
+    duration: 0.4,
+
+    platformAngle: 0,
+    platformAngularVelocity: 2
   };
 
   function Trigger( x, y, radius, material ) {
@@ -65,36 +69,55 @@ define([
       this.active = true;
     }
 
-    // Animation.
+    // Opening animation.
     if ( this.active && this.time < this.duration ) {
       this.time += dt;
+    }
+
+    // Rotating animation.
+    if ( this.active ) {
+      this.platformAngle += this.platformAngularVelocity * dt;
     }
   };
 
   Trigger.prototype.drawPath = function( ctx ) {
     var radius = this.radius;
 
+    var size = 1.2 * ( 2 * radius ),
+        halfSize = 0.5 * size,
+        quarterSize = 0.5 * halfSize;
 
-    // Draw sensor.
+    // Draw base.
+    ctx.beginPath();
+    ctx.rect( -halfSize, -halfSize, size, size );
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+    ctx.fill();
 
     // Draw frame/border.
-    var size = 1.2 * ( 2 * radius ),
-        halfSize = 0.5 * size;
-
-    var glowColor = Colors.Solid[ Material.type( this.material ) ];
+    var glowColor = Colors.Glow[ Material.type( this.material ) ];
 
     if ( glowColor ) {
       ctx.beginPath();
-      ctx.rect( -1.5 * halfSize, -1.5 * halfSize, halfSize, halfSize );
-      ctx.rect( -1.5 * halfSize,  0.5 * halfSize, halfSize, halfSize );
-      ctx.rect(  0.5 * halfSize,  0.5 * halfSize, halfSize, halfSize );
-      ctx.rect(  0.5 * halfSize, -1.5 * halfSize, halfSize, halfSize );
 
-      ctx.save();
-      ctx.clip();
+      // Top left.
+      ctx.moveTo( -quarterSize, -halfSize );
+      ctx.lineTo( -halfSize, -halfSize );
+      ctx.lineTo( -halfSize, -quarterSize );
 
-      ctx.beginPath();
-      ctx.rect( -halfSize, -halfSize, size, size );
+      // Bottom left.
+      ctx.moveTo( -halfSize, quarterSize );
+      ctx.lineTo( -halfSize, halfSize );
+      ctx.lineTo( -quarterSize, halfSize );
+
+      // Bottom right.
+      ctx.moveTo( quarterSize, halfSize );
+      ctx.lineTo( halfSize, halfSize );
+      ctx.lineTo( halfSize, quarterSize );
+
+      // Top right.
+      ctx.moveTo( halfSize, -quarterSize );
+      ctx.lineTo( halfSize, -halfSize );
+      ctx.lineTo( quarterSize, -halfSize );
 
       ctx.lineWidth = 0.3 * radius;
       ctx.strokeStyle = glowColor;
@@ -103,19 +126,82 @@ define([
       ctx.lineWidth = 0.1 * radius;
       ctx.strokeStyle = '#fff';
       ctx.stroke();
-
-      ctx.restore();
     }
 
+    var halfRadius = 0.5 * radius;
 
+    var t = 1;
+    if ( this.time < this.duration ) {
+      t = this.time / this.duration;
+    }
+
+    t *= 0.5 * halfRadius;
+
+    if ( this.platformAngle ) {
+      ctx.save();
+      ctx.rotate( this.platformAngle );
+    }
+
+    // Draw beams.
+    if ( glowColor && this.time >= this.duration ) {
+      if ( Settings.glow ) {
+        ctx.globalCompositeOperation = 'lighter';
+      }
+
+      // 45 degrees.
+      var diagonal = 0.5 * Math.sqrt( 2 ) * halfRadius;
+
+      ctx.beginPath();
+      // Left diagonal.
+      ctx.moveTo( -t - diagonal, -t - diagonal );
+      ctx.lineTo(  t + diagonal,  t + diagonal );
+      // Right diagonal.
+      ctx.moveTo(  t + diagonal, -t - diagonal );
+      ctx.lineTo( -t - diagonal,  t + diagonal );
+
+      ctx.lineWidth = ( 0.3 + Math.random() * 0.2 )  * radius;
+      ctx.strokeStyle = glowColor;
+      ctx.stroke();
+
+      ctx.lineWidth = 0.2 * radius;
+      ctx.strokeStyle = '#fff';
+      ctx.stroke();
+
+      if ( Settings.glow ) {
+        ctx.globalCompositeOperation = 'source-over';
+      }
+    }
+
+    // Draw sensor.
     ctx.beginPath();
-    ctx.arc( 0, 0, radius, 0, PI2 );
-    ctx.fillStyle = '#333';
-    ctx.fill();
+
+    // Top left.
+    ctx.moveTo( -halfRadius - t, -t );
+    ctx.arc( -t, -t, halfRadius, -Math.PI, -HALF_PI );
+
+    // Top right.
+    ctx.moveTo( t, -halfRadius - t );
+    ctx.arc( t, -t, halfRadius, -HALF_PI, 0 );
+
+    // Bottom right.
+    ctx.moveTo( halfRadius + t, t );
+    ctx.arc( t, t, halfRadius, 0, HALF_PI );
+
+    // Bottom left.
+    ctx.moveTo( -t, halfRadius + t );
+    ctx.arc( -t, t, halfRadius, HALF_PI, Math.PI );
+
+    ctx.lineWidth = 0.5 * radius;
+    ctx.strokeStyle = '#333';
+    ctx.stroke();
 
     ctx.lineWidth = 0.2 * radius;
-    ctx.strokeStyle = '#000';
+    ctx.strokeStyle = '#fff';
     ctx.stroke();
+
+    if ( this.platformAngle ) {
+      ctx.restore();
+    }
 
     PhysicsEntity.prototype.drawPath.call( this, ctx );
   };

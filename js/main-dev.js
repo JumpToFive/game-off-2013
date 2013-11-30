@@ -259,7 +259,7 @@ define(function( require ) {
   game.add( laser );
 
   // Trigger.
-  var trigger = new Trigger( 42, 30, 3, Material.MATTER );
+  var trigger = new Trigger( 48, 30, 3, Material.MATTER );
   var triggerCircle = new Circle( 0, 0, 3 );
   triggerCircle.stroke.set({
     blue: 255,
