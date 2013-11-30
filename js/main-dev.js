@@ -96,7 +96,7 @@ define(function( require ) {
   // Circle.
   var circleEntity = new Entity();
 
-  var circle = new Circle( 10, 20, 5 );
+  var circle = new Circle( -10, 25, 5 );
   circle.fill.alpha = 0.5;
 
   circleEntity.add( circle );
@@ -269,6 +269,10 @@ define(function( require ) {
   trigger.add( triggerCircle );
   game.add( trigger );
 
+  // Trigger.
+  var antiTrigger = new Trigger( 15, 20, 3, Material.ANTIMATTER );
+  game.add( antiTrigger );
+
   // Door.
   var door = new Door( 10, 40, 4 );
   var doorCircle = new Circle( 0, 0, 3 );
@@ -279,7 +283,8 @@ define(function( require ) {
   doorCircle.stroke.alpha = 0.1;
   doorCircle.lineWidth = 0.2;
   door.add( doorCircle );
-  door.trigger = trigger;
+  door.triggers.push( trigger );
+  door.triggers.push( antiTrigger );
   game.add( door );
 
   // Player.

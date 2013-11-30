@@ -32,7 +32,8 @@ define([
     Utils.defaults( this, defaults );
 
     this.open = false;
-    this.trigger = null;
+    this.triggers = [];
+
     this.player = null;
 
     // Animation time.
@@ -45,7 +46,13 @@ define([
   Door.prototype.update = function( dt ) {
     PhysicsEntity.prototype.update.call( this, dt );
 
-    if ( !this.open && this.trigger.active ) {
+    // Activate only if all triggers are active.
+    // Must have at least one trigger.
+    var active = this.triggers.every(function( trigger ) {
+      return trigger.active;
+    }) && this.triggers.length;
+
+    if ( !this.open && active ) {
       this.open = true;
     }
 
