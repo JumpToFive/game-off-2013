@@ -263,7 +263,7 @@ define(function( require ) {
   var triggerCircle = new Circle( 0, 0, 3 );
   triggerCircle.stroke.set({
     blue: 255,
-    alpha: 1
+    alpha: 0.1
   });
   triggerCircle.lineWidth = 0.2;
   trigger.add( triggerCircle );
