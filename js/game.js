@@ -44,14 +44,8 @@ define(function( require ) {
     this.player = null;
 
     this.camera = new Camera( 0.5 * this.WIDTH, 0.5 * this.HEIGHT );
-    this.camera.world = this;
-    this.camera.stroke.set({
-      blue: 255,
-      alpha: 1.0
-    });
-
     this.camera.margin = 10;
-    this.camera.lineWidth = 0.2;
+    this.camera.world = this;
 
     this.shake = new Shake();
 
@@ -65,7 +59,7 @@ define(function( require ) {
     // Frame time (seconds).
     this.FRAME_TIME = 1 / 60;
 
-    this.debug = {};
+    this.debug = false;
 
     this.background = new Background( this.WIDTH, this.HEIGHT );
     this.background.fill.set({
@@ -243,7 +237,9 @@ define(function( require ) {
 
     this.input.update( dt );
     // Camera controls.
-    this.updateDebug( dt );
+    if ( this.debug ) {
+      this.updateDebug( dt );
+    }
 
     this.entities.forEach(function( entity ) {
       entity.update( dt );

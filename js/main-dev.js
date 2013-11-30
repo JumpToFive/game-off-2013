@@ -71,6 +71,14 @@ define(function( require ) {
   }) ();
 
   var game = Game.instance = new Game();
+  game.debug = true;
+
+  game.camera.stroke.set({
+    blue: 255,
+    alpha: 1.0
+  });
+  game.camera.lineWidth = 0.2;
+
   game.level = new Level();
   game.level.fill.set({
     red: 32,
