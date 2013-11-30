@@ -67,4 +67,17 @@ define(function( require ) {
 
   togglePlayerMaterial();
   materialBtn.addEventListener( 'click', togglePlayerMaterial );
+
+  window.addEventListener( 'blur', function() {
+    game.running = false;
+
+    // Disable all inputs.
+    Object.keys( game.input.keys ).forEach(function( key ) {
+      game.input.keys[ key ] = false;
+    });
+
+    Object.keys( game.input.controls ).forEach(function( control ) {
+      game.input.controls[ control ] = false;
+    });
+  });
 });
