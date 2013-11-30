@@ -159,7 +159,7 @@ define(function( require ) {
   // Emitter.
   var emitter = new Emitter( 25, 20 );
   var emitterPolygon = new Polygon( 0, 0 );
-  emitterPolygon.vertices = [ 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5 ];
+  emitterPolygon.vertices = [ 0.75, 0.75, -0.75, 0.75, -0.75, -0.75, 0.75, -0.75 ];
   emitterPolygon.fill.set( Colors.Solid.ANTIMATTER );
   emitterPolygon.stroke.set( Colors.White );
   emitterPolygon.lineWidth = 0.2;
@@ -183,7 +183,7 @@ define(function( require ) {
     type: 'vector',
     data: emitterPolygon.vertices.slice(),
     fixture: {
-      density: 4.0,
+      density: 1.75,
       friction: 0.5,
       restitution: 0.2,
       filter: {
@@ -229,7 +229,7 @@ define(function( require ) {
     type: 'vector',
     data: matEmitterPolygon.vertices.slice(),
     fixture: {
-      density: 4.0,
+      density: 1.75,
       friction: 0.5,
       restitution: 0.2,
       filter: {

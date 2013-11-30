@@ -128,7 +128,7 @@ define(function( require ) {
           }
         }
 
-        this.shake.shake( 0.5, 0.2 );
+        this.shake.shake( 1, 0.4 );
         this.removed.push( other );
         return;
       }
