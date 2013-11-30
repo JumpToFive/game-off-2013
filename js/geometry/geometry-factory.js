@@ -4,7 +4,12 @@ define(function( require ) {
 
   var Color = require( 'color' );
 
-  var classes = {};
+  var classes = {
+    circle: require( 'geometry/circle' ),
+    polygon: require( 'geometry/polygon' ),
+    rect: require( 'geometry/rect' ),
+    segment: require( 'geometry/segment' )
+  };
 
   function create( json ) {
     var attrs = JSON.parse( json );
