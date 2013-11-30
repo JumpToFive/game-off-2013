@@ -101,6 +101,9 @@ canvas {
   background: none;
   border: none;
   outline: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
   display: block;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 100;
@@ -108,15 +111,72 @@ canvas {
   letter-spacing: 0.08em;
   color: white;
   border-radius: 0.2em;
+  margin: 0 auto;
   padding: 0.5em;
   width: 256px;
   text-transform: uppercase;
 }
-/* line 51, ../sass/screen.scss */
+/* line 53, ../sass/screen.scss */
 .material-btn.antimatter {
   background-color: #f43;
 }
-/* line 55, ../sass/screen.scss */
+/* line 57, ../sass/screen.scss */
 .material-btn.matter {
   background-color: #26e;
+}
+
+@media screen and (min-width: 300px) and (min-height: 240px) {
+  /* line 65, ../sass/screen.scss */
+  .game {
+    margin: auto;
+  }
+
+  /* line 70, ../sass/screen.scss */
+  .game,
+  canvas {
+    width: 320px;
+    height: 240px;
+  }
+
+  /* line 75, ../sass/screen.scss */
+  .material-btn {
+    width: 320px;
+  }
+}
+@media screen and (min-width: 480px) and (min-height: 360px) {
+  /* line 83, ../sass/screen.scss */
+  .game {
+    margin: auto;
+  }
+
+  /* line 88, ../sass/screen.scss */
+  .game,
+  canvas {
+    width: 480px;
+    height: 360px;
+  }
+
+  /* line 93, ../sass/screen.scss */
+  .material-btn {
+    width: 480px;
+  }
+}
+@media screen and (min-width: 640px) and (min-height: 512px) {
+  /* line 102, ../sass/screen.scss */
+  .game {
+    margin: 32px auto;
+    width: 640px;
+    height: 480px;
+  }
+
+  /* line 108, ../sass/screen.scss */
+  canvas {
+    width: auto;
+    height: auto;
+  }
+
+  /* line 113, ../sass/screen.scss */
+  .material-btn {
+    width: 256px;
+  }
 }

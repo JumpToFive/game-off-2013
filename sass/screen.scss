@@ -34,6 +34,7 @@ canvas {
   background: none;
   border: none;
   outline: none;
+  @include user-select(none);
 
   display: block;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -43,6 +44,7 @@ canvas {
   color: white;
 
   border-radius: 0.2em;
+  margin: 0 auto;
   padding: 0.5em;
   width: 256px;
 
@@ -57,3 +59,58 @@ canvas {
   }
 }
 
+@media screen and
+  (min-width: 300px) and
+  (min-height: 240px) {
+  .game {
+    margin: auto;
+  }
+
+  .game,
+  canvas {
+    width: 320px;
+    height: 240px;
+  }
+
+  .material-btn {
+    width: 320px;
+  }
+}
+
+@media screen and
+  (min-width: 480px) and
+  (min-height: 360px) {
+  .game {
+    margin: auto;
+  }
+
+  .game,
+  canvas {
+    width:  480px;
+    height: 360px;
+  }
+
+  .material-btn {
+    width: 480px;
+  }
+}
+
+@media screen and
+  (min-width: 640px) and
+  (min-height: 512px) {
+
+  .game {
+    margin: 32px auto;
+    width: 640px;
+    height: 480px;
+  }
+
+  canvas {
+    width: auto;
+    height: auto;
+  }
+
+  .material-btn {
+    width: 256px;
+  }
+}
