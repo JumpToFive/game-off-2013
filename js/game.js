@@ -76,25 +76,10 @@ define(function( require ) {
     this.world = world;
     world.GetGravity().SetZero();
 
-    // Initialize debug view.
+    // Debug view variables.
     this.box2dDebug = false;
-
-    this.debugCanvas = document.createElement( 'canvas' );
-    this.debugCtx    = this.debugCanvas.getContext( '2d' );
-
-    document.body.appendChild( this.debugCanvas );
-
-    this.debugCanvas.id = 'box2d-debug-canvas';
-    this.debugCanvas.width  = this.WIDTH;
-    this.debugCanvas.height = this.HEIGHT;
-
-    var debugDraw = new DebugDraw();
-    debugDraw.SetSprite( this.debugCtx );
-    debugDraw.SetDrawScale( 1 );
-    debugDraw.SetFillAlpha( 0.3 );
-    debugDraw.SetLineThickness( 1 );
-    debugDraw.SetFlags( DebugDraw.e_shapeBit );
-    world.SetDebugDraw( debugDraw );
+    this.debugCanvas = null;
+    this.debugCtx = null;
 
     var contactListener = new ContactListener();
 
@@ -222,6 +207,25 @@ define(function( require ) {
   }
 
   Game.instance = null;
+
+  Game.prototype.initializeDebugView = function() {
+    this.debugCanvas = document.createElement( 'canvas' );
+    this.debugCtx    = this.debugCanvas.getContext( '2d' );
+
+    document.body.appendChild( this.debugCanvas );
+
+    this.debugCanvas.id = 'box2d-debug-canvas';
+    this.debugCanvas.width  = this.WIDTH;
+    this.debugCanvas.height = this.HEIGHT;
+
+    var debugDraw = new DebugDraw();
+    debugDraw.SetSprite( this.debugCtx );
+    debugDraw.SetDrawScale( 1 );
+    debugDraw.SetFillAlpha( 0.3 );
+    debugDraw.SetLineThickness( 1 );
+    debugDraw.SetFlags( DebugDraw.e_shapeBit );
+    world.SetDebugDraw( debugDraw );
+  }
 
   Game.prototype.update = function() {
 

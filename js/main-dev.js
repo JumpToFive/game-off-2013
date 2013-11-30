@@ -72,6 +72,7 @@ define(function( require ) {
 
   var game = Game.instance = new Game();
   game.debug = true;
+  game.initializeDebugView();
 
   game.camera.stroke.set({
     blue: 255,
