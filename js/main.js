@@ -68,6 +68,16 @@ define(function( require ) {
   togglePlayerMaterial();
   materialBtn.addEventListener( 'click', togglePlayerMaterial );
 
+  document.addEventListener( 'keydown', function( event ) {
+    // Space.
+    if ( event.which === 32 ) {
+      if ( game && game.player ) {
+        event.preventDefault();
+        togglePlayerMaterial();
+      }
+    }
+  });
+
   window.addEventListener( 'blur', function() {
     game.running = false;
 
