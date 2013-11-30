@@ -9,11 +9,13 @@ define([
 ], function( PhysicsEntity, Colors, Material, Settings, Utils ) {
   'use strict';
 
-  var PI2 = Utils.PI2,
-      HALF_PI = Utils.HALF_PI;
+  var HALF_PI = Utils.HALF_PI;
 
   var defaults = {
     duration: 0.4,
+
+    // So we know the actual drawn size.
+    frameRatio: 1.2,
 
     platformAngle: 0,
     platformAngularVelocity: 2
@@ -83,7 +85,7 @@ define([
   Trigger.prototype.drawPath = function( ctx ) {
     var radius = this.radius;
 
-    var size = 1.2 * ( 2 * radius ),
+    var size = this.frameRatio * ( 2 * radius ),
         halfSize = 0.5 * size,
         quarterSize = 0.5 * halfSize;
 
