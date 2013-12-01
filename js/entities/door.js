@@ -8,8 +8,12 @@ define([
   var PI2 = Utils.PI2;
 
   var defaults = {
-    // Animation duration.
-    duration: 0.3
+    // Animation duration (seconds).
+    duration: 0.3,
+
+    callback: function() {},
+    // Callback delay (in milliseconds).
+    delay: 400
   };
 
   function Door( x, y, radius, options ) {
@@ -70,6 +74,15 @@ define([
       if ( distanceSquared < this.radius * this.radius ) {
         this.player.x = this.x;
         this.player.y = this.y;
+
+        // Call the callback once and dispose.
+        var callback = this.callback;
+        if ( typeof callback === 'function' ) {
+          setTimeout(function() {
+            callback();
+          }.bind( this ), this.delay );
+          this.callback = null;
+        }
       }
     }
   };
