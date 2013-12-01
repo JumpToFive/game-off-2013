@@ -36,11 +36,17 @@ define(function( require ) {
     game.background.prerender();
 
     var aspectRatio = game.camera.width / game.camera.height;
-    game.camera.height = 32;
+    game.camera.height = 48;
     game.camera.width  = game.camera.height * aspectRatio;
 
     game.load({
       entities: Level.loadBatchPhysicsEntities( JSON.parse( level02Data ) )
     });
+
+    // Emitter.
+
+
+    // Lasers.
+
   };
 });
