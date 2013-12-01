@@ -151,11 +151,20 @@ define([
           if ( Utils.distanceSquared( x, y, xi, yi ) > dz * dz ) {
             angle = Math.atan2( dy, dx );
 
+            // Subtract deadzone.
             dx -= dz * Math.cos( angle );
             dy -= dz * Math.sin( angle );
 
-            xt = ( dx < 0 ? -1 : 1 ) * Utils.inverseLerp( Math.abs( dx ), 0, this.touchLimit );
-            yt = ( dy < 0 ? -1 : 1 ) * Utils.inverseLerp( Math.abs( dy ), 0, this.touchLimit );
+            // Get parameter up to touch limit.
+            xt = Utils.inverseLerp( Math.abs( dx ), 0, this.touchLimit );
+            yt = Utils.inverseLerp( Math.abs( dy ), 0, this.touchLimit );
+
+            xt = Utils.clamp( xt, 0, 1 );
+            yt = Utils.clamp( yt, 0, 1 );
+
+            // Determine sign.
+            xt *= ( dx < 0 ? -1 : 1 );
+            yt *= ( dy < 0 ? -1 : 1 );
 
             ax = xt * 800;
             ay = yt * 800;
