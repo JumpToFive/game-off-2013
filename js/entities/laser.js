@@ -34,8 +34,9 @@ define([
     });
 
     this.target = null;
-    this.normal = null;
     this.endpoint = null;
+    this.normal = null;
+    this.fraction = Number.POSITIVE_INFINITY;
   }
 
   Laser.prototype = new PhysicsEntity();
@@ -44,22 +45,31 @@ define([
   Laser.prototype.update = function( dt ) {
     PhysicsEntity.prototype.update.call( this, dt );
 
-    var cos = Math.cos( -this.angle ),
-        sin = Math.sin( -this.angle );
+    var cos = 1,
+        sin = 0;
+
+    if ( this.angle ) {
+      cos = Math.cos( -this.angle );
+      sin = Math.sin( -this.angle );
+    }
 
     this.target = null;
     this.endpoint = null;
+    this.fraction = Number.POSITIVE_INFINITY;
 
     world.RayCast(
       function( fixture, point, normal, fraction ) {
         var target = fixture.GetBody().GetUserData();
         if ( !( target.material & this.material ) ) {
-          return 1;
+          return -1;
         }
 
-        this.target = target;
-        this.endpoint = point;
-        this.normal = normal;
+        if ( fraction < this.fraction ) {
+          this.target = target;
+          this.normal = normal;
+          this.endpoint = point;
+          this.fraction = fraction;
+        }
 
         return fraction;
       }.bind( this ),
