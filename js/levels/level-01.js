@@ -26,6 +26,11 @@ define(function( require ) {
   var level01Data = require( 'text!../../json/level-01.json' );
 
   return function( game ) {
+    // Prevent player from changing material.
+    var materialBtn = document.getElementById( 'material-btn' );
+    materialBtn.style.display = 'none';
+    game.player.toggleMaterial = function() {};
+
     game.clear();
 
     game.player.x = -63;
