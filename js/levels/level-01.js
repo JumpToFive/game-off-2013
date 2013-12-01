@@ -2,9 +2,8 @@
 define(function( require ) {
   'use strict';
 
-  var Color = require( 'color' );
-  var Level = require( 'level' );
   var Utils = require( 'utils' );
+  var LevelUtils = require( 'level/level-utils' );
 
   var Door = require( 'entities/door' );
   var Laser = require( 'entities/laser' );
@@ -15,7 +14,6 @@ define(function( require ) {
   var Polygon = require( 'geometry/polygon' );
   var Segment = require( 'geometry/segment' );
 
-  var Trail = require( 'effects/trail' );
   var TriggerWire = require( 'effects/trigger-wire' );
 
   var Colors = require( 'config/colors' );
@@ -27,37 +25,19 @@ define(function( require ) {
   var level02 = require( 'levels/level-02' );
 
   return function( game ) {
-    // Prevent player from changing material.
-    var materialBtn = document.getElementById( 'material-btn' );
-    materialBtn.style.display = 'none';
-    game.player.toggleMaterial = function() {};
-
     game.clear();
 
     game.player.x = -63;
     game.player.y = 12;
 
-    var trail = new Trail();
-    trail.fill = new Color( 255, 255, 255, 0.2 );
-    trail.target = game.player;
-    game.add( trail );
-
-    game.background.fill.set({
-      red: 128,
-      green: 96,
-      blue: 64,
-      alpha: 1
-    });
-
-    game.background.prerender();
+    LevelUtils.playerMaterialOff( game );
+    LevelUtils.addTrail( game );
+    LevelUtils.addBackground( game, 128, 96, 64, 1 );
+    LevelUtils.loadData( game, level01Data );
 
     var aspectRatio = game.camera.width / game.camera.height;
     game.camera.height = 32;
     game.camera.width  = game.camera.height * aspectRatio;
-
-    game.load({
-      entities: Level.loadBatchPhysicsEntities( JSON.parse( level01Data ) )
-    });
 
     var tractorBeam = new TractorBeam( -55, 14, 40, 14, {
       particleCount: 15,
