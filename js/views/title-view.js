@@ -54,8 +54,8 @@ define([
       return;
     }
 
-    var rx =   ( 0.5 - ( event.clientY / window.innerHeight ) ) * 90,
-        ry =  -( 0.5 - ( event.clientX / window.innerWidth  ) ) * 90;
+    var rx =  ( 0.5 - ( event.clientY / window.innerHeight ) ) * 90,
+        ry = -( 0.5 - ( event.clientX / window.innerWidth  ) ) * 90;
 
     this.setRotation( rx, ry );
   };

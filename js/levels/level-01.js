@@ -19,9 +19,10 @@ define(function( require ) {
 
   return function( game ) {
     game.clear();
+    game.debug = true;
 
-    game.player.x = 0;
-    game.player.y = 0;
+    game.player.x = -65;
+    game.player.y = 15;
 
     var trail = new Trail();
     trail.fill = new Color( 255, 255, 255, 0.2 );
@@ -45,7 +46,7 @@ define(function( require ) {
       entities: Level.loadBatchPhysicsEntities( JSON.parse( level01Data ) )
     });
 
-    var tractorBeam = new TractorBeam( 10, 4, 40, 14, {
+    var tractorBeam = new TractorBeam( -55, 14, 40, 14, {
       particleCount: 15,
       particleHeight: 8
     });
@@ -53,7 +54,7 @@ define(function( require ) {
     tractorBeam.force = 3000;
     game.add( tractorBeam );
 
-    var laser0 = new Laser( 48, 37, Material.ANTIMATTER );
+    var laser0 = new Laser( -17, 46, Material.ANTIMATTER );
     laser0.angle = 60 * DEG_TO_RAD;
     game.add( laser0 );
   };
