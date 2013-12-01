@@ -124,7 +124,7 @@ define(function( require ) {
     var em1 = new Emitter( -2, -42 );
     em1.spawnArea = new Segment( 0, -2, 0, 2 );
     em1.rate = 0.2;
-    em1.lifeTime = 3;
+    em1.lifeTime = 2.5;
     em1.speed = 20;
     em1.angle = -80 * DEG_TO_RAD;
 

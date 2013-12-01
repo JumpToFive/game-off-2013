@@ -62,8 +62,15 @@ define([
     }
 
     if ( this.open && this.player ) {
-      this.player.x = this.x;
-      this.player.y = this.y;
+      var distanceSquared = Utils.distanceSquared(
+        this.x, this.y,
+        this.player.x, this.player.y
+      );
+
+      if ( distanceSquared < this.radius * this.radius ) {
+        this.player.x = this.x;
+        this.player.y = this.y;
+      }
     }
   };
 
