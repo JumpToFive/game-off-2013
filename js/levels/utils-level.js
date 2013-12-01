@@ -46,7 +46,7 @@ define([
 
   function loadData( game, data ) {
     game.load({
-      entitites: Level.loadBatchPhysicsEntities( JSON.parse( data ) )
+      entities: Level.loadBatchPhysicsEntities( JSON.parse( data ) )
     });
   }
 

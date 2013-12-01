@@ -3,7 +3,7 @@ define(function( require ) {
   'use strict';
 
   var Utils = require( 'utils' );
-  var LevelUtils = require( 'level/level-utils' );
+  var LevelUtils = require( 'levels/utils-level' );
 
   var Door = require( 'entities/door' );
   var Laser = require( 'entities/laser' );

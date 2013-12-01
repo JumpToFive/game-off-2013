@@ -2,7 +2,7 @@
 define(function( require ) {
   'use strict';
 
-  var LevelUtils = require( 'level/utils-level' );
+  var LevelUtils = require( 'levels/utils-level' );
   var level02Data = require( 'text!../../json/level-02.json' );
 
   return function( game ) {
