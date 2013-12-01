@@ -16,9 +16,9 @@ define(function( require ) {
     LevelUtils.addBackground( game, 96, 75, 32, 1 );
     LevelUtils.loadData( game, level02Data );
 
-    var aspectRatio = game.camera.width / game.camera.height;
-    game.camera.height = 48;
-    game.camera.width  = game.camera.height * aspectRatio;
+    game.camera.setHeight( 48, {
+      maintainAspectRatio: true
+    });
 
 
     // Emitter.

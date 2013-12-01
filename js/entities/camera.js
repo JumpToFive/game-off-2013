@@ -84,6 +84,19 @@ define([
     ctx.closePath();
   };
 
+  Camera.prototype.setHeight = function( height, options ) {
+    height = height || 1;
+    options = options || {};
+
+    var aspectRatio;
+    if ( options.maintainAspectRatio ) {
+      aspectRatio = this.width / this.height;
+      this.width = height * aspectRatio;
+    }
+
+    this.height = height;
+  };
+
   Object.defineProperty( Camera.prototype, 'aabb', {
     get: function() {
       var halfWidth = 0.5 * this.width,

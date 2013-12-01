@@ -35,9 +35,9 @@ define(function( require ) {
     LevelUtils.addBackground( game, 128, 96, 64, 1 );
     LevelUtils.loadData( game, level01Data );
 
-    var aspectRatio = game.camera.width / game.camera.height;
-    game.camera.height = 32;
-    game.camera.width  = game.camera.height * aspectRatio;
+    game.camera.setHeight( 32, {
+      maintainAspectRatio: true
+    });
 
     var tractorBeam = new TractorBeam( -55, 14, 40, 14, {
       particleCount: 15,
