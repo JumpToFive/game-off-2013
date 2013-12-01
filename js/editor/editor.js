@@ -804,6 +804,13 @@ define(function( require ) {
     }
   };
 
+  Editor.prototype.translateAll = function( x, y ) {
+    this.elements.forEach(function( element ) {
+      element.x += x;
+      element.y += y;
+    });
+  };
+
   Editor.prototype.save = function() {
     var date = new Date();
 

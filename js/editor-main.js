@@ -39,6 +39,19 @@ define(function( require ) {
   editor.add( polygon );
   editor.draw();
 
+  // Translate all.
+  var translateXEl = document.getElementById( 'translate-x' ),
+      translateYEl = document.getElementById( 'translate-y' );
+
+  var translateBtn = document.getElementById( 'translate-btn' );
+  translateBtn.addEventListener( 'click', function() {
+    var tx = parseFloat( translateXEl.value ),
+        ty = parseFloat( translateYEl.value );
+
+    editor.translateAll( tx, ty );
+    editor.draw();
+  });
+
   // History buttons.
   var loadHistoryBtn = document.getElementById( 'load-history-btn' );
   loadHistoryBtn.addEventListener( 'click', editor.loadSelected.bind( editor ) );
