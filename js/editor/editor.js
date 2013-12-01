@@ -949,6 +949,11 @@ define(function( require ) {
 
     var optionFragment = document.createDocumentFragment();
     Object.keys( this.storage ).forEach(function( key, index ) {
+      // Only add keys that can be parsed as dates.
+      if ( !Date.parse( key ) ) {
+        return;
+      }
+
       var optionEl = document.createElement( 'option' );
       optionEl.value = index;
       optionEl.innerHTML = key;
