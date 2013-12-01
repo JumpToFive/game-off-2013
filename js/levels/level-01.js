@@ -10,13 +10,8 @@ define(function( require ) {
   var Emitter = require( 'entities/emitter' );
   var TractorBeam = require( 'entities/tractor-beam' );
   var Trigger = require( 'entities/trigger' );
-
-  var Polygon = require( 'geometry/polygon' );
-  var Segment = require( 'geometry/segment' );
-
   var TriggerWire = require( 'effects/trigger-wire' );
 
-  var Colors = require( 'config/colors' );
   var Material = require( 'config/material' );
 
   var DEG_TO_RAD = Utils.DEG_TO_RAD;
@@ -139,7 +134,7 @@ define(function( require ) {
         1, 0.5
       ],
       sourceDirection: TriggerWire.Direction.BOTTOM,
-      targetDirection: TriggerWire.Direction.Top
+      targetDirection: TriggerWire.Direction.TOP
     });
     game.add( triggerWire );
   };
