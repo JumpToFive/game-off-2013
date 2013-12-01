@@ -15,9 +15,7 @@ define(function( require ) {
   'use strict';
 
   var Game = require( 'game' );
-  var Color = require( 'color' );
   var Player = require( 'entities/player' );
-  var Trail = require( 'effects/trail' );
 
   var Material = require( 'config/material' );
 

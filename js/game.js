@@ -56,6 +56,7 @@ define(function( require ) {
 
     // dt should never exceed this (milliseconds).
     this.MAX_FRAME_TIME = 1000 / 30;
+    this.MIN_FRAME_TIME = 1000 / 120;
     // Frame time (seconds).
     this.FRAME_TIME = 1 / 60;
 
@@ -228,9 +229,12 @@ define(function( require ) {
   };
 
   Game.prototype.update = function() {
-
     this.currTime = Date.now();
     var dt = this.currTime - this.prevTime;
+    if ( dt < this.MIN_FRAME_TIME ) {
+      return;
+    }
+
     this.prevTime = this.currTime;
 
     if ( dt > this.MAX_FRAME_TIME ) {
