@@ -864,7 +864,7 @@ define(function( require ) {
     this.load( this.storage.getItem( key ) );
   };
 
-  Editor.prototype.loadData = function( data, scale  ) {
+  Editor.prototype.loadData = function( data, scale ) {
     scale = scale || 1;
     var inverseScale = 1 / scale;
 
@@ -899,25 +899,29 @@ define(function( require ) {
   };
 
   Editor.prototype.loadBatchData = function( batchData, scale ) {
-    var data = JSON.parse( batchData ).data;
+    var shapesData = [];
 
-    scale = scale || 1;
-    var inverseScale = 1 / scale;
+    JSON.parse( batchData ).forEach(function( groupData ) {
+      var data = groupData.data;
 
-    var shapesData = data.map(function( elementData ) {
-      var vertices = elementData.data.map(function( component ) {
-        return component * inverseScale;
+      scale = scale || 1;
+      var inverseScale = 1 / scale;
+
+      data.forEach(function( elementData ) {
+        var vertices = elementData.data.map(function( component ) {
+          return component * inverseScale;
+        });
+
+        shapesData.push({
+          type: 'polygon',
+          x: elementData.x * inverseScale,
+          y: elementData.y * inverseScale,
+          angle: elementData.angle,
+          fill: new Color(),
+          stroke: new Color(),
+          vertices: vertices
+        });
       });
-
-      return {
-        type: 'polygon',
-        x: elementData.x * inverseScale,
-        y: elementData.y * inverseScale,
-        angle: elementData.angle,
-        fill: new Color(),
-        stroke: new Color(),
-        vertices: vertices
-      };
     });
 
     this.load( JSON.stringify( shapesData ) );
