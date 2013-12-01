@@ -720,6 +720,7 @@ define(function( require ) {
     ctx.save();
     ctx.translate( this.translate.x, this.translate.y );
 
+    this.drawBounds( 0.25 );
     this.drawGrid( 16 );
     this.drawPlayerScale( this.playerPreview.x, this.playerPreview.y, 3 );
 
@@ -730,6 +731,28 @@ define(function( require ) {
     }.bind( this ));
 
     ctx.restore();
+  };
+
+  /**
+   * Draw background bounds as it would appear ingame,
+   * given a parallax scale.
+   */
+  Editor.prototype.drawBounds = function( parallax ) {
+    var ctx = this.ctx;
+
+    var scale = this.scale;
+
+    var width  = ctx.canvas.width  * parallax / scale,
+        height = ctx.canvas.height * parallax / scale;
+
+    var halfWidth  = 0.5 * width,
+        halfHeight = 0.5 * height;
+
+    ctx.beginPath();
+    ctx.rect( -halfWidth, -halfHeight, width, height );
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#222';
+    ctx.stroke();
   };
 
   Editor.prototype.drawGrid = function( spacing ) {
