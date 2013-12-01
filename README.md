@@ -1,6 +1,8 @@
 Hyperspace Garbage Collection
 ===
 
+Backstory
+---
 At the multiverse juncture known as Alpha Omnicron Seven, `N4n`, a waste management systems machine, has been diligently maintaining the Variadic Intergalactic Garbage Processing Plant for the past seven millenia. A nineteenth generation Cyber-Fruit Inc. design, `N4n` features a dual-mode force-field, a levitation-engine, and a proprietary emotion display.
 
 The Plant accepts both matter and anti-matter for processing and recycling. Day-to-day operations are automated and municipalities must adhere to a strict delivery schedule to avoid complete annihilation.
@@ -18,6 +20,9 @@ Dependencies
 * [Box2dWeb](code.google.com/p/box2dweb/)
 * [RequireJS](github.com/jrburke/requirejs)
 
+
+Developer dependencies
+---
 * [Sass](github.com/nex3/sass)
 * [Compass](github.com/chriseppstein/compass)
 * [Jade](github.com/visionmedia/jade)
