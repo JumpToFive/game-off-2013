@@ -250,15 +250,14 @@ define(function( require ) {
   game.add( matEmitter );
 
   // Laser.
-  var laser = new Laser( 0, 20 );
+  var laser = new Laser( 0, 20, Material.ANTIMATTER );
   var laserCircle = new Circle( 0, 0, 1 );
   laserCircle.fill.set({
     red: 255,
-    alpha: 1
+    alpha: 0.2
   });
   laser.angle = -25 * Math.PI / 180;
   laser.add( laserCircle );
-  laser.material = Material.ANTIMATTER;
   game.add( laser );
 
   // Trigger.

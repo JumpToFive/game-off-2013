@@ -17,10 +17,13 @@ define([
 
   var Vec2 = Box2D.Common.Math.b2Vec2;
 
-  function Laser( x, y ) {
+  function Laser( x, y, material ) {
     PhysicsEntity.call( this, {
       fixture: {
-        isSensor: true
+        isSensor: true,
+        filter: {
+          categoryBits: material
+        }
       },
       body: {
         position: {
@@ -78,7 +81,7 @@ define([
 
       if ( Settings.explosions ) {
         var explosion, fill;
-        fill = Colors.Explosion[ Material.type( target.material ) ]
+        fill = Colors.Explosion[ Material.type( target.material ) ];
 
         if ( fill ) {
           explosion = new Explosion( target.x, target.y );
@@ -89,11 +92,23 @@ define([
     }
   };
 
+  Laser.prototype.drawPath = function( ctx ) {
+    // Draw laser source.
+    ctx.beginPath();
+
+    // The laser starts at a radius of 1.
+    ctx.rect( -1, -0.5, 2, 1 );
+    ctx.fillStyle = '#000';
+    ctx.fill();
+
+    PhysicsEntity.prototype.drawPath.call( this, ctx );
+  };
+
   Laser.prototype.draw = function( ctx ) {
     PhysicsEntity.prototype.draw.call( this, ctx );
 
-    // Only render if there is no endpoint and target, or if the target has not
-    // been removed from the game.
+    // Only render beam if there is no endpoint and target,
+    // or if the target has not been removed from the game.
     if ( !this.endpoint || !this.target ||
         ( this.target && !this.target.game ) ) {
       return;
