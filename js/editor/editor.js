@@ -289,6 +289,11 @@ define(function( require ) {
       y: 0.5 * this.canvas.height
     };
 
+    this.playerPreview = {
+      x: 0,
+      y: 0
+    };
+
     this.snapping = true;
     this.snappingRadius = 15;
 
@@ -439,7 +444,7 @@ define(function( require ) {
       return;
     }
 
-    // Add vertex.
+    // V. Add vertex.
     if ( this.keys[ 86 ] ) {
       var minDistanceSquared = Number.POSITIVE_INFINITY,
           minElement, minIndex;
@@ -546,6 +551,12 @@ define(function( require ) {
   Editor.prototype.onMouseMove = function( event ) {
     this.mousePosition( event );
     this.mouse.moved = true;
+
+    // P. Preview player size.
+    if ( this.keys[ 80 ] ) {
+      this.playerPreview.x = this.mouse.x;
+      this.playerPreview.y = this.mouse.y;
+    }
 
     // Move selection.
     if ( this.selection.length ) {
@@ -710,11 +721,12 @@ define(function( require ) {
     ctx.translate( this.translate.x, this.translate.y );
 
     this.drawGrid( 16 );
-    this.drawPlayerScale( 3 );
+    this.drawPlayerScale( this.playerPreview.x, this.playerPreview.y, 3 );
 
     this.elements.forEach(function( element ) {
       var isSelected = this.selection.indexOf( element ) !== -1;
-      element.draw( ctx, true );
+      isSelected = true;
+      element.draw( ctx, isSelected );
     }.bind( this ));
 
     ctx.restore();
@@ -766,11 +778,11 @@ define(function( require ) {
     ctx.stroke();
   };
 
-  Editor.prototype.drawPlayerScale = function( playerRadius ) {
+  Editor.prototype.drawPlayerScale = function( x, y, playerRadius ) {
     var ctx = this.ctx;
 
     ctx.beginPath();
-    ctx.arc( 0, 0, playerRadius / this.scale, 0, PI2 );
+    ctx.arc( x, y, playerRadius / this.scale, 0, PI2 );
     ctx.fillStyle = '#222';
     ctx.fill();
   };
