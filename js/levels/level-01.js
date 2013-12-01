@@ -126,10 +126,14 @@ define(function( require ) {
     em0.start( 500 );
     game.add( em0 );
 
-    // Laser to destroy upflow from emitter.
+    // Lasers to destroy upflow from emitter.
     var laser5 = new Laser( 48, -15, Material.ANTIMATTER );
     laser5.angle = 160 * DEG_TO_RAD;
     game.add( laser5 );
+
+    var laser6 = new Laser( 28, -26, Material.ANTIMATTER );
+    laser6.angle = 5 * DEG_TO_RAD;
+    game.add( laser6 );
 
     // End emitter.
     var em1 = new Emitter( -2, -42 );
