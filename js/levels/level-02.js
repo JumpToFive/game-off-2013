@@ -23,6 +23,7 @@ define(function( require ) {
 
     game.player.x = 60;
     game.player.y = -40;
+    game.material = Material.ANTIMATTER;
 
     LevelUtils.playerMaterialOn( game );
     LevelUtils.addTrail( game );

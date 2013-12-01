@@ -14,21 +14,22 @@ define(function( require ) {
 
   var DEG_TO_RAD = Utils.DEG_TO_RAD;
 
-  var level03Data = require( 'text!../../json/level-03.json' );
-  var level04 = require( 'levels/level-04' );
+  var level04Data = require( 'text!../../json/level-04.json' );
+  // var level05 = require( 'levels/level-05' );
 
   return function( game ) {
     game.clear();
 
     game.player.x = 0;
-    game.player.y = -40;
+    game.player.y = 0;
+    game.camera.fill.alpha = 1;
 
     game.background.hueSpread = 20;
 
     LevelUtils.playerMaterialOn( game );
     LevelUtils.addTrail( game );
     LevelUtils.addBackground( game, 75, 44, 12, 1 );
-    LevelUtils.loadData( game, level03Data );
+    LevelUtils.loadData( game, level04Data );
 
     game.camera.setHeight( 48, {
       maintainAspectRatio: true
@@ -48,8 +49,6 @@ define(function( require ) {
 
     em0.particle = trashM;
     em0.properties = LevelUtils.normalTrashProperties( trashM, Material.MATTER );
-    // Reverse angular velocity so its easier to push.
-    em0.properties.body.angularVelocity = -em0.properties.body.angularVelocity;
 
     em0.start();
     game.add( em0 );
@@ -77,7 +76,7 @@ define(function( require ) {
     // Door.
     var door = new Door( 0, 40, 3, {
       callback: function() {
-        level04( game );
+        // level05( game );
       }
     });
     door.triggers.push( trig0 );
