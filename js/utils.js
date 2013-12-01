@@ -187,6 +187,28 @@ define(function() {
     };
   }
 
+  function expandAABB( aabb, width, height ) {
+    var dw = 0.5 * ( width  - ( aabb.xmax - aabb.xmin ) ),
+        dh = 0.5 * ( height - ( aabb.ymax - aabb.ymin ) );
+
+    return {
+      xmin: aabb.xmin - dw,
+      ymin: aabb.ymin - dh,
+      xmax: aabb.xmax + dw,
+      ymax: aabb.ymax + dh
+    };
+  }
+
+  function relativeExpandAABB( aabb, widthRatio, heightRatio ) {
+    var width  = aabb.xmax - aabb.xmin,
+        height = aabb.ymax - aabb.ymin;
+
+    width  *= widthRatio;
+    height *= heightRatio;
+
+    return expandAABB( aabb, width, height );
+  }
+
 
   return {
     PI2: PI2,
@@ -221,6 +243,9 @@ define(function() {
     set: set,
     defaults: defaults,
 
-    rotateAABB: rotateAABB
+    rotateAABB: rotateAABB,
+
+    expandAABB: expandAABB,
+    relativeExpandAABB: relativeExpandAABB
   };
 });
