@@ -200,7 +200,6 @@ define(function( require ) {
 
       if ( door && door.open ) {
         door.player = player;
-        console.log( 'Change level now!' );
       }
     }.bind( this );
 
