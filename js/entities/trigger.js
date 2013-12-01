@@ -21,7 +21,7 @@ define([
     platformAngularVelocity: 2
   };
 
-  function Trigger( x, y, radius, material ) {
+  function Trigger( x, y, radius, material, options ) {
     this.radius = radius || 0;
 
     PhysicsEntity.call( this, {
@@ -41,7 +41,7 @@ define([
       }
     });
 
-    Utils.defaults( this, defaults );
+    Utils.defaults( this, options, defaults );
 
     this.object = null;
     // If there is an object AND the trigger has caught it.

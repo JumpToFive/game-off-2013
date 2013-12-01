@@ -12,7 +12,7 @@ define([
     duration: 0.3
   };
 
-  function Door( x, y, radius ) {
+  function Door( x, y, radius, options ) {
     this.radius = radius || 0;
 
     PhysicsEntity.call( this, {
@@ -29,7 +29,7 @@ define([
       }
     });
 
-    Utils.defaults( this, defaults );
+    Utils.defaults( this, options, defaults );
 
     this.open = false;
     this.triggers = [];
