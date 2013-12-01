@@ -97,23 +97,21 @@ define([
     this.height = height;
   };
 
-  Object.defineProperty( Camera.prototype, 'aabb', {
-    get: function() {
-      var halfWidth = 0.5 * this.width,
-         halfHeight = 0.5 * this.height;
+  Camera.prototype.aabb = function() {
+    var halfWidth = 0.5 * this.width,
+       halfHeight = 0.5 * this.height;
 
-      var left   = -halfWidth,
-          top    = -halfHeight,
-          right  = halfWidth,
-          bottom = halfHeight;
+    var left   = -halfWidth,
+        top    = -halfHeight,
+        right  = halfWidth,
+        bottom = halfHeight;
 
-      return Utils.rotateAABB(
-        this.x, this.y,
-        left, top, right, bottom,
-        this.angle
-      );
-    }
-  });
+    return Utils.rotateAABB(
+      this.x, this.y,
+      left, top, right, bottom,
+      this.angle
+    );
+  };
 
   return Camera;
 });

@@ -337,18 +337,18 @@ define(function( require ) {
 
     var aabb;
     this.entities.forEach(function( entity ) {
-      aabb = entity.aabb;
+      aabb = entity.aabb();
       if ( aabb ) {
         ctx.rect( aabb.xmin, aabb.ymin, aabb.xmax - aabb.xmin, aabb.ymax - aabb.ymin );
       }
     });
 
-    aabb = this.player.aabb;
+    aabb = this.player.aabb();
     if ( aabb ) {
       ctx.rect( aabb.xmin, aabb.ymin, aabb.xmax - aabb.xmin, aabb.ymax - aabb.ymin );
     }
 
-    aabb = this.camera.aabb;
+    aabb = this.camera.aabb();
     if ( aabb ) {
       ctx.rect( aabb.xmin, aabb.ymin, aabb.xmax - aabb.xmin, aabb.ymax - aabb.ymin );
     }

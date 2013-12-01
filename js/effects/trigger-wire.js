@@ -40,6 +40,10 @@ define([
   TriggerWire.prototype.update = function() {};
 
   TriggerWire.prototype.draw = function( ctx ) {
+    if ( !this.source || !this.target ) {
+      return;
+    }
+
     var x0 = this.source.x,
         y0 = this.source.y,
         r0 = this.source.radius;
@@ -121,6 +125,31 @@ define([
 
     ctx.lineWidth = 0.1 * r1;
     ctx.stroke();
+  };
+
+  // This doesn't handle negative vertex values.
+  TriggerWire.prototype.aabb = function() {
+    if ( !this.source || !this.target ) {
+      return null;
+    }
+
+    var x0 = this.source.x,
+        y0 = this.source.y,
+        r0 = this.source.radius;
+
+    var x1 = this.target.x,
+        y1 = this.target.y;
+
+    var aabb = {
+      xmin: Math.min( x0, x1 ),
+      ymin: Math.min( y0, y1 ),
+      xmax: Math.max( x0, x1 ),
+      ymax: Math.max( y0, y1 )
+    };
+
+    // AABB radius.
+    var radius = 0.2 * r0;
+    return Utils.relativeExpandAABB( aabb, radius, radius );
   };
 
   TriggerWire.Direction = Direction;

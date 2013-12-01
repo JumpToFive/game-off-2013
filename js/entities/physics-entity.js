@@ -180,6 +180,17 @@ define([
     this.vy = Utils.roundNearZero( this.vy );
   };
 
+  PhysicsEntity.prototype.aabb = function() {
+    var aabb = this.fixture.GetAABB();
+
+    return {
+      xmin: aabb.lowerBound.x,
+      ymin: aabb.lowerBound.y,
+      xmax: aabb.upperBound.x,
+      ymax: aabb.upperBound.y
+    };
+  };
+
   Object.defineProperty( PhysicsEntity.prototype, 'body', {
     get: function() {
       return this.fixture.GetBody();
@@ -285,19 +296,6 @@ define([
 
     set: function( va ) {
       this.body.SetAngularVelocity( va || 0 );
-    }
-  });
-
-  Object.defineProperty( PhysicsEntity.prototype, 'aabb', {
-    get: function() {
-      var aabb = this.fixture.GetAABB();
-
-      return {
-        xmin: aabb.lowerBound.x,
-        ymin: aabb.lowerBound.y,
-        xmax: aabb.upperBound.x,
-        ymax: aabb.upperBound.y
-      };
     }
   });
 

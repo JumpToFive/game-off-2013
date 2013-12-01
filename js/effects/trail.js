@@ -89,6 +89,10 @@ define([
     }
   };
 
+  Trail.prototype.aabb = function() {
+    return null;
+  };
+
   Object.defineProperty( Trail.prototype, 'frequency', {
     get: function() {
       return 1 / this.period;
