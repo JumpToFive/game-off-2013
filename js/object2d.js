@@ -92,6 +92,16 @@ define([
     };
   };
 
+  Object.defineProperty( Object2D.prototype, 'aabb', {
+    get: function() {
+      return {
+        xmin: this.x,
+        ymin: this.y,
+        xmax: this.x,
+        ymax: this.y
+      };
+    }
+  });
 
   return Object2D;
 });

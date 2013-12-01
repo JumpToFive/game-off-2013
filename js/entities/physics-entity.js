@@ -288,5 +288,18 @@ define([
     }
   });
 
+  Object.defineProperty( PhysicsEntity.prototype, 'aabb', {
+    get: function() {
+      var aabb = this.fixture.GetAABB();
+
+      return {
+        xmin: aabb.lowerBound.x,
+        ymin: aabb.lowerBound.y,
+        xmax: aabb.upperBound.x,
+        ymax: aabb.upperBound.y
+      };
+    }
+  });
+
   return PhysicsEntity;
 });
