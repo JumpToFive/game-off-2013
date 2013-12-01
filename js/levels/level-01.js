@@ -2,14 +2,31 @@
 define(function( require ) {
   'use strict';
 
+  var Color = require( 'color' );
   var Level = require( 'level' );
+  var Utils = require( 'utils' );
 
+  var Laser = require( 'entities/laser' );
   var TractorBeam = require( 'entities/tractor-beam' );
+
+  var Trail = require( 'effects/trail' );
+
+  var Material = require( 'config/material' );
+
+  var DEG_TO_RAD = Utils.DEG_TO_RAD;
 
   var level01Data = require( 'text!../../json/level-01.json' );
 
   return function( game ) {
     game.clear();
+
+    game.player.x = 0;
+    game.player.y = 0;
+
+    var trail = new Trail();
+    trail.fill = new Color( 255, 255, 255, 0.2 );
+    trail.target = game.player;
+    game.add( trail );
 
     game.background.fill.set({
       red: 128,
@@ -28,12 +45,16 @@ define(function( require ) {
       entities: Level.loadBatchPhysicsEntities( JSON.parse( level01Data ) )
     });
 
-    var tractorBeam = new TractorBeam( 10, 5, 40, 12, {
-      particleCount: 20,
-      particleHeight: 6
+    var tractorBeam = new TractorBeam( 10, 4, 40, 14, {
+      particleCount: 15,
+      particleHeight: 8
     });
-    tractorBeam.angle = -25 * Math.PI / 180;
+    tractorBeam.angle = -25 * DEG_TO_RAD;
     tractorBeam.force = 3000;
     game.add( tractorBeam );
+
+    var laser0 = new Laser( 48, 37, Material.ANTIMATTER );
+    laser0.angle = 60 * DEG_TO_RAD;
+    game.add( laser0 );
   };
 });

@@ -25,11 +25,6 @@ define(function( require ) {
   game.setPlayer( new Player() );
   game.camera.target = game.player;
 
-  var trail = new Trail();
-  trail.fill = new Color( 255, 255, 255, 0.2 );
-  trail.target = game.player;
-  game.add( trail );
-
   // Add game element to body.
   game.element.classList.add( 'game' );
   document.body.insertBefore( game.element, document.body.firstChild );
