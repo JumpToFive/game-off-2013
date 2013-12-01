@@ -29,7 +29,7 @@ define(function( require ) {
     game.clear();
 
     game.player.x = -63;
-    game.player.y = 13;
+    game.player.y = 12;
 
     var trail = new Trail();
     trail.fill = new Color( 255, 255, 255, 0.2 );
@@ -67,20 +67,20 @@ define(function( require ) {
     game.add( laser0 );
 
     // Laser web.
-    var laser1 = new Laser( 16, 48, Material.MATTER );
-    laser1.angle = 90 * DEG_TO_RAD;
+    var laser1 = new Laser( 19, 47, Material.MATTER );
+    laser1.angle = 120 * DEG_TO_RAD;
     game.add( laser1 );
 
-    var laser2 = new Laser( 28, 42, Material.ANTIMATTER );
-    laser2.angle = 130 * DEG_TO_RAD;
+    var laser2 = new Laser( 35, 33, Material.ANTIMATTER );
+    laser2.angle = 160 * DEG_TO_RAD;
     game.add( laser2 );
 
-    var laser3 = new Laser( 13, 17, Material.ANTIMATTER );
-    laser3.angle = -40 * DEG_TO_RAD;
+    var laser3 = new Laser( 14, 16, Material.ANTIMATTER );
+    laser3.angle = -60 * DEG_TO_RAD;
     game.add( laser3 );
 
-    var laser4 = new Laser( 18, 13, Material.MATTER );
-    laser4.angle = -20 * DEG_TO_RAD;
+    var laser4 = new Laser( 22, 10, Material.MATTER );
+    laser4.angle = -50 * DEG_TO_RAD;
     game.add( laser4 );
 
     // Trash.
@@ -94,7 +94,7 @@ define(function( require ) {
     var em0 = new Emitter( 35, -15 );
     em0.spawnArea = new Segment( 0, -2, 0, 2 );
     em0.rate = 0.4;
-    em0.lifeTime = 2;
+    em0.lifeTime = 3;
     em0.speed = 100;
     em0.angle = -110 * DEG_TO_RAD;
 
@@ -121,6 +121,12 @@ define(function( require ) {
     em0.start( 500 );
     game.add( em0 );
 
+    // Laser to destroy upflow from emitter.
+    var laser5 = new Laser( 48, -15, Material.ANTIMATTER );
+    laser5.angle = 160 * DEG_TO_RAD;
+    game.add( laser5 );
+
+    // End emitter.
     var em1 = new Emitter( -2, -42 );
     em1.spawnArea = new Segment( 0, -2, 0, 2 );
     em1.rate = 0.2;
@@ -148,7 +154,7 @@ define(function( require ) {
       }
     };
 
-    em1.start( 1000 );
+    em1.start( 1500 );
     game.add( em1 );
 
     // Tractor beam leading to trigger.
