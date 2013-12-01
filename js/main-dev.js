@@ -22,6 +22,8 @@ define(function( require ) {
       Segment = require( 'geometry/segment' ),
       Player  = require( 'entities/player' );
 
+  var Utils = require( 'utils' );
+
   var Color = require( 'color' );
   var Entity = require( 'entities/entity' );
   var PhysicsEntity = require( 'entities/physics-entity' );
@@ -33,6 +35,7 @@ define(function( require ) {
   var Trigger = require( 'entities/trigger' );
   var Door = require( 'entities/door' );
   var TriggerWire = require( 'effects/trigger-wire' );
+  var CameraPath = require( 'effects/camera-path' );
 
   var Colors = require( 'config/colors' );
   var Material = require( 'config/material' );
@@ -323,6 +326,18 @@ define(function( require ) {
   game.add( trail );
   trail.target = game.player;
 
+  // Camera path.
+  var cameraPath = new CameraPath( 0, 60, 50, 10 );
+  cameraPath.stroke.set({
+    blue: 192,
+    alpha: 1
+  });
+  cameraPath.lineWidth = 0.2;
+  cameraPath.relativeTo( game.camera, 2, 40 * Utils.DEG_TO_RAD );
+  cameraPath.target = game.player;
+  cameraPath.camera = game.camera;
+  game.add( cameraPath );
+
   // Debug objects.
   [
     [
@@ -337,6 +352,11 @@ define(function( require ) {
       [ 10, -5, 20, -5 ],
       [ 20, -5, 20, 0 ],
       [ 20, 0, 10, 0 ]
+    ],
+    // Camera path.
+    [
+      [ -25, 55, 25, 55 ],
+      [ 25, 65, -25, 65 ]
     ]
   ].forEach(function( object ) {
     object.forEach(function( edgeData ) {
