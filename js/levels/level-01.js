@@ -152,17 +152,21 @@ define(function( require ) {
     game.add( em1 );
 
     // Tractor beam leading to trigger.
-    var tB1 = new TractorBeam( 35, -33, 20, 5 );
-    tB1.angle = -180 * DEG_TO_RAD;
+    var tB1 = new TractorBeam( 35, -34, 20, 5 );
+    tB1.angle = -176 * DEG_TO_RAD;
     tB1.force = 3000;
     game.add( tB1 );
 
     // Trigger.
-    var trig0 = new Trigger( -15, -30, 3, Material.ANTIMATTER );
+    var trig0 = new Trigger( -15, -29, 3, Material.ANTIMATTER, {
+      duration: 0.5
+    });
     game.add( trig0 );
 
     // Door.
-    var door = new Door( -3, -15, 3 );
+    var door = new Door( -3, -19, 3, {
+      duration: 1.2
+    });
     door.triggers.push( trig0 );
     game.add( door );
 
