@@ -70,39 +70,18 @@ define(function( require ) {
     game.add( laser4 );
 
     // Trash.
-    var trashAM = new Polygon();
-    trashAM.vertices = [ 0.75, 0.75, -0.75, 0.75, -0.75, -0.75, 0.75, -0.75 ];
-    trashAM.fill.set( Colors.Solid.ANTIMATTER );
-    trashAM.stroke.set( Colors.White );
-    trashAM.lineWidth = 0.2;
+    var trashAM = LevelUtils.normalTrash( Material.ANTIMATTER );
 
     // Emitters.
     var em0 = new Emitter( 35, -15 );
-    em0.spawnArea = new Segment( 0, -2, 0, 2 );
+    em0.spawnArea = LevelUtils.normalSpawnArea(4);
     em0.rate = 0.4;
     em0.lifeTime = 3;
     em0.speed = 100;
     em0.angle = -110 * DEG_TO_RAD;
 
     em0.particle = trashAM;
-    em0.properties = {
-      shape: 'polygon',
-      type: 'vector',
-      data: trashAM.vertices.slice(),
-      fixture: {
-        density: 1.75,
-        friction: 0.5,
-        restitution: 0.2,
-        filter: {
-          categoryBits: Material.ANTIMATTER
-        }
-      },
-      body: {
-        angularVelocity: 3 * Math.PI,
-        linearDamping: 0.2,
-        type: 'dynamic'
-      }
-    };
+    em0.properties = LevelUtils.normalTrashProperties( trashAM, Material.ANTIMATTER );
 
     em0.start( 500 );
     game.add( em0 );
@@ -118,31 +97,15 @@ define(function( require ) {
 
     // End emitter.
     var em1 = new Emitter( -2, -42 );
-    em1.spawnArea = new Segment( 0, -2, 0, 2 );
+    em1.spawnArea = LevelUtils.normalSpawnArea(4);
     em1.rate = 0.2;
     em1.lifeTime = 2.5;
     em1.speed = 20;
     em1.angle = -80 * DEG_TO_RAD;
 
     em1.particle = trashAM;
-    em1.properties = {
-      shape: 'polygon',
-      type: 'vector',
-      data: trashAM.vertices.slice(),
-      fixture: {
-        density: 1,
-        friction: 0.5,
-        restitution: 0.2,
-        filter: {
-          categoryBits: Material.ANTIMATTER
-        }
-      },
-      body: {
-        angularVelocity: 3 * Math.PI,
-        linearDamping: 0.2,
-        type: 'dynamic'
-      }
-    };
+    em1.properties = LevelUtils.normalTrashProperties( trashAM, Material.ANTIMATTER );
+    em1.properties.fixture.density = 1;
 
     em1.start( 1500 );
     game.add( em1 );

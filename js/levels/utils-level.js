@@ -1,10 +1,17 @@
 /*globals define*/
-define([
-  'level',
-  'effects/trail',
-  'entities/player',
-], function( Level, Trail, Player ) {
+define(function( require ) {
   'use strict';
+
+  var Level = require( 'level' );
+
+  var Colors = require( 'config/colors' );
+  var Material = require( 'config/material' );
+
+  var Polygon = require( 'geometry/polygon' );
+  var Segment = require( 'geometry/segment' );
+
+  var Player = require( 'entities/player' );
+  var Trail = require( 'effects/trail' );
 
   function addTrail( game ) {
     var trail = new Trail();
@@ -50,6 +57,44 @@ define([
     });
   }
 
+  // Helper functions for emitters.
+  function normalSpawnArea( width ) {
+    var halfWidth = 0.5 * width;
+    return new Segment( 0, -halfWidth, 0, halfWidth );
+  }
+
+  function normalTrash( material ) {
+    var trash = new Polygon();
+
+    trash.vertices = [ 0.75, 0.75, -0.75, 0.75, -0.75, -0.75, 0.75, -0.75 ];
+    trash.fill.set( Colors.Solid[ Material.type( material ) ] );
+    trash.stroke.set( Colors.White );
+    trash.lineWidth = 0.2;
+
+    return trash;
+  }
+
+  function normalTrashProperties( trash, material ) {
+    return {
+      shape: 'polygon',
+      type: 'vector',
+      data: trash.vertices.slice(),
+      fixture: {
+        density: 1.75,
+        friction: 0.5,
+        restitution: 0.2,
+        filter: {
+          categoryBits: material
+        }
+      },
+      body: {
+        angularVelocity: 3 * Math.PI,
+        linearDamping: 0.2,
+        type: 'dynamic'
+      }
+    };
+  }
+
   return {
     addTrail: addTrail,
     addBackground: addBackground,
@@ -57,6 +102,11 @@ define([
     playerMaterialOff: playerMaterialOff,
     playerMaterialOn: playerMaterialOn,
 
-    loadData: loadData
+    loadData: loadData,
+
+    // emitter helpers.
+    normalSpawnArea: normalSpawnArea,
+    normalTrash: normalTrash,
+    normalTrashProperties: normalTrashProperties
   };
 });
