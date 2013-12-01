@@ -1,0 +1,31 @@
+[
+  {
+    "data": [
+      {
+        "x": -13.2,
+        "y": 1.1,
+        "angle": 1.571,
+        "data": [
+          10,
+          5,
+          -10,
+          5,
+          0,
+          -10
+        ]
+      }
+    ],
+    "properties": {
+      "shape": "polygon",
+      "type": "vector",
+      "fixture": {
+        "density": 1,
+        "friction": 0.5,
+        "restitution": 0.2,
+        "filter": {
+          "categoryBits": 6
+        }
+      }
+    }
+  }
+]

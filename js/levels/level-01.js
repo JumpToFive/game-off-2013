@@ -24,6 +24,7 @@ define(function( require ) {
   var DEG_TO_RAD = Utils.DEG_TO_RAD;
 
   var level01Data = require( 'text!../../json/level-01.json' );
+  var level02 = require( 'levels/level-02' );
 
   return function( game ) {
     // Prevent player from changing material.
@@ -180,7 +181,10 @@ define(function( require ) {
 
     // Door.
     var door = new Door( -3, -19, 3, {
-      duration: 1.2
+      duration: 1.2,
+      callback: function() {
+        level02( game );
+      }
     });
     door.triggers.push( trig0 );
     game.add( door );
