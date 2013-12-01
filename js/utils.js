@@ -5,6 +5,9 @@ define(function() {
   var PI2 = 2 * Math.PI,
       HALF_PI = 0.5 * Math.PI;
 
+  var RAD_TO_DEG = 180 / Math.PI,
+      DEG_TO_RAD = Math.PI / 180;
+
   var EPSILON = 1e-1;
 
   function clamp( value, min, max ) {
@@ -188,6 +191,9 @@ define(function() {
   return {
     PI2: PI2,
     HALF_PI: HALF_PI,
+
+    RAD_TO_DEG: RAD_TO_DEG,
+    DEG_TO_RAD: DEG_TO_RAD,
 
     EPSILON: EPSILON,
 
