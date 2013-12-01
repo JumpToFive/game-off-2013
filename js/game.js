@@ -63,13 +63,6 @@ define(function( require ) {
     this.debug = false;
 
     this.background = new Background( width, height );
-    this.background.fill.set({
-      red: 64,
-      green: 64,
-      blue: 96,
-      alpha: 1
-    });
-
     this.background.camera = this.camera;
     this.background.game = this;
     this.background.prerender();

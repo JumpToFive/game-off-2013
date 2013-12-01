@@ -16,7 +16,7 @@ define(function( require ) {
   var DEG_TO_RAD = Utils.DEG_TO_RAD;
 
   var level02Data = require( 'text!../../json/level-02.json' );
-  // var level03 = require( 'levels/level-03' );
+  var level03 = require( 'levels/level-03' );
 
   return function( game ) {
     game.clear();
@@ -38,7 +38,7 @@ define(function( require ) {
 
     var em0 = new Emitter( 70, -40 );
     em0.spawnArea = LevelUtils.normalSpawnArea(4);
-    em0.rate = 0.4;
+    em0.rate = 0.2;
     em0.lifeTime = 6;
     em0.speed = 100;
     em0.angle = -180 * DEG_TO_RAD;
@@ -69,7 +69,9 @@ define(function( require ) {
 
     // Door.
     var door = new Door( -45, -17, 3, {
-      callback: function() {}
+      callback: function() {
+        level03( game );
+      }
     });
 
     door.triggers.push( trig0 );

@@ -80,6 +80,14 @@ define(function( require ) {
   game.debug = true;
   game.initializeDebugView();
 
+  game.background.fill.set({
+    red: 64,
+    green: 64,
+    blue: 96,
+    alpha: 1
+  });
+  game.background.prerender();
+
   game.camera.stroke.set({
     blue: 255,
     alpha: 1.0
