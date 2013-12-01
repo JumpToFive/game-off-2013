@@ -301,6 +301,10 @@ define(function( require ) {
     this.player.draw( ctx );
     this.camera.draw( ctx );
 
+    if ( this.debug ) {
+      this.drawAABBs( ctx );
+    }
+
     ctx.restore();
 
     this.input.draw( ctx );
@@ -333,6 +337,32 @@ define(function( require ) {
       this.camera.height = 48;
       this.camera.angle = 0;
     }
+  };
+
+  Game.prototype.drawAABBs = function( ctx ) {
+    ctx.beginPath();
+
+    var aabb;
+    this.entities.forEach(function( entity ) {
+      aabb = entity.aabb;
+      if ( aabb ) {
+        ctx.rect( aabb.xmin, aabb.ymin, aabb.xmax - aabb.xmin, aabb.ymax - aabb.ymin );
+      }
+    });
+
+    aabb = this.player.aabb;
+    if ( aabb ) {
+      ctx.rect( aabb.xmin, aabb.ymin, aabb.xmax - aabb.xmin, aabb.ymax - aabb.ymin );
+    }
+
+    aabb = this.camera.aabb;
+    if ( aabb ) {
+      ctx.rect( aabb.xmin, aabb.ymin, aabb.xmax - aabb.xmin, aabb.ymax - aabb.ymin );
+    }
+
+    ctx.strokeStyle = '#f00';
+    ctx.lineWidth = 0.2;
+    ctx.stroke();
   };
 
   Game.prototype.drawDebug = function() {
