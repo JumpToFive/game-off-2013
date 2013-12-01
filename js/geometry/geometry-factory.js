@@ -3,12 +3,16 @@ define(function( require ) {
   'use strict';
 
   var Color = require( 'color' );
+  var Circle = require( 'geometry/circle' );
+  var Polygon = require( 'geometry/polygon' );
+  var Rect = require( 'geometry/rect' );
+  var Segment = require( 'geometry/segment' );
 
   var classes = {
-    circle: require( 'geometry/circle' ),
-    polygon: require( 'geometry/polygon' ),
-    rect: require( 'geometry/rect' ),
-    segment: require( 'geometry/segment' )
+    circle: Circle,
+    polygon: Polygon,
+    rect: Rect,
+    segment: Segment
   };
 
   function create( json ) {
