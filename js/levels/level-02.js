@@ -6,14 +6,20 @@ define(function( require ) {
   var Level = require( 'level' );
 
   var Trail = require( 'effects/trail' );
+  var Player = require( 'entities/player' );
 
   var level02Data = require( 'text!../../json/level-02.json' );
 
   return function( game ) {
+    // Allow player to change material.
+    var materialBtn = document.getElementById( 'material-btn' );
+    materialBtn.style.display = '';
+    game.player.toggleMaterial = Player.prototype.toggleMaterial;
+
     game.clear();
 
-    game.player.x = 0;
-    game.player.y = 0;
+    game.player.x = 64;
+    game.player.y = -45;
 
     var trail = new Trail();
     trail.fill = new Color( 255, 255, 255, 0.2 );

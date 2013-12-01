@@ -100,8 +100,8 @@ define(function( require ) {
     // Start game.
     game.tick();
 
-    var level01 = require( 'levels/level-01' );
-    level01( game );
+    var level = require( 'levels/level-01' );
+    level( game );
   }
 
   startBtn.addEventListener( 'click', start );
@@ -109,5 +109,7 @@ define(function( require ) {
   // For debugging purposes.
   if ( window.localStorage.getItem( 'debug' ) ) {
     start();
+    var level = require( 'levels/level-02' );
+    level( game );
   }
 });
