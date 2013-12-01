@@ -112,4 +112,9 @@ define(function( require ) {
   }
 
   startBtn.addEventListener( 'click', start );
+
+  // For debugging purposes.
+  if ( window.localStorage.getItem( 'debug' ) ) {
+    start();
+  }
 });
