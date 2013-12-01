@@ -187,10 +187,7 @@ define(function() {
     };
   }
 
-  function expandAABB( aabb, width, height ) {
-    var dw = 0.5 * ( width  - ( aabb.xmax - aabb.xmin ) ),
-        dh = 0.5 * ( height - ( aabb.ymax - aabb.ymin ) );
-
+  function relativeExpandAABB( aabb, dw, dh ) {
     return {
       xmin: aabb.xmin - dw,
       ymin: aabb.ymin - dh,
@@ -199,14 +196,21 @@ define(function() {
     };
   }
 
-  function relativeExpandAABB( aabb, widthRatio, heightRatio ) {
-    var width  = aabb.xmax - aabb.xmin,
-        height = aabb.ymax - aabb.ymin;
+  function expandAABB( aabb, width, height ) {
+    var dw = 0.5 * ( width  - ( aabb.xmax - aabb.xmin ) ),
+        dh = 0.5 * ( height - ( aabb.ymax - aabb.ymin ) );
 
-    width  *= widthRatio;
-    height *= heightRatio;
+    return relativeExpandAABB( aabb, dw, dh );
+  }
 
-    return expandAABB( aabb, width, height );
+  function ratioExpandAABB( aabb, widthRatio, heightRatio ) {
+    var dw = aabb.xmax - aabb.xmin,
+        dh = aabb.ymax - aabb.ymin;
+
+    dw = ( dw *  widthRatio ) - dw;
+    dh = ( dh * heightRatio ) - dh;
+
+    return relativeExpandAABB( aabb, dw, dh );
   }
 
 
@@ -246,6 +250,7 @@ define(function() {
     rotateAABB: rotateAABB,
 
     expandAABB: expandAABB,
+    ratioExpandAABB: ratioExpandAABB,
     relativeExpandAABB: relativeExpandAABB
   };
 });
