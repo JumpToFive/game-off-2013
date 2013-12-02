@@ -3,6 +3,21 @@ Hyperspace Garbage Collection
 
 ![Screenshot](./img/screenshot.png)
 
+Instructions
+---
+**WASD/←↑→↓/Touch Controls** - movement.
+**Spacebar** Toggle material type between matter and antimatter.
+
+**Red** - Antimatter.
+**Blue** - Matter.
+
+Trash flies out of interuniverse warp holes.
+If matter and antimatter trash collide, they destroy each other. Watch out, trash has a limited lifetime!
+
+Manipulate the correct type of trash to a similarily-colored trigger to open up the door to the next level.
+
+Lasers don't harm you, but they destroy trash of the same color.
+
 Backstory
 ---
 At the multiverse juncture known as Alpha Omnicron Seven, `N4n`, a waste management systems machine, has been diligently maintaining the Variadic Intergalactic Garbage Processing Plant for the past seven millenia. A nineteenth generation Cyber-Fruit Inc. design, `N4n` features a dual-mode force-field, a levitation-engine, and a proprietary emotion display.
