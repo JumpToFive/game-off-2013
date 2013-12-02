@@ -64,6 +64,8 @@ define(function( require ) {
     this.debug = false;
     this.debugAABB = false;
 
+    this.text = '';
+
     this.background = new Background( width, height );
     this.background.camera = this.camera;
     this.background.game = this;
@@ -303,6 +305,21 @@ define(function( require ) {
     ctx.restore();
 
     this.input.draw( ctx );
+
+    if ( this.text ) {
+      ctx.font = '48pt Georgia, Times New Roman, serf';
+      ctx.fillStyle = 'white';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = 'black';
+      ctx.fillText( this.text, 0.5 * ctx.canvas.width, 0.25 * ctx.canvas.height );
+      ctx.shadowBlur = 0;
+
+      ctx.textAlign = 'start';
+      ctx.textBaseline = 'alphabetic';
+    }
   };
 
   Game.prototype.updateDebug = function( dt ) {
