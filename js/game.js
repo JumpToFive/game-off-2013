@@ -5,6 +5,7 @@ define(function( require ) {
 
   var Box2D = require( 'box2d' );
   var Input = require( 'input' );
+  var Intersection = require( 'geometry/intersection' );
   var Camera = require( 'entities/camera' );
   var Player = require( 'entities/player' );
   var Explosion = require( 'entities/explosion' );
@@ -287,7 +288,15 @@ define(function( require ) {
       this.background.draw( ctx );
     }
 
+    // Cull.
+    var cameraAABB = this.camera.aabb();
+
     this.entities.forEach(function( entity ) {
+      var aabb = entity.aabb();
+      if ( aabb && !Intersection.aabb( cameraAABB, aabb ) ) {
+        return;
+      }
+
       entity.draw( ctx );
     });
 
