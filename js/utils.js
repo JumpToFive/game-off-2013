@@ -200,8 +200,8 @@ define(function() {
   }
 
   function expandAABB( aabb, width, height ) {
-    var dw = 0.5 * ( width  - ( aabb.xmax - aabb.xmin ) ),
-        dh = 0.5 * ( height - ( aabb.ymax - aabb.ymin ) );
+    var dw = width  - ( aabb.xmax - aabb.xmin ),
+        dh = height - ( aabb.ymax - aabb.ymin );
 
     return relativeExpandAABB( aabb, dw, dh );
   }
