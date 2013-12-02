@@ -69,6 +69,19 @@ define(function() {
     return Math.sqrt( distanceSquared( x0, y0, x1, y1 ) );
   }
 
+    /**
+   * Rounds a value to the given precision, removes any trailing zeros produced
+   * by Number.prototype.toFixed().
+   *
+   * Example:
+   *   var x = 100;
+   *   x.toFixed(2); // "100.00"
+   *   round( 100, 2 ); // "100"
+   */
+  function round( value, precision ) {
+    return parseFloat( value.toFixed( precision ) );
+  }
+
   function roundNearZero( value, epsilon ) {
     return Math.abs( value ) > ( epsilon || EPSILON ) ? value : 0;
   }
@@ -241,6 +254,7 @@ define(function() {
     distanceSquared: distanceSquared,
     distance: distance,
 
+    round: round,
     roundNearZero: roundNearZero,
     lineNormal: lineNormal,
     angleFrom: angleFrom,

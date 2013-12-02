@@ -49,18 +49,7 @@ define(function( require ) {
     arrayToColorObject( strokes );
   }) ();
 
-    /**
-   * Rounds a value to the given precision, removes any trailing zeros produced
-   * by Number.prototype.toFixed().
-   *
-   * Example:
-   *   var x = 100;
-   *   x.toFixed(2); // "100.00"
-   *   round( 100, 2 ); // "100"
-   */
-  function round( value, precision ) {
-    return parseFloat( value.toFixed( precision ) );
-  }
+  var round = Utils.round;
 
   // Utility class to allow for Polygon vertex transforms.
   function Vertex( polygon, index ) {
@@ -731,6 +720,13 @@ define(function( require ) {
     }.bind( this ));
 
     ctx.restore();
+
+    ctx.font = '12pt "Helvetica Neue"';
+    ctx.fillStyle = 'black';
+    ctx.fillText(
+      ( this.mouse.x * this.scale ).toFixed(1) + ', ' +
+      ( this.mouse.y * this.scale ).toFixed(1),
+    20, 30 );
   };
 
   /**
