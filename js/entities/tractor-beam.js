@@ -149,7 +149,7 @@ define([
     }.bind( this ));
   };
 
-  PhysicsEntity.prototype.updateParticles = function( force ) {
+  TractorBeam.prototype.updateParticles = function( force ) {
     // Slow it down to resemble ingame effect.
     force *= 1e-2;
 
