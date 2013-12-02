@@ -165,6 +165,11 @@ define([
     } else if ( this.emotion === Emotion.HIT ) {
       // Draw X.
       ctx.beginPath();
+      ctx.lineCap = 'round';
+
+      // Smaller eye movements.
+      dx *= 0.5;
+      dy *= 0.5;
 
       // Left diagonal.
       ctx.moveTo( -0.08 * width + dx, -0.07 * height + dy );
@@ -173,9 +178,11 @@ define([
       ctx.moveTo( -0.08 * width + dx,  0.07 * height + dy );
       ctx.lineTo(  0.08 * width + dx, -0.07 * height + dy );
 
-      ctx.lineWidth = 0.03 * width;
+      ctx.lineWidth = 0.04 * width;
       ctx.strokeStyle = faceColor;
       ctx.stroke();
+
+      ctx.lineCap = 'butt';
     }
   };
 
