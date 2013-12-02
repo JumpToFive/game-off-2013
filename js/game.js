@@ -308,26 +308,26 @@ define(function( require ) {
   Game.prototype.updateDebug = function( dt ) {
     var aspectRatio = this.camera.width / this.camera.height;
     // Basic camera controls.
-    // W. Zoom in.
-    if ( this.input.keys[ 87 ] ) {
+    // I. Zoom in.
+    if ( this.input.keys[ 73 ] ) {
       this.camera.width = Math.max( this.camera.width - 1.5 * aspectRatio, 32 );
       this.camera.height = Math.max( this.camera.height - 1.5, 24 );
     }
-    // S. Zoom out.
-    if ( this.input.keys[ 83 ] ) {
+    // J. Zoom out.
+    if ( this.input.keys[ 74 ] ) {
       this.camera.width += 1.5 * aspectRatio;
       this.camera.height += 1.5;
     }
-    // A. Rotate left.
-    if ( this.input.keys[ 65 ] ) {
+    // K. Rotate left.
+    if ( this.input.keys[ 75 ] ) {
       this.camera.angle += dt;
     }
-    // D. Rotate right.
-    if ( this.input.keys[ 68 ] ) {
+    // L. Rotate right.
+    if ( this.input.keys[ 76 ] ) {
       this.camera.angle -= dt;
     }
-    // Q. Reset camera.
-    if ( this.input.keys[ 81 ] ) {
+    // O. Reset camera.
+    if ( this.input.keys[ 79 ] ) {
       this.camera.width = 64;
       this.camera.height = 48;
       this.camera.angle = 0;
