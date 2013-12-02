@@ -208,5 +208,12 @@ define([
     PhysicsEntity.prototype.drawPath.call( this, ctx );
   };
 
+  Trigger.prototype.aabb = function() {
+    var aabb = PhysicsEntity.prototype.aabb.call( this );
+    // Add half lineWidth of frame.
+    var ratio = this.frameRatio + 0.15;
+    return Utils.ratioExpandAABB( aabb, ratio, ratio );
+  };
+
   return Trigger;
 });

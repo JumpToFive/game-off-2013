@@ -148,7 +148,7 @@ define([
     };
 
     // AABB radius.
-    var radius = 0.2 * r0;
+    var radius = 0.1 * r0;
     return Utils.relativeExpandAABB( aabb, radius, radius );
   };
 

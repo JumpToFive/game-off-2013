@@ -188,6 +188,9 @@ define(function() {
   }
 
   function relativeExpandAABB( aabb, dw, dh ) {
+    dw *= 0.5;
+    dh *= 0.5;
+
     return {
       xmin: aabb.xmin - dw,
       ymin: aabb.ymin - dh,

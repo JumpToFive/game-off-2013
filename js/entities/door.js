@@ -141,5 +141,11 @@ define([
     PhysicsEntity.prototype.drawPath.call( this, ctx );
   };
 
+  Door.prototype.aabb = function() {
+    // Drawn door width = ( 1.2 + 0.1 ) * radius.
+    var aabb = PhysicsEntity.prototype.aabb.call( this );
+    return Utils.ratioExpandAABB( aabb, 1.3, 1.3 );
+  };
+
   return Door;
 });
