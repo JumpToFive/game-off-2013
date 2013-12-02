@@ -160,5 +160,9 @@ define([
     }
   };
 
+  TractorBeam.prototype.aabb = function() {
+    return null;
+  };
+
   return TractorBeam;
 });

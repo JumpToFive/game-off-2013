@@ -195,6 +195,10 @@ define([
     PhysicsEntity.prototype.drawPath.call( this, ctx );
   };
 
+  Emitter.prototype.aabb = function() {
+    return null;
+  };
+
   Object.defineProperty( Emitter.prototype, 'portalRadius', {
     get: function() {
       return this.spawnArea.height * this.portalRadiusRatio;

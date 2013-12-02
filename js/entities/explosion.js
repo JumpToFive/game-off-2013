@@ -127,5 +127,14 @@ define([
     ctx.restore();
   };
 
+  Explosion.prototype.aabb = function() {
+    return {
+      xmin: this.x - 8,
+      ymin: this.y - 8,
+      xmax: this.x + 8,
+      ymax: this.y + 8
+    };
+  };
+
   return Explosion;
 });
