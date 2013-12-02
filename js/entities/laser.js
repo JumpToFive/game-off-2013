@@ -197,5 +197,30 @@ define([
     ctx.restore();
   };
 
+  Laser.prototype.aabb = function() {
+    var aabb;
+    if ( !this.endpoint ) {
+      aabb = PhysicsEntity.prototype.aabb();
+      return Utils.expandAABB( aabb, 1, 1 );
+    }
+
+    var x0 = this.x,
+        y0 = this.y;
+
+    var x1 = this.endpoint.x,
+        y1 = this.endpoint.y;
+
+    aabb = {
+      xmin: Math.min( x0, x1 ),
+      ymin: Math.min( y0, y1 ),
+      xmax: Math.max( x0, x1 ),
+      ymax: Math.max( y0, y1 )
+    };
+
+    // 1 is the pointer radius. 0.6 is the maximum glow radius.
+    var radius = 1.6;
+    return Utils.relativeExpandAABB( aabb, radius, radius );
+  };
+
   return Laser;
 });
