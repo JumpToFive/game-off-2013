@@ -30,7 +30,7 @@ define(function( require ) {
     LevelUtils.addBackground( game, 75, 44, 12, 1 );
     LevelUtils.loadData( game, level03Data );
 
-    game.camera.setHeight( 48, {
+    game.camera.setHeight( 42, {
       maintainAspectRatio: true
     });
 
