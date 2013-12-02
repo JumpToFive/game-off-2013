@@ -692,6 +692,11 @@ define(function( require ) {
 
       this.draw();
     }
+
+    // S. Toggle snapping.
+    if ( event.which === 83 ) {
+      this.snapping = !this.snapping;
+    }
   };
 
   Editor.prototype.onKeyUp = function( event ) {
