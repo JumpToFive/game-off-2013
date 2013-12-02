@@ -21,6 +21,7 @@ define(function( require ) {
       maintainAspectRatio: true
     });
 
+    game.font = '48pt Georgia, Times New Roman, serif';
     game.text = 'the end';
   };
 });

@@ -25,6 +25,21 @@ define(function( require ) {
     game.player.y = -40;
     game.material = Material.ANTIMATTER;
 
+    game.font = '16pt "Helvetica Neue", Helvetica, Arial, sans-serif';
+    var materialText = 'Press button or spacebar to change matter type.';
+    game.text = materialText;
+
+    var checkMaterial = setInterval(function() {
+      if ( game.player.material === Material.MATTER ) {
+        game.text = '';
+        clearInterval( checkMaterial );
+      }
+
+      if ( game.text !== materialText ) {
+        clearInterval( checkMaterial );
+      }
+    }, 200 );
+
     LevelUtils.playerMaterialOn( game );
     LevelUtils.addTrail( game );
     LevelUtils.addBackground( game, 96, 75, 32, 1 );

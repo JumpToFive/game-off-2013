@@ -307,7 +307,7 @@ define(function( require ) {
     this.input.draw( ctx );
 
     if ( this.text ) {
-      ctx.font = '48pt Georgia, Times New Roman, serf';
+      ctx.font = this.font;
       ctx.fillStyle = 'white';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';

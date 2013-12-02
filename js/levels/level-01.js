@@ -25,6 +25,21 @@ define(function( require ) {
     game.player.x = -63;
     game.player.y = 12;
 
+    game.font = 'bold 36pt "Helvetica Neue", Helvetica, Arial, sans-serif';
+    var controlsText = 'WASD   ←↑→↓   touch';
+    game.text = controlsText;
+
+    var checkMovement = setInterval(function() {
+      if ( ( game.player.vx || game.player.vy ) ) {
+        game.text = '';
+        clearInterval( checkMovement );
+      }
+
+      if ( game.text !== controlsText )  {
+        clearInterval( checkMovement );
+      }
+    }, 200 );
+
     LevelUtils.playerMaterialOff( game );
     LevelUtils.addTrail( game );
     LevelUtils.addBackground( game, 128, 96, 64, 1 );

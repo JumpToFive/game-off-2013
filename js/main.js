@@ -109,7 +109,7 @@ define(function( require ) {
   // For debugging purposes.
   if ( window.localStorage.getItem( 'debug' ) ) {
     start();
-    var level = require( 'levels/level-04' );
+    var level = require( 'levels/level-02' );
     level( game );
   }
 });
