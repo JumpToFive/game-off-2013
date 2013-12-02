@@ -244,7 +244,7 @@ button {
   margin-left: -125px;
   z-index: 2;
   display: none;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.5);
   padding: 20px;
 }
 /* line 166, ../sass/screen.scss */
@@ -270,61 +270,63 @@ button {
 /* line 184, ../sass/screen.scss */
 .settings-view .toggle-settings-btn {
   position: absolute;
+  right: 20px;
+  bottom: 20px;
   font-size: 3em;
   color: white;
 }
 
 @media screen and (min-width: 320px), screen and (min-height: 240px) {
-  /* line 196, ../sass/screen.scss */
+  /* line 198, ../sass/screen.scss */
   .game {
     margin: auto;
   }
 
-  /* line 201, ../sass/screen.scss */
+  /* line 203, ../sass/screen.scss */
   .game,
   canvas {
     width: 320px;
     height: 240px;
   }
 
-  /* line 206, ../sass/screen.scss */
+  /* line 208, ../sass/screen.scss */
   .material-btn {
     width: 320px;
   }
 }
 @media screen and (min-width: 480px) and (min-height: 400px) {
-  /* line 214, ../sass/screen.scss */
+  /* line 216, ../sass/screen.scss */
   .game {
     margin: auto;
   }
 
-  /* line 219, ../sass/screen.scss */
+  /* line 221, ../sass/screen.scss */
   .game,
   canvas {
     width: 480px;
     height: 360px;
   }
 
-  /* line 224, ../sass/screen.scss */
+  /* line 226, ../sass/screen.scss */
   .material-btn {
     width: 480px;
   }
 }
 @media screen and (min-width: 640px) and (min-height: 576px) {
-  /* line 233, ../sass/screen.scss */
+  /* line 235, ../sass/screen.scss */
   .game {
     margin: 32px auto;
     width: 640px;
     height: 480px;
   }
 
-  /* line 239, ../sass/screen.scss */
+  /* line 241, ../sass/screen.scss */
   canvas {
     width: auto;
     height: auto;
   }
 
-  /* line 244, ../sass/screen.scss */
+  /* line 246, ../sass/screen.scss */
   .material-btn {
     width: 256px;
   }

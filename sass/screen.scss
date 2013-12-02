@@ -159,7 +159,7 @@ $settings-size: 250px;
     margin-left: -0.5 * $settings-size;
     z-index: 2;
     display: none;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.5);
     padding: 20px;
   }
 
@@ -183,6 +183,8 @@ $settings-size: 250px;
 
   .toggle-settings-btn {
     position: absolute;
+    right: 20px;
+    bottom: 20px;
     font-size: 3em;
     color: white;
   }
