@@ -127,44 +127,55 @@ define([
   Player.prototype.drawFace = function( ctx, width, height ) {
     var faceColor = Colors.Face;
 
+    // Determine direction of movement.
+    var dx = Utils.inverseLerp( Math.abs( this.vx ), 0, 20 ),
+        dy = Utils.inverseLerp( Math.abs( this.vy ), 0, 20 );
+
+    dx = Utils.clamp( dx, 0, 1 );
+    dy = Utils.clamp( dy, 0, 1 );
+
+    dx *= this.vx < 0 ? -1 : 1;
+    dy *= this.vy < 0 ? -1 : 1;
+
+    dx *= 0.05 * width;
+    dy *= 0.05 * width;
+
+    dx += this.game.camera.x;
+    dy += this.game.camera.y;
+
+    var d = this.game.camera.toLocal( dx, dy );
+    dx = d.x;
+    dy = d.y;
+
     if ( this.emotion === Emotion.NORMAL ) {
       // Draw eyes.
       ctx.beginPath();
-      // Draw left eye.
-      ctx.rect( -0.1 * width, -0.06 * height, 0.04 * width, 0.08 * width );
-      // Draw right eye.
-      ctx.rect( 0.06 * width, -0.06 * height, 0.04 * width, 0.08 * width );
+
+      ctx.save();
+      ctx.scale( 0.6, 1 );
+
+      // // Draw left eye.
+      ctx.arc( -0.12 * width + dx, dy, 0.07 * width, 0, PI2 );
+      // // Draw right eye.
+      ctx.arc(  0.12 * width + dx, dy, 0.07 * width, 0, PI2 );
 
       ctx.fillStyle = faceColor;
       ctx.fill();
-
-      // Draw smile.
-      ctx.beginPath();
-      ctx.arc( 0, 0.02 * height, 0.1 * width, 0.25 * Math.PI, 0.75 * Math.PI );
-
-      ctx.lineWidth = 0.03 * width;
-      ctx.strokeStyle = faceColor;
-      ctx.stroke();
+      ctx.restore();
     } else if ( this.emotion === Emotion.HIT ) {
       // Draw X.
       ctx.beginPath();
 
       // Left diagonal.
-      ctx.moveTo( -0.1 * width, -0.06 * height );
-      ctx.lineTo( 0.1 * width, 0.02 * height );
+      ctx.moveTo( -0.08 * width + dx, -0.07 * height + dy );
+      ctx.lineTo(  0.08 * width + dx,  0.07 * height + dy );
       // Right diagonal.
-      ctx.moveTo( -0.1 * width, 0.02 * height );
-      ctx.lineTo( 0.1 * width, -0.06 * height );
+      ctx.moveTo( -0.08 * width + dx,  0.07 * height + dy );
+      ctx.lineTo(  0.08 * width + dx, -0.07 * height + dy );
 
       ctx.lineWidth = 0.03 * width;
       ctx.strokeStyle = faceColor;
       ctx.stroke();
-
-      // Draw square.
-      ctx.beginPath();
-      ctx.rect( -0.02 * width, 0.08 * height, 0.04 * width, 0.04 * width );
-      ctx.fillStyle = faceColor;
-      ctx.fill();
     }
   };
 
