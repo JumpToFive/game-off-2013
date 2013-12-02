@@ -45,10 +45,6 @@ define(function( require ) {
     var laser1 = new Laser( -4, -18, Material.MATTER );
     game.add( laser1 );
 
-    game.player.x =  5;
-    game.player.y =  -22;
-
-
     // Tractor beam.
     var tractorBeam = new TractorBeam( -55, 22, 20, 5 );
     tractorBeam.angle = -80 * DEG_TO_RAD;
