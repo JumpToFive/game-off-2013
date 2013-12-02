@@ -37,10 +37,17 @@ define(function( require ) {
       maintainAspectRatio: true
     });
 
-    // Laser.
+    // Lasers.
     var laser0 = new Laser( -57, 7, Material.ANTIMATTER );
     laser0.angle = -60 * DEG_TO_RAD;
     game.add( laser0 );
+
+    var laser1 = new Laser( -4, -18, Material.MATTER );
+    game.add( laser1 );
+
+    game.player.x =  5;
+    game.player.y =  -22;
+
 
     // Tractor beam.
     var tractorBeam = new TractorBeam( -55, 22, 20, 5 );
@@ -67,29 +74,59 @@ define(function( require ) {
     em0.start();
     game.add( em0 );
 
+    var em1 = new Emitter( 40, -36 );
+    em1.spawnArea = LevelUtils.normalSpawnArea(4);
+    em1.rate = 0.6;
+    em1.lifeTime = 2;
+    em1.speed = 200;
+    em1.angle = -90 * DEG_TO_RAD;
+
+    em1.particle = trashM;
+    em1.properties = LevelUtils.normalTrashProperties( trashM, Material.MATTER );
+
+    em1.start();
+    game.add( em1 );
+
+
     // Triggers.
     var trig0 = new Trigger( -20, 35, 3, Material.ANTIMATTER );
     game.add( trig0 );
 
+
+    var trig1 = new Trigger( 43, -8, 3, Material.MATTER );
+    game.add( trig1 );
+
     // Door.
-    var door = new Door( 0, 40, 3, {
+    var door = new Door( 57, 25, 3, {
       callback: function() {
         // level05( game );
       }
     });
     door.triggers.push( trig0 );
+    door.triggers.push( trig1 );
     game.add( door );
 
     // Trigger wires.
     var wire0 = new TriggerWire( trig0, door, {
+      vertices: [
+        0.5, 0,
+        0.5, 0.5,
+        0.5, 1
+      ],
+      sourceDirection: TriggerWire.Direction.RIGHT,
+      targetDirection: TriggerWire.Direction.LEFT
+    });
+    game.add( wire0 );
+
+    var wire1 = new TriggerWire( trig1, door, {
       vertices: [
         0, 0.5,
         0.5, 0.5,
         0.5, 1
       ],
       sourceDirection: TriggerWire.Direction.BOTTOM,
-      targetDirection: TriggerWire.Direction.RIGHT
+      targetDirection: TriggerWire.Direction.TOP
     });
-    game.add( wire0 );
+    game.add( wire1 );
   };
 });
