@@ -62,6 +62,7 @@ define(function( require ) {
     this.FRAME_TIME = 1 / 60;
 
     this.debug = false;
+    this.debugAABB = false;
 
     this.background = new Background( width, height );
     this.background.camera = this.camera;
@@ -295,7 +296,7 @@ define(function( require ) {
     this.player.draw( ctx );
     this.camera.draw( ctx );
 
-    if ( this.debug ) {
+    if ( this.debugAABB ) {
       this.drawAABBs( ctx );
     }
 
