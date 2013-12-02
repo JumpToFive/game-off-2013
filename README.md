@@ -1,7 +1,7 @@
 Hyperspace Garbage Collection
 ===
 
-![Screenshot](./screenshot.png)
+![Screenshot](./img/screenshot.png)
 
 Backstory
 ---
