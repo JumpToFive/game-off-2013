@@ -69,6 +69,12 @@ define([
       }
 
       this.active = true;
+
+      // Super hacky last minute audio.
+      var sound = document.getElementById( 'trigger-activate-audio' );
+      sound.volume = 0.1;
+      sound.load();
+      sound.play();
     }
 
     // Opening animation.
