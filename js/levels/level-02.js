@@ -39,7 +39,7 @@ define(function( require ) {
 
     var em0 = new Emitter( 70, -40 );
     em0.spawnArea = LevelUtils.normalSpawnArea(4);
-    em0.rate = 0.2;
+    em0.rate = 0.1;
     em0.lifeTime = 6;
     em0.speed = 100;
     em0.angle = -180 * DEG_TO_RAD;
