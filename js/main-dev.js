@@ -108,9 +108,9 @@ define(function( require ) {
   game.load( level );
 
   // Circle.
-  var circleEntity = new Entity();
+  var circleEntity = new Entity( -10, 25 );
 
-  var circle = new Circle( -10, 25, 5 );
+  var circle = new Circle( 0, 0, 5 );
   circle.fill.alpha = 0.5;
 
   circleEntity.add( circle );
@@ -137,9 +137,9 @@ define(function( require ) {
   }, 600 );
 
   // Polygon.
-  var polyEntity = new Entity( 50, 35 );
+  var polyEntity = new Entity( 55, 35 );
 
-  var polygon = new Polygon( 5, 0 );
+  var polygon = new Polygon();
   polygon.vertices = [ 5, 3, -5, 3, 0, -5 ];
   polygon.fill.alpha = 0.5;
 
@@ -151,7 +151,7 @@ define(function( require ) {
   segmentEntity.x = 20;
   segmentEntity.y = 35;
 
-  var testSegment = new Segment(10, 5, 0, 0 );
+  var testSegment = new Segment(-5, 0, 5, 0 );
   testSegment.stroke.alpha = 1;
   testSegment.lineWidth = 0.2;
 
