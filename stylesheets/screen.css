@@ -233,57 +233,98 @@ button {
   transform: translateZ(-100px);
 }
 
+/* line 152, ../sass/screen.scss */
+.settings-view .settings {
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  top: 50%;
+  left: 50%;
+  margin-top: -125px;
+  margin-left: -125px;
+  z-index: 2;
+  display: none;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 20px;
+}
+/* line 166, ../sass/screen.scss */
+.settings-view .setting {
+  margin-bottom: 2px;
+}
+/* line 169, ../sass/screen.scss */
+.settings-view .setting label {
+  display: inline;
+  font-weight: 100;
+  font-size: 2em;
+  letter-spacing: 0.08em;
+}
+/* line 177, ../sass/screen.scss */
+.settings-view .setting input[type="checkbox"],
+.settings-view .setting input[type="checkbox"]:checked {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  width: 2em;
+  height: 2em;
+}
+/* line 184, ../sass/screen.scss */
+.settings-view .toggle-settings-btn {
+  position: absolute;
+  font-size: 3em;
+  color: white;
+}
+
 @media screen and (min-width: 320px), screen and (min-height: 240px) {
-  /* line 152, ../sass/screen.scss */
+  /* line 196, ../sass/screen.scss */
   .game {
     margin: auto;
   }
 
-  /* line 157, ../sass/screen.scss */
+  /* line 201, ../sass/screen.scss */
   .game,
   canvas {
     width: 320px;
     height: 240px;
   }
 
-  /* line 162, ../sass/screen.scss */
+  /* line 206, ../sass/screen.scss */
   .material-btn {
     width: 320px;
   }
 }
 @media screen and (min-width: 480px) and (min-height: 400px) {
-  /* line 170, ../sass/screen.scss */
+  /* line 214, ../sass/screen.scss */
   .game {
     margin: auto;
   }
 
-  /* line 175, ../sass/screen.scss */
+  /* line 219, ../sass/screen.scss */
   .game,
   canvas {
     width: 480px;
     height: 360px;
   }
 
-  /* line 180, ../sass/screen.scss */
+  /* line 224, ../sass/screen.scss */
   .material-btn {
     width: 480px;
   }
 }
 @media screen and (min-width: 640px) and (min-height: 576px) {
-  /* line 189, ../sass/screen.scss */
+  /* line 233, ../sass/screen.scss */
   .game {
     margin: 32px auto;
     width: 640px;
     height: 480px;
   }
 
-  /* line 195, ../sass/screen.scss */
+  /* line 239, ../sass/screen.scss */
   canvas {
     width: auto;
     height: auto;
   }
 
-  /* line 200, ../sass/screen.scss */
+  /* line 244, ../sass/screen.scss */
   .material-btn {
     width: 256px;
   }

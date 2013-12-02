@@ -91,6 +91,10 @@ define(function( require ) {
   var titleView = new TitleView();
   document.body.insertBefore( titleView.el, document.body.firstChild );
 
+  var SettingsView = require( 'views/settings-view' );
+  var settingsView = new SettingsView();
+  document.body.insertBefore( settingsView.el, document.body.firstChild );
+
   // Start on click.
   var startBtn = titleView.el.querySelector( '#start-btn' );
   function start() {
