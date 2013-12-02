@@ -288,15 +288,7 @@ define(function( require ) {
       this.background.draw( ctx );
     }
 
-    // Cull.
-    var cameraAABB = this.camera.aabb();
-
     this.entities.forEach(function( entity ) {
-      var aabb = entity.aabb();
-      if ( aabb && !Intersection.aabb( cameraAABB, aabb ) ) {
-        return;
-      }
-
       entity.draw( ctx );
     });
 
