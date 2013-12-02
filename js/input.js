@@ -112,10 +112,17 @@ define([
       });
 
       // Keyboard update.
+      // Arrow keys.
       if ( this.keys[ 37 ] ) { controls.LEFT   = true; }
       if ( this.keys[ 38 ] ) { controls.TOP    = true; }
       if ( this.keys[ 39 ] ) { controls.RIGHT  = true; }
       if ( this.keys[ 40 ] ) { controls.BOTTOM = true; }
+
+      // WASD.
+      if ( this.keys[ 65 ] ) { controls.LEFT   = true; }
+      if ( this.keys[ 87 ] ) { controls.TOP    = true; }
+      if ( this.keys[ 68 ] ) { controls.RIGHT  = true; }
+      if ( this.keys[ 83 ] ) { controls.BOTTOM = true; }
 
       this.updatePlayer( dt );
     },
