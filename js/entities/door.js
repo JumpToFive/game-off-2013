@@ -13,7 +13,7 @@ define([
 
     callback: function() {},
     // Callback delay (in milliseconds).
-    delay: 400
+    delay: 200
   };
 
   function Door( x, y, radius, options ) {

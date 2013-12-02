@@ -17,7 +17,7 @@ define(function( require ) {
   var DEG_TO_RAD = Utils.DEG_TO_RAD;
 
   var level04Data = require( 'text!../../json/level-04.json' );
-  // var level05 = require( 'levels/level-05' );
+  var levelEnd = require( 'levels/level-end' );
 
   return function( game ) {
     game.clear();
@@ -95,7 +95,7 @@ define(function( require ) {
     // Door.
     var door = new Door( 57, 25, 3, {
       callback: function() {
-        // level05( game );
+        levelEnd( game );
       }
     });
     door.triggers.push( trig0 );
